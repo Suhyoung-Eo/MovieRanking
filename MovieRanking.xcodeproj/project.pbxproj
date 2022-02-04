@@ -86,7 +86,6 @@
 			children = (
 				FE7C444127AB55BF00AA33AC /* Info.plist */,
 				FE7C445127AB5ABB00AA33AC /* Private.swift */,
-				FE7C445327AB5AEC00AA33AC /* K.swift */,
 				FE7C444E27AB59FD00AA33AC /* App */,
 				FE7C444927AB58CB00AA33AC /* Entity */,
 				FE7C444A27AB58F500AA33AC /* Repository */,
@@ -112,6 +111,7 @@
 		FE7C444927AB58CB00AA33AC /* Entity */ = {
 			isa = PBXGroup;
 			children = (
+				FE7C445327AB5AEC00AA33AC /* K.swift */,
 				FE7C446127AB623400AA33AC /* DailyBoxOfficeModel.swift */,
 				FE7C446327AB623900AA33AC /* WeeklyBoxOfficeModel.swift */,
 				FE7C446527AB623F00AA33AC /* MovieInformationModel.swift */,

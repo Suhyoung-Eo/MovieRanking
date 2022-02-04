@@ -1,0 +1,13 @@
+.DS_Store
+MovieRanking/Private.swift
+MovieRanking/GoogleService-Info.plist
+
+## User settings
+xcuserdata/
+xcshareddata/
+xcdebugger/
+
+## Pod files
+MovieRanking.xcworkspace/
+Podfile.lock
+Pods/
