@@ -61,10 +61,10 @@
             </objects>
             <point key="canvasLocation" x="-1900" y="-952"/>
         </scene>
-        <!--Box Office Type Option Table View Controller-->
+        <!--Option Table View Controller-->
         <scene sceneID="Ebr-eo-0fC">
             <objects>
-                <tableViewController storyboardIdentifier="BoxOfficeTypeOptionTableViewController" useStoryboardIdentifierAsRestorationIdentifier="YES" id="RWL-Um-c5x" customClass="BoxOfficeTypeOptionTableViewController" customModule="MovieRanking" customModuleProvider="target" sceneMemberID="viewController">
+                <tableViewController storyboardIdentifier="BoxOfficeTypeOptionTableViewController" useStoryboardIdentifierAsRestorationIdentifier="YES" id="RWL-Um-c5x" customClass="OptionTableViewController" customModule="MovieRanking" customModuleProvider="target" sceneMemberID="viewController">
                     <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" bounces="NO" scrollEnabled="NO" showsHorizontalScrollIndicator="NO" showsVerticalScrollIndicator="NO" bouncesZoom="NO" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="-1" estimatedSectionHeaderHeight="-1" sectionFooterHeight="-1" estimatedSectionFooterHeight="-1" id="ma3-z9-Vpb">
                         <rect key="frame" x="0.0" y="0.0" width="414" height="842"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>

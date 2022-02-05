@@ -13,7 +13,13 @@ class BoxOfficeViewController: UIViewController {
     @IBOutlet weak var button: UIButton!
     
     private let viewModel = BoxOfficeViewModel()
-    private var boxOfficeType = 0   //  0: 주간/ 1: 주말/ 2: 일별 박스오피스
+    
+    // boxOfficeType - 0: 주간/ 1: 주말/ 2: 일별 박스오피스
+    private var boxOfficeType = 0 {
+        didSet {
+            fetchBoxOffice()
+        }
+    }
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -28,14 +34,17 @@ class BoxOfficeViewController: UIViewController {
         
         viewModel.onUpdated = { [weak self] in
             DispatchQueue.main.async {
-                self?.tableView.separatorStyle = .singleLine
+                if self?.viewModel.numberOfRowsInSection == 0 {
+                    self?.tableView.separatorStyle = .none
+                } else {
+                    self?.tableView.separatorStyle = .singleLine
+                }
                 self?.tableView.reloadData()
                 self?.button.isEnabled = true
             }
         }
         
-        fetchBoxOffice(boxOfficeType)
-
+        fetchBoxOffice()
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -45,10 +54,28 @@ class BoxOfficeViewController: UIViewController {
     }
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        guard let navigationVC = segue.destination as? UINavigationController,
+              let destinationVC = navigationVC.viewControllers.first as? OptionTableViewController else {
+            fatalError("Could not found segue destination")
+        }
+        
+        // custom segue 설정
+        navigationVC.transitioningDelegate = self
+        navigationVC.modalPresentationStyle = .custom
+        navigationVC.view.layer.cornerRadius = 10
+        navigationVC.view.clipsToBounds = true
+        navigationVC.view.layer.maskedCorners = [.layerMinXMinYCorner, .layerMaxXMinYCorner]
+        
+        destinationVC.delegate = self
+        destinationVC.boxOfficeType = boxOfficeType
+        
+        let backItem = UIBarButtonItem()
+        backItem.title = ""
+        navigationItem.backBarButtonItem = backItem
         
     }
     
-    private func fetchBoxOffice(_ boxOfficeType: Int) {
+    private func fetchBoxOffice() {
         button.isEnabled = false    // 박스오피스 정보 다운로드 완료전까지 선택 버튼 비활성화
         
         switch boxOfficeType {
@@ -60,7 +87,7 @@ class BoxOfficeViewController: UIViewController {
             viewModel.fetchWeeklyBoxOffice(by: 1)   // 주말 (금~일)
         case 2:
             button.setTitle("     ▼  일별 박스오피스", for: .normal)
-            viewModel.fetchDailyBoxOffice()           // 일별 (검색일 하루 전)
+            viewModel.fetchDailyBoxOffice()         // 일별 (검색일 하루 전)
         default:
             button.setTitle("     ▼  주간 박스오피스", for: .normal)
             viewModel.fetchWeeklyBoxOffice(by: 0)
@@ -116,5 +143,25 @@ extension BoxOfficeViewController: UITableViewDelegate {
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
        
+    }
+}
+
+//MARK: - UIViewControllerTransitioning delegate method
+
+extension BoxOfficeViewController: UIViewControllerTransitioningDelegate {
+    
+    func presentationController(forPresented presented: UIViewController, presenting: UIViewController?, source: UIViewController) -> UIPresentationController? {
+        return ModalPresentationController(presentedViewController: presented, presenting: presentingViewController)
+    }
+}
+
+//MARK: - OptionTableViewController delegate method
+
+extension BoxOfficeViewController: OptionTableViewControllerDelegate {
+    
+    func didSelectType(selectedType: Int) {
+        if boxOfficeType != selectedType {
+            boxOfficeType = selectedType
+        }
     }
 }
