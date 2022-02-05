@@ -7,7 +7,7 @@
 
 import Foundation
 
-class APIService {
+class Service {
     // 박스오피스 정보 취득 순서
     // 1. fetchDailyBoxOffice/ fetchWeeklyBoxOffice: 박스오피스 Top 10 영화리스트 정보 취득 - 영화진흥위원회
     // 2. fetchMovieInfo: 1번에서 취득한 movieNm과 openDt 조합으로 필요한 영화 정보 취득 - 한국영화데이터베이스

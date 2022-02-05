@@ -48,7 +48,7 @@ struct BoxOfficeModel {
         let numberFormtter = NumberFormatter()
         numberFormtter.numberStyle = .decimal
         let audiAccNum = Int(boxOffice.audiAcc)
-        let audiAcc = numberFormtter.string(from: NSNumber(value: audiAccNum!))
+        let audiAcc = numberFormtter.string(from: NSNumber(value: audiAccNum ?? 0))
         return audiAcc ?? ""
     }
 }
