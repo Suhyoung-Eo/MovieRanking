@@ -28,25 +28,27 @@ class BoxOfficeViewModel {
         return movieInfoList == nil ? 0 : movieInfoList.count
     }
     
-    func fetchWeeklyBoxOffice(by boxOfficeType: Int) {
+    func fetchWeeklyBoxOffice(by boxOfficeType: Int, completion: @escaping (Error?) -> Void) {
         boxOfficeList = nil
         movieInfoList = nil
         
         service.fetchWeeklyBoxOffice(by: boxOfficeType) { [weak self] boxOfficeList, movieInfoList, error in
-            guard error == nil else { return }
+            guard error == nil else { completion(error); return }
             self?.boxOfficeList = boxOfficeList
             self?.movieInfoList = movieInfoList
+            completion(nil)
         }
     }
     
-    func fetchDailyBoxOffice() {
+    func fetchDailyBoxOffice(completion: @escaping (Error?) -> Void) {
         boxOfficeList = nil
         movieInfoList = nil
         
         service.fetchDailyBoxOffice { [weak self] boxOfficeList, movieInfoList, error in
-            guard error == nil else { return }
+            guard error == nil else { completion(error); return }
             self?.boxOfficeList = boxOfficeList
             self?.movieInfoList = movieInfoList
+            completion(nil)
         }
     }
     

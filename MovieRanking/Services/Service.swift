@@ -14,6 +14,8 @@ class Service {
     
     private let repository = Repository()
     
+    //MARK: - for BoxOfficeViewModel
+    
     // 일일 박스오피스 리스트 - 영화진흥위원회
     func fetchDailyBoxOffice(completion: @escaping (BoxOfficeListModel, MovieInfoListModel, Error?) -> Void) {
         guard let boxOfficeDay = getBoxofficeDate(day: -1),
@@ -80,6 +82,18 @@ class Service {
         repository.fetchMovieInfo(with: url) { movieInfo, error in
             guard error == nil else { completion(MovieInfoListModel([MovieInfo.empty])); return }
             completion(MovieInfoListModel(movieInfo))
+        }
+    }
+    
+    //MARK: - for searchMovieViewModel
+    
+    func fetchMovieInfo(title movieName: String, completion: @escaping(MovieInfoListModel, Error?) -> Void) {
+        guard let movieName = movieName.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed),
+              let url = URL.urlForMovieInfoApi(movieName: movieName) else { return }
+        
+        repository.fetchMovieInfo(with: url) { movieInfo, error in
+            guard error == nil else { completion(MovieInfoListModel([MovieInfo.empty]), error); return }
+            completion(MovieInfoListModel(movieInfo), nil)
         }
     }
     

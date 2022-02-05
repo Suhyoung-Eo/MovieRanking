@@ -29,6 +29,10 @@
 		FEA886A527ADEA3400A0320B /* BoxOfficeViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = FEA886A427ADEA3400A0320B /* BoxOfficeViewModel.swift */; };
 		FEA886A727ADEA7A00A0320B /* Service.swift in Sources */ = {isa = PBXBuildFile; fileRef = FEA886A627ADEA7A00A0320B /* Service.swift */; };
 		FEA886A927ADEC0000A0320B /* BoxOfficeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FEA886A827ADEC0000A0320B /* BoxOfficeViewController.swift */; };
+		FEA886AB27ADFE2000A0320B /* SearchMovieViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FEA886AA27ADFE2000A0320B /* SearchMovieViewController.swift */; };
+		FEA886AD27ADFEE400A0320B /* SearchMovieCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = FEA886AC27ADFEE400A0320B /* SearchMovieCell.swift */; };
+		FEA886AF27ADFEF300A0320B /* MovieInfoCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = FEA886AE27ADFEF300A0320B /* MovieInfoCell.xib */; };
+		FEA886B127AE005400A0320B /* SearchMovieViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = FEA886B027AE005400A0320B /* SearchMovieViewModel.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -56,6 +60,10 @@
 		FEA886A427ADEA3400A0320B /* BoxOfficeViewModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BoxOfficeViewModel.swift; sourceTree = "<group>"; };
 		FEA886A627ADEA7A00A0320B /* Service.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Service.swift; sourceTree = "<group>"; };
 		FEA886A827ADEC0000A0320B /* BoxOfficeViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BoxOfficeViewController.swift; sourceTree = "<group>"; };
+		FEA886AA27ADFE2000A0320B /* SearchMovieViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SearchMovieViewController.swift; sourceTree = "<group>"; };
+		FEA886AC27ADFEE400A0320B /* SearchMovieCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SearchMovieCell.swift; sourceTree = "<group>"; };
+		FEA886AE27ADFEF300A0320B /* MovieInfoCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = MovieInfoCell.xib; sourceTree = "<group>"; };
+		FEA886B027AE005400A0320B /* SearchMovieViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchMovieViewModel.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -96,8 +104,8 @@
 				FE7C444B27AB590C00AA33AC /* Models */,
 				FE7C444C27AB591E00AA33AC /* Services */,
 				FE7C445927AB5C3A00AA33AC /* ViewModels */,
-				FE7C444D27AB59A100AA33AC /* ViewCells */,
 				FE7C444827AB588700AA33AC /* ViewController */,
+				FE7C444D27AB59A100AA33AC /* ViewCells */,
 				FEA8869F27ADE97300A0320B /* CustomView */,
 				FE7C445C27AB5E9000AA33AC /* Utils */,
 			);
@@ -110,6 +118,7 @@
 				FE7C443927AB55BE00AA33AC /* Main.storyboard */,
 				FEA886A827ADEC0000A0320B /* BoxOfficeViewController.swift */,
 				FEA886A227ADE9A400A0320B /* OptionTableViewController.swift */,
+				FEA886AA27ADFE2000A0320B /* SearchMovieViewController.swift */,
 			);
 			path = ViewController;
 			sourceTree = "<group>";
@@ -154,7 +163,9 @@
 			isa = PBXGroup;
 			children = (
 				FE7C445527AB5BB300AA33AC /* BoxOfficeCell.xib */,
+				FEA886AE27ADFEF300A0320B /* MovieInfoCell.xib */,
 				FE7C445727AB5BBB00AA33AC /* BoxOfficeCell.swift */,
+				FEA886AC27ADFEE400A0320B /* SearchMovieCell.swift */,
 			);
 			path = ViewCells;
 			sourceTree = "<group>";
@@ -173,6 +184,7 @@
 			isa = PBXGroup;
 			children = (
 				FEA886A427ADEA3400A0320B /* BoxOfficeViewModel.swift */,
+				FEA886B027AE005400A0320B /* SearchMovieViewModel.swift */,
 			);
 			path = ViewModels;
 			sourceTree = "<group>";
@@ -264,6 +276,7 @@
 				FE7C444027AB55BF00AA33AC /* LaunchScreen.storyboard in Resources */,
 				FE7C443D27AB55BF00AA33AC /* Assets.xcassets in Resources */,
 				FE7C443B27AB55BE00AA33AC /* Main.storyboard in Resources */,
+				FEA886AF27ADFEF300A0320B /* MovieInfoCell.xib in Resources */,
 				FE7C445627AB5BB300AA33AC /* BoxOfficeCell.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -277,6 +290,7 @@
 			files = (
 				FE7C445B27AB5CFB00AA33AC /* BoxOfficeListModel.swift in Sources */,
 				FEA886A127ADE98D00A0320B /* ModalPresentationController.swift in Sources */,
+				FEA886AD27ADFEE400A0320B /* SearchMovieCell.swift in Sources */,
 				FE7C445427AB5AEC00AA33AC /* K.swift in Sources */,
 				FE7C443427AB55BE00AA33AC /* AppDelegate.swift in Sources */,
 				FEA886A727ADEA7A00A0320B /* Service.swift in Sources */,
@@ -290,8 +304,10 @@
 				FEA886A527ADEA3400A0320B /* BoxOfficeViewModel.swift in Sources */,
 				FEA8868C27AB9D3600A0320B /* Repository.swift in Sources */,
 				FE7C445E27AB5EBB00AA33AC /* AlertService.swift in Sources */,
+				FEA886B127AE005400A0320B /* SearchMovieViewModel.swift in Sources */,
 				FE7C445227AB5ABB00AA33AC /* Private.swift in Sources */,
 				FE7C446427AB623900AA33AC /* WeeklyBoxOfficeModel.swift in Sources */,
+				FEA886AB27ADFE2000A0320B /* SearchMovieViewController.swift in Sources */,
 				FEA8868E27ABA21200A0320B /* Extensions.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
