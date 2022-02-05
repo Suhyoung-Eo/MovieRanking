@@ -79,18 +79,41 @@ class BoxOfficeViewController: UIViewController {
         button.isEnabled = false    // 박스오피스 정보 다운로드 완료전까지 선택 버튼 비활성화
         
         switch boxOfficeType {
-        case 0:
+        case 0: // 주간 (월~일)
             button.setTitle("     ▼  주간 박스오피스", for: .normal)
-            viewModel.fetchWeeklyBoxOffice(by: 0)   // 주간 (월~일)
-        case 1:
+            viewModel.fetchWeeklyBoxOffice(by: 0) { [weak self] error in
+                guard error != nil else { return }
+                self?.retry(error: error)
+            }
+        case 1: // 주말 (금~일)
             button.setTitle("     ▼  주말 박스오피스", for: .normal)
-            viewModel.fetchWeeklyBoxOffice(by: 1)   // 주말 (금~일)
-        case 2:
+            viewModel.fetchWeeklyBoxOffice(by: 1) { [weak self] error in
+                guard error != nil else { return }
+                self?.retry(error: error)
+            }
+        case 2: // 일별 (검색일 하루 전)
             button.setTitle("     ▼  일별 박스오피스", for: .normal)
-            viewModel.fetchDailyBoxOffice()         // 일별 (검색일 하루 전)
+            viewModel.fetchDailyBoxOffice { [weak self] error in
+                guard error != nil else { return }
+                self?.retry(error: error)
+            }
         default:
             button.setTitle("     ▼  주간 박스오피스", for: .normal)
-            viewModel.fetchWeeklyBoxOffice(by: 0)
+            viewModel.fetchWeeklyBoxOffice(by: 0) { [weak self] error in
+                guard error != nil else { return }
+                self?.retry(error: error)
+            }
+        }
+    }
+    
+    private func retry(error: Error?) {
+        DispatchQueue.main.async {
+            let alert = UIAlertController(title: "네트워크 장애", message: error?.localizedDescription, preferredStyle: .alert)
+            let action = UIAlertAction(title: "재시도", style: .default) { [weak self] action in
+                self?.fetchBoxOffice()
+            }
+            alert.addAction(action)
+            self.present(alert, animated: true, completion: nil)
         }
     }
 }

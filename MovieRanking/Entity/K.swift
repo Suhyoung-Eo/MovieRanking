@@ -25,7 +25,7 @@ struct K {
     
     struct CellIdentifier {
         static let boxOfficeCell = "BoxOfficeCell"
-        static let movieInfoCell = "MovieInfoCell"
+        static let searchMovieCell = "SearchMovieCell"
         static let movieImageCell = "MovieImageCell"
         static let gradeAverageTableViewCell = "GradeAverageTableViewCell"
         static let movieDetailInfoCell = "MovieDetailInfoCell"
