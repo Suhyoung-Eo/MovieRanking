@@ -65,7 +65,9 @@ extension SearchMovieViewController: UITableViewDataSource {
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: K.CellIdentifier.searchMovieCell, for: indexPath) as! SearchMovieCell
+        guard let cell = tableView.dequeueReusableCell(withIdentifier: K.CellIdentifier.searchMovieCell, for: indexPath) as? SearchMovieCell else {
+            fatalError("Could not found ViewCell")
+        }
 
         let movieInfo = viewModel.movieInfoList.movieInfoModel(indexPath.row)
         // cell 속성

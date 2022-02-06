@@ -19,7 +19,6 @@ class ImageViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        collectionView.register(UINib(nibName: "ImageCollectionViewCell", bundle: nil), forCellWithReuseIdentifier: K.CellIdentifier.imageCollectionViewCell)
         collectionView.dataSource = self
         collectionView.delegate = self
         
@@ -125,7 +124,9 @@ extension ImageViewController: UICollectionViewDataSource {
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: K.CellIdentifier.imageCollectionViewCell, for: indexPath) as! ImageCollectionViewCell
+        guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: K.CellIdentifier.imageCollectionViewCell, for: indexPath) as? ImageCollectionViewCell else {
+            fatalError("Could not found ViewCell")
+        }
         cell.imageView.setImage(from: imageLinks[indexPath.row])
         return cell
     }

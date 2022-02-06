@@ -27,13 +27,9 @@ struct K {
         static let boxOfficeCell = "BoxOfficeCell"
         static let searchMovieCell = "SearchMovieCell"
         static let movieImageCell = "MovieImageCell"
-        static let gradeAverageTableViewCell = "GradeAverageTableViewCell"
-        static let movieDetailInfoCell = "MovieDetailInfoCell"
-        static let directorAndActorsNameCell = "DirectorAndActorsNameCell"
-        static let staffsInfoCell = "staffsInfoCell"
-        static let addCommentButtonCell = "AddCommentButtonCell"
-        static let commentCell = "CommentCell"
         static let imageCollectionViewCell = "ImageCollectionViewCell"
+        static let detailInfoCell = "DetailInfoCell"
+        static let staffsInfoCell = "StaffsInfoCell"
     }
     
     struct SegueIdentifier {
@@ -45,11 +41,7 @@ struct K {
         static let imageView = "goToImageView"
         static let movieListOptionView = "goToMovieListOptionView"
     }
-    
-    struct StoryboardID {
-        static let boxOfficeTypeOptionView = "BoxOfficeTypeOptionTableViewController"
-    }
-    
+
     struct Image {
         static let noImage = "no_image"
         static let starFull = "star_full"

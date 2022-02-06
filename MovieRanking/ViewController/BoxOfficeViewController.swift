@@ -150,7 +150,9 @@ extension BoxOfficeViewController: UITableViewDataSource {
     }    
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        guard let cell = tableView.dequeueReusableCell(withIdentifier: K.CellIdentifier.boxOfficeCell, for: indexPath) as? BoxOfficeCell else { return UITableViewCell() }
+        guard let cell = tableView.dequeueReusableCell(withIdentifier: K.CellIdentifier.boxOfficeCell, for: indexPath) as? BoxOfficeCell else {
+            fatalError("Could not found ViewCell")
+        }
 
         let boxOfficeList = viewModel.boxOfficeList.boxOfficeModel(indexPath.row)
         let movieInfoList = viewModel.movieInfoList.movieInfoModel(indexPath.row)

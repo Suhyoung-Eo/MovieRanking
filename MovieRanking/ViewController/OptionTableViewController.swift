@@ -7,7 +7,7 @@
 
 import UIKit
 
-protocol OptionTableViewControllerDelegate {
+protocol OptionTableViewControllerDelegate: AnyObject {
     func didSelectType(selectedType: Int)
 }
 
@@ -15,7 +15,7 @@ class OptionTableViewController: UITableViewController {
     
     private let viewModel = BoxOfficeViewModel()
     
-    var delegate: OptionTableViewControllerDelegate?
+    weak var delegate: OptionTableViewControllerDelegate?
     var boxOfficeType: Int = 0
     
     override func viewDidLoad() {

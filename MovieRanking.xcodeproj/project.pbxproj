@@ -37,9 +37,13 @@
 		FEA886B727AFBD8C00A0320B /* MovieImageCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = FEA886B627AFBD8C00A0320B /* MovieImageCell.xib */; };
 		FEA886B927AFBD9B00A0320B /* MovieImageCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = FEA886B827AFBD9B00A0320B /* MovieImageCell.swift */; };
 		FEA886BB27AFC5F000A0320B /* ImageViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FEA886BA27AFC5F000A0320B /* ImageViewController.swift */; };
-		FEA886BD27AFC66200A0320B /* ImageCollectionViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = FEA886BC27AFC66200A0320B /* ImageCollectionViewCell.xib */; };
 		FEA886BF27AFC66C00A0320B /* ImageCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = FEA886BE27AFC66C00A0320B /* ImageCollectionViewCell.swift */; };
 		FEA886C127AFC8F200A0320B /* ImageDownloadService.swift in Sources */ = {isa = PBXBuildFile; fileRef = FEA886C027AFC8F200A0320B /* ImageDownloadService.swift */; };
+		FEA886C327AFF9B000A0320B /* DetailInfoCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = FEA886C227AFF9B000A0320B /* DetailInfoCell.xib */; };
+		FEA886C527AFF9BE00A0320B /* DetailInfoCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = FEA886C427AFF9BE00A0320B /* DetailInfoCell.swift */; };
+		FEA886C727B004A400A0320B /* StaffsInfoCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = FEA886C627B004A400A0320B /* StaffsInfoCell.swift */; };
+		FEA886C927B004C000A0320B /* StaffsInfoCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = FEA886C827B004C000A0320B /* StaffsInfoCell.xib */; };
+		FEF75EBA27B008770022A1EE /* StaffsInfoTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FEF75EB927B008770022A1EE /* StaffsInfoTableViewController.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -75,9 +79,13 @@
 		FEA886B627AFBD8C00A0320B /* MovieImageCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = MovieImageCell.xib; sourceTree = "<group>"; };
 		FEA886B827AFBD9B00A0320B /* MovieImageCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MovieImageCell.swift; sourceTree = "<group>"; };
 		FEA886BA27AFC5F000A0320B /* ImageViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ImageViewController.swift; sourceTree = "<group>"; };
-		FEA886BC27AFC66200A0320B /* ImageCollectionViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = ImageCollectionViewCell.xib; sourceTree = "<group>"; };
 		FEA886BE27AFC66C00A0320B /* ImageCollectionViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ImageCollectionViewCell.swift; sourceTree = "<group>"; };
 		FEA886C027AFC8F200A0320B /* ImageDownloadService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageDownloadService.swift; sourceTree = "<group>"; };
+		FEA886C227AFF9B000A0320B /* DetailInfoCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = DetailInfoCell.xib; sourceTree = "<group>"; };
+		FEA886C427AFF9BE00A0320B /* DetailInfoCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DetailInfoCell.swift; sourceTree = "<group>"; };
+		FEA886C627B004A400A0320B /* StaffsInfoCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StaffsInfoCell.swift; sourceTree = "<group>"; };
+		FEA886C827B004C000A0320B /* StaffsInfoCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = StaffsInfoCell.xib; sourceTree = "<group>"; };
+		FEF75EB927B008770022A1EE /* StaffsInfoTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StaffsInfoTableViewController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -114,9 +122,9 @@
 				FE7C445127AB5ABB00AA33AC /* Private.swift */,
 				FEA8869327ACF20700A0320B /* Resource */,
 				FE7C444E27AB59FD00AA33AC /* App */,
-				FE7C444927AB58CB00AA33AC /* Model */,
+				FE7C444927AB58CB00AA33AC /* Entity */,
 				FE7C444A27AB58F500AA33AC /* Repository */,
-				FE7C444B27AB590C00AA33AC /* Domain */,
+				FE7C444B27AB590C00AA33AC /* Model */,
 				FE7C444C27AB591E00AA33AC /* Service */,
 				FE7C445927AB5C3A00AA33AC /* ViewModel */,
 				FE7C444827AB588700AA33AC /* ViewController */,
@@ -136,11 +144,12 @@
 				FEA886AA27ADFE2000A0320B /* SearchMovieViewController.swift */,
 				FEA886B427AFBC5E00A0320B /* MovieInfoViewController.swift */,
 				FEA886BA27AFC5F000A0320B /* ImageViewController.swift */,
+				FEF75EB927B008770022A1EE /* StaffsInfoTableViewController.swift */,
 			);
 			path = ViewController;
 			sourceTree = "<group>";
 		};
-		FE7C444927AB58CB00AA33AC /* Model */ = {
+		FE7C444927AB58CB00AA33AC /* Entity */ = {
 			isa = PBXGroup;
 			children = (
 				FE7C445327AB5AEC00AA33AC /* K.swift */,
@@ -148,7 +157,7 @@
 				FE7C446327AB623900AA33AC /* WeeklyBoxOfficeModel.swift */,
 				FE7C446527AB623F00AA33AC /* MovieInformationModel.swift */,
 			);
-			path = Model;
+			path = Entity;
 			sourceTree = "<group>";
 		};
 		FE7C444A27AB58F500AA33AC /* Repository */ = {
@@ -159,13 +168,13 @@
 			path = Repository;
 			sourceTree = "<group>";
 		};
-		FE7C444B27AB590C00AA33AC /* Domain */ = {
+		FE7C444B27AB590C00AA33AC /* Model */ = {
 			isa = PBXGroup;
 			children = (
 				FE7C445A27AB5CFB00AA33AC /* BoxOfficeListModel.swift */,
 				FEA8868F27ABBBC600A0320B /* MovieInfoListModel.swift */,
 			);
-			path = Domain;
+			path = Model;
 			sourceTree = "<group>";
 		};
 		FE7C444C27AB591E00AA33AC /* Service */ = {
@@ -182,11 +191,14 @@
 				FE7C445527AB5BB300AA33AC /* BoxOfficeCell.xib */,
 				FEA886AE27ADFEF300A0320B /* MovieInfoCell.xib */,
 				FEA886B627AFBD8C00A0320B /* MovieImageCell.xib */,
-				FEA886BC27AFC66200A0320B /* ImageCollectionViewCell.xib */,
+				FEA886C227AFF9B000A0320B /* DetailInfoCell.xib */,
+				FEA886C827B004C000A0320B /* StaffsInfoCell.xib */,
 				FE7C445727AB5BBB00AA33AC /* BoxOfficeCell.swift */,
 				FEA886AC27ADFEE400A0320B /* SearchMovieCell.swift */,
 				FEA886B827AFBD9B00A0320B /* MovieImageCell.swift */,
 				FEA886BE27AFC66C00A0320B /* ImageCollectionViewCell.swift */,
+				FEA886C427AFF9BE00A0320B /* DetailInfoCell.swift */,
+				FEA886C627B004A400A0320B /* StaffsInfoCell.swift */,
 			);
 			path = ViewCell;
 			sourceTree = "<group>";
@@ -296,11 +308,12 @@
 			files = (
 				FE7C444027AB55BF00AA33AC /* LaunchScreen.storyboard in Resources */,
 				FE7C443D27AB55BF00AA33AC /* Assets.xcassets in Resources */,
+				FEA886C927B004C000A0320B /* StaffsInfoCell.xib in Resources */,
 				FEA886B727AFBD8C00A0320B /* MovieImageCell.xib in Resources */,
-				FEA886BD27AFC66200A0320B /* ImageCollectionViewCell.xib in Resources */,
 				FE7C443B27AB55BE00AA33AC /* Main.storyboard in Resources */,
 				FEA886AF27ADFEF300A0320B /* MovieInfoCell.xib in Resources */,
 				FE7C445627AB5BB300AA33AC /* BoxOfficeCell.xib in Resources */,
+				FEA886C327AFF9B000A0320B /* DetailInfoCell.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -317,6 +330,7 @@
 				FEA886C127AFC8F200A0320B /* ImageDownloadService.swift in Sources */,
 				FEA886AD27ADFEE400A0320B /* SearchMovieCell.swift in Sources */,
 				FE7C445427AB5AEC00AA33AC /* K.swift in Sources */,
+				FEA886C727B004A400A0320B /* StaffsInfoCell.swift in Sources */,
 				FE7C443427AB55BE00AA33AC /* AppDelegate.swift in Sources */,
 				FEA886A727ADEA7A00A0320B /* Service.swift in Sources */,
 				FE7C445827AB5BBB00AA33AC /* BoxOfficeCell.swift in Sources */,
@@ -336,7 +350,9 @@
 				FEA886AB27ADFE2000A0320B /* SearchMovieViewController.swift in Sources */,
 				FEA8868E27ABA21200A0320B /* Extensions.swift in Sources */,
 				FEA886BB27AFC5F000A0320B /* ImageViewController.swift in Sources */,
+				FEA886C527AFF9BE00A0320B /* DetailInfoCell.swift in Sources */,
 				FEA886B527AFBC5E00A0320B /* MovieInfoViewController.swift in Sources */,
+				FEF75EBA27B008770022A1EE /* StaffsInfoTableViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
