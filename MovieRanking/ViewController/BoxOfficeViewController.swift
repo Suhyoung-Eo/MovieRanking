@@ -11,6 +11,7 @@ class BoxOfficeViewController: UIViewController {
     
     @IBOutlet weak var tableView: UITableView!
     @IBOutlet weak var button: UIButton!
+    @IBOutlet weak var activityIndicator: UIActivityIndicatorView!
     
     private let viewModel = BoxOfficeViewModel()
     
@@ -23,7 +24,6 @@ class BoxOfficeViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
         tableView.dataSource = self
         tableView.delegate = self
         tableView.register(UINib(nibName: "BoxOfficeCell", bundle: nil), forCellReuseIdentifier: K.CellIdentifier.boxOfficeCell)
@@ -38,9 +38,10 @@ class BoxOfficeViewController: UIViewController {
                     self?.tableView.separatorStyle = .none
                 } else {
                     self?.tableView.separatorStyle = .singleLine
+                    self?.activityIndicator.stopAnimating()
+                    self?.button.isEnabled = true
                 }
                 self?.tableView.reloadData()
-                self?.button.isEnabled = true
             }
         }
         
@@ -77,6 +78,8 @@ class BoxOfficeViewController: UIViewController {
     
     private func fetchBoxOffice() {
         button.isEnabled = false    // 박스오피스 정보 다운로드 완료전까지 선택 버튼 비활성화
+        activityIndicator.isHidden = false
+        activityIndicator.startAnimating()
         
         switch boxOfficeType {
         case 0: // 주간 (월~일)

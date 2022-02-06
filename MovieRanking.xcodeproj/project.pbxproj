@@ -99,13 +99,13 @@
 				FE7C444127AB55BF00AA33AC /* Info.plist */,
 				FE7C445127AB5ABB00AA33AC /* Private.swift */,
 				FE7C444E27AB59FD00AA33AC /* App */,
-				FE7C444927AB58CB00AA33AC /* Entity */,
+				FE7C444927AB58CB00AA33AC /* Model */,
 				FE7C444A27AB58F500AA33AC /* Repository */,
-				FE7C444B27AB590C00AA33AC /* Models */,
-				FE7C444C27AB591E00AA33AC /* Services */,
-				FE7C445927AB5C3A00AA33AC /* ViewModels */,
+				FE7C444B27AB590C00AA33AC /* Domain */,
+				FE7C444C27AB591E00AA33AC /* Service */,
+				FE7C445927AB5C3A00AA33AC /* ViewModel */,
 				FE7C444827AB588700AA33AC /* ViewController */,
-				FE7C444D27AB59A100AA33AC /* ViewCells */,
+				FE7C444D27AB59A100AA33AC /* ViewCell */,
 				FEA8869F27ADE97300A0320B /* CustomView */,
 				FE7C445C27AB5E9000AA33AC /* Utils */,
 			);
@@ -123,7 +123,7 @@
 			path = ViewController;
 			sourceTree = "<group>";
 		};
-		FE7C444927AB58CB00AA33AC /* Entity */ = {
+		FE7C444927AB58CB00AA33AC /* Model */ = {
 			isa = PBXGroup;
 			children = (
 				FE7C445327AB5AEC00AA33AC /* K.swift */,
@@ -131,7 +131,7 @@
 				FE7C446327AB623900AA33AC /* WeeklyBoxOfficeModel.swift */,
 				FE7C446527AB623F00AA33AC /* MovieInformationModel.swift */,
 			);
-			path = Entity;
+			path = Model;
 			sourceTree = "<group>";
 		};
 		FE7C444A27AB58F500AA33AC /* Repository */ = {
@@ -142,24 +142,24 @@
 			path = Repository;
 			sourceTree = "<group>";
 		};
-		FE7C444B27AB590C00AA33AC /* Models */ = {
+		FE7C444B27AB590C00AA33AC /* Domain */ = {
 			isa = PBXGroup;
 			children = (
 				FE7C445A27AB5CFB00AA33AC /* BoxOfficeListModel.swift */,
 				FEA8868F27ABBBC600A0320B /* MovieInfoListModel.swift */,
 			);
-			path = Models;
+			path = Domain;
 			sourceTree = "<group>";
 		};
-		FE7C444C27AB591E00AA33AC /* Services */ = {
+		FE7C444C27AB591E00AA33AC /* Service */ = {
 			isa = PBXGroup;
 			children = (
 				FEA886A627ADEA7A00A0320B /* Service.swift */,
 			);
-			path = Services;
+			path = Service;
 			sourceTree = "<group>";
 		};
-		FE7C444D27AB59A100AA33AC /* ViewCells */ = {
+		FE7C444D27AB59A100AA33AC /* ViewCell */ = {
 			isa = PBXGroup;
 			children = (
 				FE7C445527AB5BB300AA33AC /* BoxOfficeCell.xib */,
@@ -167,7 +167,7 @@
 				FE7C445727AB5BBB00AA33AC /* BoxOfficeCell.swift */,
 				FEA886AC27ADFEE400A0320B /* SearchMovieCell.swift */,
 			);
-			path = ViewCells;
+			path = ViewCell;
 			sourceTree = "<group>";
 		};
 		FE7C444E27AB59FD00AA33AC /* App */ = {
@@ -180,13 +180,13 @@
 			path = App;
 			sourceTree = "<group>";
 		};
-		FE7C445927AB5C3A00AA33AC /* ViewModels */ = {
+		FE7C445927AB5C3A00AA33AC /* ViewModel */ = {
 			isa = PBXGroup;
 			children = (
 				FEA886A427ADEA3400A0320B /* BoxOfficeViewModel.swift */,
 				FEA886B027AE005400A0320B /* SearchMovieViewModel.swift */,
 			);
-			path = ViewModels;
+			path = ViewModel;
 			sourceTree = "<group>";
 		};
 		FE7C445C27AB5E9000AA33AC /* Utils */ = {

@@ -11,6 +11,7 @@ class SearchMovieViewController: UIViewController {
 
     @IBOutlet weak var tableView: UITableView!
     @IBOutlet weak var backgroundImageView: UIImageView!
+    @IBOutlet weak var activityIndicator: UIActivityIndicatorView!
     
     private let searchController = UISearchController()
     
@@ -37,6 +38,7 @@ class SearchMovieViewController: UIViewController {
                     self?.tableView.separatorStyle = .none
                 } else {
                     self?.tableView.separatorStyle = .singleLine
+                    self?.activityIndicator.stopAnimating()
                 }
                 self?.tableView.reloadData()
             }
@@ -105,9 +107,13 @@ extension SearchMovieViewController: UISearchBarDelegate {
         backgroundImageView.isHidden = true
         
         if let movieName = searchBar.text {
+            activityIndicator.isHidden = false
+            activityIndicator.startAnimating()
+            
             viewModel.fetchMovieInfo(title: movieName) { [weak self] error in
                 guard error == nil else {
                     DispatchQueue.main.async {
+                        self?.activityIndicator.stopAnimating()
                         AlertService.shared.alert(viewController: self,
                                                   alertTitle: "네트워크 장애",
                                                   message: error?.localizedDescription,
@@ -118,6 +124,7 @@ extension SearchMovieViewController: UISearchBarDelegate {
                 
                 if self?.viewModel.movieInfoList == nil {
                     DispatchQueue.main.async {
+                        self?.activityIndicator.stopAnimating()
                         AlertService.shared.alert(viewController: self,
                                                   alertTitle: "검색 된 영화가 없습니다",
                                                   message: "다른 컨탠츠를 검색 해보세요",
