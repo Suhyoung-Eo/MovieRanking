@@ -1,8 +1,8 @@
 //
-//  MovieDetailViewModel.swift
-//  MovingMovie
+//  MovieInfoListModel.swift
+//  MovieRanking
 //
-//  Created by Suhyoung Eo on 2021/12/12.
+//  Created by Suhyoung Eo on 2022/02/03.
 //
 
 import Foundation

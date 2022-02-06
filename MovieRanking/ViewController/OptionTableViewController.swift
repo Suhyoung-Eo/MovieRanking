@@ -1,6 +1,6 @@
 //
 //  OptionTableViewController.swift
-//  MovingMovie
+//  MovieRanking
 //
 //  Created by Suhyoung Eo on 2021/12/29.
 //
@@ -55,7 +55,7 @@ class OptionTableViewController: UITableViewController {
         dismiss(animated: true, completion: nil)
     }
     
-    // deinit {
-    //     print("deinit OptionTableViewController")
-    // }
+    deinit {
+        print("deinit OptionTableViewController")
+    }
 }

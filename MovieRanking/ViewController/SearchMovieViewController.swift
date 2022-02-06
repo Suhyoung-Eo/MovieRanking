@@ -1,6 +1,6 @@
 //
 //  SearchMovieViewController.swift
-//  MovingMovie
+//  MovieRanking
 //
 //  Created by Suhyoung Eo on 2022/02/05.
 //
@@ -20,9 +20,9 @@ class SearchMovieViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        tableView.register(UINib(nibName: "MovieInfoCell", bundle: nil), forCellReuseIdentifier: K.CellIdentifier.searchMovieCell)
         tableView.dataSource = self
         tableView.delegate = self
-        tableView.register(UINib(nibName: "MovieInfoCell", bundle: nil), forCellReuseIdentifier: K.CellIdentifier.searchMovieCell)
         tableView.separatorStyle = .none
         
         navigationItem.title = "영화검색"

@@ -7,7 +7,7 @@
 
 import Foundation
 
-class Repository {
+class ApiService {
         
     // 영화진흥위원회 일일 박스오피스 순위 검색
     func fetchDailyBoxOffice(with url: URL, completion: @escaping ([BoxOffice], Error?) -> Void) {

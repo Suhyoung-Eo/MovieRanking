@@ -1,6 +1,6 @@
 //
 //  BoxOfficeViewController.swift
-//  MovingMovie
+//  MovieRanking
 //
 //  Created by Suhyoung Eo on 2021/11/15.
 //
@@ -15,7 +15,7 @@ class BoxOfficeViewController: UIViewController {
     
     private let viewModel = BoxOfficeViewModel()
     
-    // boxOfficeType - 0: 주간/ 1: 주말/ 2: 일별 박스오피스
+    // 0: 주간/ 1: 주말/ 2: 일별 박스오피스
     private var boxOfficeType = 0 {
         didSet {
             fetchBoxOffice()
@@ -24,9 +24,9 @@ class BoxOfficeViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        tableView.register(UINib(nibName: "BoxOfficeCell", bundle: nil), forCellReuseIdentifier: K.CellIdentifier.boxOfficeCell)
         tableView.dataSource = self
         tableView.delegate = self
-        tableView.register(UINib(nibName: "BoxOfficeCell", bundle: nil), forCellReuseIdentifier: K.CellIdentifier.boxOfficeCell)
         tableView.separatorStyle = .none
         
         navigationItem.title = "박스오피스 순위"
@@ -55,26 +55,41 @@ class BoxOfficeViewController: UIViewController {
     }
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        guard let navigationVC = segue.destination as? UINavigationController,
-              let destinationVC = navigationVC.viewControllers.first as? OptionTableViewController else {
-            fatalError("Could not found segue destination")
+        
+        if let sender = sender as? String, sender == "movieInfoView" {
+            guard let destinationVC = segue.destination as? MovieInfoViewController else {
+                fatalError("Could not found segue destination")
+            }
+            
+            if let indexPath = tableView.indexPathForSelectedRow {
+                destinationVC.movieInfo = viewModel.movieInfoList.movieInfoModel(indexPath.row)
+            }
+        } else {
+            guard let navigationVC = segue.destination as? UINavigationController,
+                  let destinationVC = navigationVC.viewControllers.first as? OptionTableViewController else {
+                      fatalError("Could not found segue destination")
+                  }
+            
+            // custom segue 설정
+            navigationVC.transitioningDelegate = self
+            navigationVC.modalPresentationStyle = .custom
+            navigationVC.view.layer.cornerRadius = 10
+            navigationVC.view.clipsToBounds = true
+            navigationVC.view.layer.maskedCorners = [.layerMinXMinYCorner, .layerMaxXMinYCorner]
+            
+            destinationVC.delegate = self
+            destinationVC.boxOfficeType = boxOfficeType
         }
-        
-        // custom segue 설정
-        navigationVC.transitioningDelegate = self
-        navigationVC.modalPresentationStyle = .custom
-        navigationVC.view.layer.cornerRadius = 10
-        navigationVC.view.clipsToBounds = true
-        navigationVC.view.layer.maskedCorners = [.layerMinXMinYCorner, .layerMaxXMinYCorner]
-        
-        destinationVC.delegate = self
-        destinationVC.boxOfficeType = boxOfficeType
         
         let backItem = UIBarButtonItem()
         backItem.title = ""
         navigationItem.backBarButtonItem = backItem
-        
     }
+}
+
+//MARK: - extension BoxOfficeViewController
+
+extension BoxOfficeViewController {
     
     private func fetchBoxOffice() {
         button.isEnabled = false    // 박스오피스 정보 다운로드 완료전까지 선택 버튼 비활성화
@@ -110,13 +125,14 @@ class BoxOfficeViewController: UIViewController {
     }
     
     private func retry(error: Error?) {
-        DispatchQueue.main.async {
+        DispatchQueue.main.async { [weak self] in
+            self?.activityIndicator.stopAnimating()
             let alert = UIAlertController(title: "네트워크 장애", message: error?.localizedDescription, preferredStyle: .alert)
-            let action = UIAlertAction(title: "재시도", style: .default) { [weak self] action in
+            let action = UIAlertAction(title: "재시도", style: .default) { action in
                 self?.fetchBoxOffice()
             }
             alert.addAction(action)
-            self.present(alert, animated: true, completion: nil)
+            self?.present(alert, animated: true, completion: nil)
         }
     }
 }
@@ -168,7 +184,16 @@ extension BoxOfficeViewController: UITableViewDataSource {
 extension BoxOfficeViewController: UITableViewDelegate {
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-       
+        if viewModel.movieInfoList.movieInfoModel(indexPath.row).movieId != "" {
+            performSegue(withIdentifier: K.SegueIdentifier.movieInfoView, sender: "movieInfoView")
+        } else {
+            DispatchQueue.main.async {
+                AlertService.shared.alert(viewController: self,
+                                          alertTitle: "해당 영화의 상세 정보가 없습니다.",
+                                          message: nil,
+                                          actionTitle: "확인")
+            }
+        }
     }
 }
 

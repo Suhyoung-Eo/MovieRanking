@@ -37,7 +37,7 @@ struct K {
     }
     
     struct SegueIdentifier {
-        static let resultView = "goToResultView"
+        static let movieInfoView = "goToMovieInfoView"
         static let staffsInfoTableView = "goToStaffsInfoView"
         static let addCommentView = "goToAddCommentView"
         static let loginView = "goToLoginView"

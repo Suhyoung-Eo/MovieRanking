@@ -60,7 +60,7 @@ class ModalPresentationController: UIPresentationController {
         presentedViewController.dismiss(animated: true, completion: nil)
     }
     
-    // deinit {
-    //     print("deinit ModalPresentationController")
-    // }
+    deinit {
+        print("deinit ModalPresentationController")
+    }
 }

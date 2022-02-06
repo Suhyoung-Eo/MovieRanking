@@ -61,7 +61,7 @@
                         <outlet property="activityIndicator" destination="kI3-Ft-hfa" id="PeN-lB-bTL"/>
                         <outlet property="button" destination="4is-87-GRT" id="ajm-Pd-IWu"/>
                         <outlet property="tableView" destination="jyc-bO-Sq8" id="VAz-oN-qLm"/>
-                        <segue destination="JEh-Cz-2hp" kind="show" identifier="goToResultView" id="3vi-Ab-nMX"/>
+                        <segue destination="JEh-Cz-2hp" kind="show" identifier="goToMovieInfoView" id="3vi-Ab-nMX"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="c5X-8t-Reo" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
@@ -100,7 +100,7 @@
         <!--영화상세정보-->
         <scene sceneID="miv-Ke-cMl">
             <objects>
-                <viewController id="JEh-Cz-2hp" customClass="ResultViewController" customModule="MovieRanking" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController id="JEh-Cz-2hp" customClass="MovieInfoViewController" customModule="MovieRanking" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="hUj-Af-RwW">
                         <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -448,10 +448,6 @@
                                 <rect key="frame" x="0.0" y="140" width="414" height="673"/>
                                 <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                             </tableView>
-                            <activityIndicatorView hidden="YES" opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" hidesWhenStopped="YES" animating="YES" style="large" translatesAutoresizingMaskIntoConstraints="NO" id="fGC-p8-EDj">
-                                <rect key="frame" x="188.5" y="429.5" width="37" height="37"/>
-                                <color key="color" red="0.91764706370000004" green="0.20392158630000001" blue="0.36078432199999999" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
-                            </activityIndicatorView>
                             <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="background_image" translatesAutoresizingMaskIntoConstraints="NO" id="KSz-k8-eZW">
                                 <rect key="frame" x="90" y="375.5" width="234" height="145"/>
                                 <constraints>
@@ -459,6 +455,10 @@
                                     <constraint firstAttribute="width" constant="234" id="uGM-UE-t4U"/>
                                 </constraints>
                             </imageView>
+                            <activityIndicatorView hidden="YES" opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" hidesWhenStopped="YES" animating="YES" style="large" translatesAutoresizingMaskIntoConstraints="NO" id="fGC-p8-EDj">
+                                <rect key="frame" x="188.5" y="429.5" width="37" height="37"/>
+                                <color key="color" red="0.91764706370000004" green="0.20392158630000001" blue="0.36078432199999999" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
+                            </activityIndicatorView>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="lu9-wC-7FN"/>
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
@@ -478,7 +478,7 @@
                         <outlet property="activityIndicator" destination="fGC-p8-EDj" id="D2b-8Z-9Vi"/>
                         <outlet property="backgroundImageView" destination="KSz-k8-eZW" id="VKI-hx-4bj"/>
                         <outlet property="tableView" destination="eSC-9q-EbX" id="FLP-lN-pmA"/>
-                        <segue destination="JEh-Cz-2hp" kind="show" identifier="goToResultView" id="7dB-tT-0G5"/>
+                        <segue destination="JEh-Cz-2hp" kind="show" identifier="goToMovieInfoView" id="7dB-tT-0G5"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="KIr-IK-mpn" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>

@@ -18,9 +18,9 @@ extension UIImageView {
         
         if !link.isEmpty {
             DispatchQueue.global(qos: .background).async { [weak self] in
-                // 캐시키로 url link 사용
-                let cachedKey = NSString(string: link)
                 
+                let cachedKey = NSString(string: link)  // 캐시키로 url link 사용
+                // 캐시메모리에 이미지 있는 경우
                 if let cachedImage = ImageCacheManager.shared.object(forKey: cachedKey) {
                     DispatchQueue.main.async {
                         self?.image = cachedImage
@@ -29,25 +29,14 @@ extension UIImageView {
                 }
                 
                 guard let url = URL(string: link) else { return }
+                guard let data = try? Data(contentsOf: url) else { return }
                 
-                URLSession.shared.dataTask(with: url) { [weak self] data, response, error in
-                    
-                    guard let data = data, error == nil else {
-                        DispatchQueue.main.async {
-                            print("Failed download image from Url", error as Any)
-                            self?.image = UIImage()
-                        }
-                        return
+                if let image = UIImage(data: data) {
+                    ImageCacheManager.shared.setObject(image, forKey: cachedKey)
+                    DispatchQueue.main.async {
+                        self?.image = image
                     }
-                    
-                    if let image = UIImage(data: data) {
-                        ImageCacheManager.shared.setObject(image, forKey: cachedKey)
-                        
-                        DispatchQueue.main.async {
-                            self?.image = image
-                        }
-                    }
-                }.resume()
+                }
             }
         } else {
             DispatchQueue.main.async { [weak self] in
