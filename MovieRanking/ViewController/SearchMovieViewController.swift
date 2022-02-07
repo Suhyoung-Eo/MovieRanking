@@ -15,7 +15,7 @@ class SearchMovieViewController: UIViewController {
     
     private let searchController = UISearchController()
     
-    private let viewModel = SearchMovieViewModel()
+    private let viewModel = MovieInfoViewModel()
     
     override func viewDidLoad() {
         super.viewDidLoad()

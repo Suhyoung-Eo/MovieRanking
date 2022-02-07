@@ -1,5 +1,5 @@
 //
-//  SearchMovieViewModel.swift
+//  MovieInfoViewModel.swift
 //  MovieRanking
 //
 //  Created by Suhyoung Eo on 2022/02/05.
@@ -7,7 +7,7 @@
 
 import Foundation
 
-class SearchMovieViewModel {
+class MovieInfoViewModel {
     var onUpdated: () -> Void = {}
     
     private let service = Service()

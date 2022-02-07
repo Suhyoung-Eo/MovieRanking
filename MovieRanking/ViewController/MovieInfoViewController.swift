@@ -64,6 +64,12 @@ class MovieInfoViewController: UIViewController {
                     fatalError("Could not found segue destination")
                 }
                 destinationVC.staffs = movieInfo.staffs
+            case "commentView":
+                guard let destinationVC = segue.destination as? AddCommentViewController else {
+                    fatalError("Could not found segue destination")
+                }
+                destinationVC.movieId = movieInfo.movieId
+                destinationVC.movieName = movieInfo.movieName
             default:
                 return
             }
@@ -272,7 +278,7 @@ extension MovieInfoViewController: StaffsInfoCellDelegate, UserInteractionCellDe
     }
     
     func pushedAddCommentButton(data: Any) {
-        print("pushedAddCommentButton")
+        performSegue(withIdentifier: K.SegueIdentifier.addCommentView, sender: data)
     }
     
     func pushedWishToWatchButton() {

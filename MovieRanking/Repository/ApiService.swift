@@ -43,7 +43,7 @@ class ApiService {
             guard let data = data, error == nil else { completion([MovieInfo.empty], error); return}
             do {
                 let movieInfoModel = try JSONDecoder().decode(MovieInformationModel.self, from: data)
-                completion(movieInfoModel.Data[0].Result ?? [MovieInfo.empty], nil)
+                completion(movieInfoModel.Data.first?.Result ?? [MovieInfo.empty], nil)
             } catch {
                 completion([MovieInfo.empty], error)
             }
