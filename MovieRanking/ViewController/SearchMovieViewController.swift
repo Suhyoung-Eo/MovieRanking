@@ -1,6 +1,6 @@
 //
 //  SearchMovieViewController.swift
-//  MovingMovie
+//  MovieRanking
 //
 //  Created by Suhyoung Eo on 2022/02/05.
 //
@@ -11,6 +11,7 @@ class SearchMovieViewController: UIViewController {
 
     @IBOutlet weak var tableView: UITableView!
     @IBOutlet weak var backgroundImageView: UIImageView!
+    @IBOutlet weak var activityIndicator: UIActivityIndicatorView!
     
     private let searchController = UISearchController()
     
@@ -19,9 +20,9 @@ class SearchMovieViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        tableView.register(UINib(nibName: "MovieInfoCell", bundle: nil), forCellReuseIdentifier: K.CellIdentifier.searchMovieCell)
         tableView.dataSource = self
         tableView.delegate = self
-        tableView.register(UINib(nibName: "MovieInfoCell", bundle: nil), forCellReuseIdentifier: K.CellIdentifier.searchMovieCell)
         tableView.separatorStyle = .none
         
         navigationItem.title = "영화검색"
@@ -37,6 +38,7 @@ class SearchMovieViewController: UIViewController {
                     self?.tableView.separatorStyle = .none
                 } else {
                     self?.tableView.separatorStyle = .singleLine
+                    self?.activityIndicator.stopAnimating()
                 }
                 self?.tableView.reloadData()
             }
@@ -46,6 +48,19 @@ class SearchMovieViewController: UIViewController {
     override func viewWillAppear(_ animated: Bool) {
         navigationController?.navigationBar.setBackgroundImage(UIImage(), for:.default)
         navigationController?.navigationBar.shadowImage = UIImage()
+    }
+    
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        guard let destinationVC = segue.destination as? MovieInfoViewController else {
+            fatalError("Could not found segue destination")
+        }
+        
+        if let indexPath = tableView.indexPathForSelectedRow {
+            destinationVC.movieInfo = viewModel.movieInfoList.movieInfoModel(indexPath.row)
+        }
+        let backItem = UIBarButtonItem()
+        backItem.title = ""
+        navigationItem.backBarButtonItem = backItem
     }
 
 }
@@ -63,7 +78,9 @@ extension SearchMovieViewController: UITableViewDataSource {
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: K.CellIdentifier.searchMovieCell, for: indexPath) as! SearchMovieCell
+        guard let cell = tableView.dequeueReusableCell(withIdentifier: K.CellIdentifier.searchMovieCell, for: indexPath) as? SearchMovieCell else {
+            fatalError("Could not found ViewCell")
+        }
 
         let movieInfo = viewModel.movieInfoList.movieInfoModel(indexPath.row)
         // cell 속성
@@ -93,7 +110,7 @@ extension SearchMovieViewController: UITableViewDataSource {
 extension SearchMovieViewController: UITableViewDelegate {
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-
+        performSegue(withIdentifier: K.SegueIdentifier.movieInfoView, sender: nil)
     }
 }
 
@@ -105,9 +122,13 @@ extension SearchMovieViewController: UISearchBarDelegate {
         backgroundImageView.isHidden = true
         
         if let movieName = searchBar.text {
+            activityIndicator.isHidden = false
+            activityIndicator.startAnimating()
+            
             viewModel.fetchMovieInfo(title: movieName) { [weak self] error in
                 guard error == nil else {
                     DispatchQueue.main.async {
+                        self?.activityIndicator.stopAnimating()
                         AlertService.shared.alert(viewController: self,
                                                   alertTitle: "네트워크 장애",
                                                   message: error?.localizedDescription,
@@ -118,6 +139,7 @@ extension SearchMovieViewController: UISearchBarDelegate {
                 
                 if self?.viewModel.movieInfoList == nil {
                     DispatchQueue.main.async {
+                        self?.activityIndicator.stopAnimating()
                         AlertService.shared.alert(viewController: self,
                                                   alertTitle: "검색 된 영화가 없습니다",
                                                   message: "다른 컨탠츠를 검색 해보세요",

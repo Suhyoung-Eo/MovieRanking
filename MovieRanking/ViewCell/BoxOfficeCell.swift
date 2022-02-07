@@ -1,6 +1,6 @@
 //
 //  BoxOfficeCell.swift
-//  MovingMovie
+//  MovieRanking
 //
 //  Created by Suhyoung Eo on 2021/11/18.
 //
@@ -20,7 +20,6 @@ class BoxOfficeCell: UITableViewCell {
         super.awakeFromNib()
         
         thumbnailImageView.layer.cornerRadius = thumbnailImageView.frame.height / 15
-        
     }
     
     override func setSelected(_ selected: Bool, animated: Bool) {
@@ -31,7 +30,6 @@ class BoxOfficeCell: UITableViewCell {
     override func prepareForReuse() {
         super.prepareForReuse()
         
-        // cell 재사용 시 이미지 다운로드 완료전 이전 이미지 겹침 문제 발생 방지
         thumbnailImageView.image = nil
         newImageView.image = nil
     }

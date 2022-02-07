@@ -12,8 +12,9 @@ class BoxOfficeViewModel {
     
     private let service = Service()
     
-    // 화면에 보여줘야 되는 값
+    // 박스 오피스 순위 정보를 가지고 있음
     var boxOfficeList: BoxOfficeListModel!
+    // 썸네일등 각 영화의 상세 정보를 가지고 있음
     var movieInfoList: MovieInfoListModel! {
         didSet {
             onUpdated()
@@ -21,11 +22,11 @@ class BoxOfficeViewModel {
     }
     
     var numberOfSections: Int {
-        return movieInfoList == nil ? 0 : 1
+        return boxOfficeList == nil ? 0 : 1
     }
     
     var numberOfRowsInSection: Int {
-        return movieInfoList == nil ? 0 : movieInfoList.count
+        return boxOfficeList == nil ? 0 : boxOfficeList.count
     }
     
     func fetchWeeklyBoxOffice(by boxOfficeType: Int, completion: @escaping (Error?) -> Void) {

@@ -1,8 +1,8 @@
 //
-//  MovieDetailViewModel.swift
-//  MovingMovie
+//  MovieInfoListModel.swift
+//  MovieRanking
 //
-//  Created by Suhyoung Eo on 2021/12/12.
+//  Created by Suhyoung Eo on 2022/02/03.
 //
 
 import Foundation
@@ -10,16 +10,16 @@ import Foundation
 struct MovieInfoListModel {
     let movieInfoList: [MovieInfo]
     
-    var count: Int {
-        return movieInfoList.count
-    }
-    
     init(_ movieInfoList: [MovieInfo]) {
         self.movieInfoList = movieInfoList
     }
 }
 
 extension MovieInfoListModel {
+    
+    var count: Int {
+        return movieInfoList.count
+    }
     
     func movieInfoModel(_ index: Int) -> MovieInfoModel {
         return MovieInfoModel(movieInfoList[index])

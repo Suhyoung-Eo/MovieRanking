@@ -1,6 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="19529" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="sj8-yg-fAm">
+    <device id="retina6_1" orientation="portrait" appearance="light"/>
     <dependencies>
+        <deployment identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="19519"/>
         <capability name="Image references" minToolsVersion="12.0"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
@@ -14,14 +16,18 @@
             <objects>
                 <viewController id="5rn-wq-iCu" customClass="BoxOfficeViewController" customModule="MovieRanking" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="xH0-yS-vAv">
-                        <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
+                        <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" showsHorizontalScrollIndicator="NO" showsVerticalScrollIndicator="NO" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="28" estimatedSectionHeaderHeight="-1" sectionFooterHeight="28" estimatedSectionFooterHeight="-1" translatesAutoresizingMaskIntoConstraints="NO" id="jyc-bO-Sq8">
-                                <rect key="frame" x="0.0" y="89" width="600" height="462"/>
+                                <rect key="frame" x="0.0" y="133" width="414" height="680"/>
                             </tableView>
+                            <activityIndicatorView hidden="YES" opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" hidesWhenStopped="YES" animating="YES" style="large" translatesAutoresizingMaskIntoConstraints="NO" id="kI3-Ft-hfa">
+                                <rect key="frame" x="188.5" y="429.5" width="37" height="37"/>
+                                <color key="color" red="0.91764706370000004" green="0.20392158630000001" blue="0.36078432199999999" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
+                            </activityIndicatorView>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" adjustsImageWhenHighlighted="NO" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="4is-87-GRT">
-                                <rect key="frame" x="0.0" y="44" width="600" height="45"/>
+                                <rect key="frame" x="0.0" y="88" width="414" height="45"/>
                                 <color key="backgroundColor" red="0.0" green="0.23311599" blue="0.49015383379999999" alpha="0.050000000000000003" colorSpace="custom" customColorSpace="sRGB"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="45" id="UeR-NP-5bZ"/>
@@ -41,8 +47,10 @@
                         <constraints>
                             <constraint firstItem="jyc-bO-Sq8" firstAttribute="leading" secondItem="t9Q-YR-Esk" secondAttribute="leading" id="65f-vK-YfA"/>
                             <constraint firstItem="jyc-bO-Sq8" firstAttribute="top" secondItem="4is-87-GRT" secondAttribute="bottom" id="76N-KU-dNL"/>
+                            <constraint firstItem="kI3-Ft-hfa" firstAttribute="centerY" secondItem="xH0-yS-vAv" secondAttribute="centerY" id="AmF-ex-8IN"/>
                             <constraint firstItem="jyc-bO-Sq8" firstAttribute="trailing" secondItem="t9Q-YR-Esk" secondAttribute="trailing" id="FSD-9i-g4w"/>
                             <constraint firstItem="t9Q-YR-Esk" firstAttribute="trailing" secondItem="4is-87-GRT" secondAttribute="trailing" id="VlH-HO-E2Q"/>
+                            <constraint firstItem="kI3-Ft-hfa" firstAttribute="centerX" secondItem="xH0-yS-vAv" secondAttribute="centerX" id="gLd-8U-tQl"/>
                             <constraint firstItem="t9Q-YR-Esk" firstAttribute="bottom" secondItem="jyc-bO-Sq8" secondAttribute="bottom" id="rAY-T2-rGC"/>
                             <constraint firstItem="4is-87-GRT" firstAttribute="top" secondItem="t9Q-YR-Esk" secondAttribute="top" id="uLo-et-mKP"/>
                             <constraint firstItem="4is-87-GRT" firstAttribute="leading" secondItem="t9Q-YR-Esk" secondAttribute="leading" id="wIF-rg-YYM"/>
@@ -50,9 +58,10 @@
                     </view>
                     <navigationItem key="navigationItem" title="박스오피스 순위" largeTitleDisplayMode="never" id="Xx3-aP-JP7"/>
                     <connections>
+                        <outlet property="activityIndicator" destination="kI3-Ft-hfa" id="PeN-lB-bTL"/>
                         <outlet property="button" destination="4is-87-GRT" id="ajm-Pd-IWu"/>
                         <outlet property="tableView" destination="jyc-bO-Sq8" id="VAz-oN-qLm"/>
-                        <segue destination="JEh-Cz-2hp" kind="show" identifier="goToResultView" id="3vi-Ab-nMX"/>
+                        <segue destination="JEh-Cz-2hp" kind="show" identifier="goToMovieInfoView" id="3vi-Ab-nMX"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="c5X-8t-Reo" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
@@ -64,15 +73,15 @@
             <objects>
                 <tableViewController storyboardIdentifier="BoxOfficeTypeOptionTableViewController" useStoryboardIdentifierAsRestorationIdentifier="YES" id="RWL-Um-c5x" customClass="OptionTableViewController" customModule="MovieRanking" customModuleProvider="target" sceneMemberID="viewController">
                     <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" bounces="NO" scrollEnabled="NO" showsHorizontalScrollIndicator="NO" showsVerticalScrollIndicator="NO" bouncesZoom="NO" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="-1" estimatedSectionHeaderHeight="-1" sectionFooterHeight="-1" estimatedSectionFooterHeight="-1" id="ma3-z9-Vpb">
-                        <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
+                        <rect key="frame" x="0.0" y="0.0" width="414" height="842"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                         <prototypes>
                             <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" reuseIdentifier="ReuseCell" id="LbL-gA-wbm">
-                                <rect key="frame" x="0.0" y="44.5" width="600" height="43.5"/>
+                                <rect key="frame" x="0.0" y="44.5" width="414" height="43.5"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="LbL-gA-wbm" id="Cdz-nr-HWc">
-                                    <rect key="frame" x="0.0" y="0.0" width="600" height="43.5"/>
+                                    <rect key="frame" x="0.0" y="0.0" width="414" height="43.5"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                 </tableViewCellContentView>
                             </tableViewCell>
@@ -86,18 +95,18 @@
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="xTn-x3-PDS" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-257" y="-952"/>
+            <point key="canvasLocation" x="-381" y="-952"/>
         </scene>
         <!--영화상세정보-->
         <scene sceneID="miv-Ke-cMl">
             <objects>
-                <viewController id="JEh-Cz-2hp" customClass="ResultViewController" customModule="MovieRanking" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController id="JEh-Cz-2hp" customClass="MovieInfoViewController" customModule="MovieRanking" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="hUj-Af-RwW">
-                        <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
+                        <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" showsHorizontalScrollIndicator="NO" showsVerticalScrollIndicator="NO" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="28" estimatedSectionHeaderHeight="-1" sectionFooterHeight="28" estimatedSectionFooterHeight="-1" translatesAutoresizingMaskIntoConstraints="NO" id="dpf-Oh-FO4">
-                                <rect key="frame" x="0.0" y="44" width="600" height="556"/>
+                                <rect key="frame" x="0.0" y="88" width="414" height="808"/>
                             </tableView>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="KLw-pg-VYb"/>
@@ -126,14 +135,14 @@
             <objects>
                 <viewController id="jn7-Gv-kj0" customClass="AddCommentViewController" customModule="MovieRanking" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="H2K-yx-1CQ">
-                        <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
+                        <rect key="frame" x="0.0" y="0.0" width="414" height="842"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="5Fi-Gx-DFt" userLabel="Contents View">
-                                <rect key="frame" x="10" y="10" width="580" height="560"/>
+                                <rect key="frame" x="10" y="10" width="394" height="788"/>
                                 <subviews>
                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="9b7-NJ-cnp" userLabel="Top View">
-                                        <rect key="frame" x="240" y="20" width="100" height="30"/>
+                                        <rect key="frame" x="147" y="20" width="100" height="30"/>
                                         <subviews>
                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="코멘트 작성" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="seT-Cd-2rb">
                                                 <rect key="frame" x="0.0" y="0.0" width="100" height="30"/>
@@ -175,7 +184,7 @@
                                         </constraints>
                                     </view>
                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="MS3-1c-dhS" userLabel="Confirm button View">
-                                        <rect key="frame" x="520" y="20" width="40" height="30"/>
+                                        <rect key="frame" x="334" y="20" width="40" height="30"/>
                                         <subviews>
                                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Tid-YG-GEd">
                                                 <rect key="frame" x="0.0" y="0.0" width="40" height="30"/>
@@ -197,10 +206,10 @@
                                         </constraints>
                                     </view>
                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="R27-B5-4t7" userLabel="Title View">
-                                        <rect key="frame" x="10" y="70" width="560" height="24"/>
+                                        <rect key="frame" x="10" y="70" width="374" height="24"/>
                                         <subviews>
                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="영화 제목" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="FHJ-s1-MAc">
-                                                <rect key="frame" x="0.0" y="0.0" width="560" height="24"/>
+                                                <rect key="frame" x="0.0" y="0.0" width="374" height="24"/>
                                                 <fontDescription key="fontDescription" type="boldSystem" pointSize="20"/>
                                                 <nil key="textColor"/>
                                                 <nil key="highlightedColor"/>
@@ -214,7 +223,7 @@
                                         </constraints>
                                     </view>
                                     <stackView opaque="NO" contentMode="scaleToFill" distribution="fillEqually" spacing="5" translatesAutoresizingMaskIntoConstraints="NO" id="DQE-tk-me9" userLabel="Star Stack View">
-                                        <rect key="frame" x="155" y="114" width="270" height="50"/>
+                                        <rect key="frame" x="62" y="114" width="270" height="50"/>
                                         <subviews>
                                             <imageView clipsSubviews="YES" userInteractionEnabled="NO" tag="1" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="star_empty" translatesAutoresizingMaskIntoConstraints="NO" id="5wZ-l9-BcJ" userLabel="1st Image View">
                                                 <rect key="frame" x="0.0" y="0.0" width="50" height="50"/>
@@ -259,7 +268,7 @@
                                         </subviews>
                                     </stackView>
                                     <slider opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" minValue="0.0" maxValue="10" translatesAutoresizingMaskIntoConstraints="NO" id="Atf-UI-x5C" customClass="RatingUISlider" customModule="MovieRanking" customModuleProvider="target">
-                                        <rect key="frame" x="155.5" y="114" width="269" height="51"/>
+                                        <rect key="frame" x="62.5" y="114" width="269" height="51"/>
                                         <constraints>
                                             <constraint firstAttribute="width" constant="265" id="LIQ-Qy-Pcc"/>
                                             <constraint firstAttribute="height" constant="50" id="wzb-Tz-TMD"/>
@@ -272,20 +281,20 @@
                                         </connections>
                                     </slider>
                                     <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" keyboardDismissMode="onDrag" translatesAutoresizingMaskIntoConstraints="NO" id="i5u-4P-8my">
-                                        <rect key="frame" x="10" y="227" width="560" height="323"/>
+                                        <rect key="frame" x="10" y="227" width="374" height="551"/>
                                         <color key="backgroundColor" systemColor="systemGray6Color"/>
                                         <color key="textColor" systemColor="labelColor"/>
                                         <fontDescription key="fontDescription" name=".AppleSystemUIFont" family=".AppleSystemUIFont" pointSize="14"/>
                                         <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
                                     </textView>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="5.0" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="7pa-1S-l9G">
-                                        <rect key="frame" x="279.5" y="174" width="21.5" height="18"/>
+                                        <rect key="frame" x="186.5" y="174" width="21.5" height="18"/>
                                         <fontDescription key="fontDescription" type="system" pointSize="15"/>
                                         <nil key="textColor"/>
                                         <nil key="highlightedColor"/>
                                     </label>
                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="WGe-Bx-2nO" userLabel="Line View">
-                                        <rect key="frame" x="0.0" y="202" width="580" height="5"/>
+                                        <rect key="frame" x="0.0" y="202" width="394" height="5"/>
                                         <color key="backgroundColor" systemColor="systemGray6Color"/>
                                         <constraints>
                                             <constraint firstAttribute="height" constant="5" id="7v1-XG-AeE"/>
@@ -343,11 +352,11 @@
             <objects>
                 <viewController id="vYC-Dr-elo" customClass="ImageViewController" customModule="MovieRanking" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="i8x-Q4-uM9">
-                        <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
+                        <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" pagingEnabled="YES" showsHorizontalScrollIndicator="NO" showsVerticalScrollIndicator="NO" dataMode="prototypes" translatesAutoresizingMaskIntoConstraints="NO" id="BYm-Bp-BTB">
-                                <rect key="frame" x="0.0" y="44" width="600" height="507"/>
+                                <rect key="frame" x="0.0" y="88" width="414" height="725"/>
                                 <color key="backgroundColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <collectionViewFlowLayout key="collectionViewLayout" scrollDirection="horizontal" minimumLineSpacing="0.0" minimumInteritemSpacing="0.0" id="7OM-b7-LNc">
                                     <size key="itemSize" width="128" height="128"/>
@@ -356,13 +365,27 @@
                                     <inset key="sectionInset" minX="0.0" minY="0.0" maxX="0.0" maxY="0.0"/>
                                 </collectionViewFlowLayout>
                                 <cells>
-                                    <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" fixedFrame="YES" reuseIdentifier="ImageCollectionViewCell" translatesAutoresizingMaskIntoConstraints="NO" id="yYo-en-gaf">
+                                    <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" reuseIdentifier="ImageCollectionViewCell" translatesAutoresizingMaskIntoConstraints="NO" id="yYo-en-gaf" customClass="ImageCollectionViewCell" customModule="MovieRanking" customModuleProvider="target">
                                         <rect key="frame" x="0.0" y="0.0" width="128" height="128"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                         <collectionViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO" id="dhL-jU-yZY">
                                             <rect key="frame" x="0.0" y="0.0" width="128" height="128"/>
                                             <autoresizingMask key="autoresizingMask"/>
+                                            <subviews>
+                                                <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="Pd7-zw-Aox">
+                                                    <rect key="frame" x="0.0" y="0.0" width="128" height="128"/>
+                                                </imageView>
+                                            </subviews>
+                                            <constraints>
+                                                <constraint firstItem="Pd7-zw-Aox" firstAttribute="leading" secondItem="dhL-jU-yZY" secondAttribute="leading" id="MLn-UM-HlB"/>
+                                                <constraint firstAttribute="trailing" secondItem="Pd7-zw-Aox" secondAttribute="trailing" id="Nw7-6P-ZFH"/>
+                                                <constraint firstItem="Pd7-zw-Aox" firstAttribute="top" secondItem="dhL-jU-yZY" secondAttribute="top" id="QiQ-cD-WGB"/>
+                                                <constraint firstAttribute="bottom" secondItem="Pd7-zw-Aox" secondAttribute="bottom" id="t11-20-1Hi"/>
+                                            </constraints>
                                         </collectionViewCellContentView>
+                                        <connections>
+                                            <outlet property="imageView" destination="Pd7-zw-Aox" id="dV6-wS-5x8"/>
+                                        </connections>
                                     </collectionViewCell>
                                 </cells>
                             </collectionView>
@@ -396,22 +419,22 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="C4e-bp-kSW" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1295.6521739130435" y="-952.23214285714278"/>
+            <point key="canvasLocation" x="386" y="-952"/>
         </scene>
         <!--출연/제작-->
         <scene sceneID="fe2-64-zcv">
             <objects>
                 <tableViewController storyboardIdentifier="goToStaffsInfoView" useStoryboardIdentifierAsRestorationIdentifier="YES" id="AsA-W5-YJ0" customClass="StaffsInfoTableViewController" customModule="MovieRanking" customModuleProvider="target" sceneMemberID="viewController">
                     <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" showsHorizontalScrollIndicator="NO" showsVerticalScrollIndicator="NO" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="-1" estimatedSectionHeaderHeight="-1" sectionFooterHeight="-1" estimatedSectionFooterHeight="-1" id="Vqq-dt-SOW">
-                        <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
+                        <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                         <prototypes>
-                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" reuseIdentifier="staffsInfoCell" id="sfF-cf-Tu9">
-                                <rect key="frame" x="0.0" y="44.5" width="600" height="43.5"/>
+                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" reuseIdentifier="ReuseCell" id="sfF-cf-Tu9">
+                                <rect key="frame" x="0.0" y="44.5" width="414" height="43.5"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="sfF-cf-Tu9" id="SmA-8c-bqt">
-                                    <rect key="frame" x="0.0" y="0.0" width="600" height="43.5"/>
+                                    <rect key="frame" x="0.0" y="0.0" width="414" height="43.5"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                 </tableViewCellContentView>
                             </tableViewCell>
@@ -432,37 +455,44 @@
             <objects>
                 <viewController id="MIs-pi-UB1" customClass="SearchMovieViewController" customModule="MovieRanking" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="IAs-sD-t8T">
-                        <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
+                        <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" showsHorizontalScrollIndicator="NO" showsVerticalScrollIndicator="NO" keyboardDismissMode="onDrag" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="-1" estimatedSectionHeaderHeight="-1" sectionFooterHeight="-1" estimatedSectionFooterHeight="-1" translatesAutoresizingMaskIntoConstraints="NO" id="eSC-9q-EbX">
-                                <rect key="frame" x="0.0" y="96" width="600" height="455"/>
+                                <rect key="frame" x="0.0" y="140" width="414" height="673"/>
                                 <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                             </tableView>
                             <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="background_image" translatesAutoresizingMaskIntoConstraints="NO" id="KSz-k8-eZW">
-                                <rect key="frame" x="183" y="227.5" width="234" height="145"/>
+                                <rect key="frame" x="90" y="375.5" width="234" height="145"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="145" id="teO-7a-vOp"/>
                                     <constraint firstAttribute="width" constant="234" id="uGM-UE-t4U"/>
                                 </constraints>
                             </imageView>
+                            <activityIndicatorView hidden="YES" opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" hidesWhenStopped="YES" animating="YES" style="large" translatesAutoresizingMaskIntoConstraints="NO" id="fGC-p8-EDj">
+                                <rect key="frame" x="188.5" y="429.5" width="37" height="37"/>
+                                <color key="color" red="0.91764706370000004" green="0.20392158630000001" blue="0.36078432199999999" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
+                            </activityIndicatorView>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="lu9-wC-7FN"/>
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                         <constraints>
+                            <constraint firstItem="fGC-p8-EDj" firstAttribute="centerX" secondItem="IAs-sD-t8T" secondAttribute="centerX" id="MsF-ch-KJJ"/>
                             <constraint firstItem="eSC-9q-EbX" firstAttribute="trailing" secondItem="lu9-wC-7FN" secondAttribute="trailing" id="N54-7y-bYR"/>
                             <constraint firstItem="eSC-9q-EbX" firstAttribute="bottom" secondItem="lu9-wC-7FN" secondAttribute="bottom" id="Rvj-sc-XgT"/>
                             <constraint firstItem="eSC-9q-EbX" firstAttribute="top" secondItem="lu9-wC-7FN" secondAttribute="top" id="f5G-yU-4qO"/>
                             <constraint firstItem="eSC-9q-EbX" firstAttribute="leading" secondItem="lu9-wC-7FN" secondAttribute="leading" id="m3e-HS-eqh"/>
                             <constraint firstItem="KSz-k8-eZW" firstAttribute="centerY" secondItem="IAs-sD-t8T" secondAttribute="centerY" id="mC0-6X-r02"/>
+                            <constraint firstItem="fGC-p8-EDj" firstAttribute="centerY" secondItem="IAs-sD-t8T" secondAttribute="centerY" id="vX5-G3-fyQ"/>
                             <constraint firstItem="KSz-k8-eZW" firstAttribute="centerX" secondItem="IAs-sD-t8T" secondAttribute="centerX" id="zNR-JZ-amY"/>
                         </constraints>
                     </view>
                     <navigationItem key="navigationItem" title="영화검색" id="JS2-oo-4Tn"/>
                     <connections>
+                        <outlet property="activityIndicator" destination="fGC-p8-EDj" id="D2b-8Z-9Vi"/>
                         <outlet property="backgroundImageView" destination="KSz-k8-eZW" id="VKI-hx-4bj"/>
                         <outlet property="tableView" destination="eSC-9q-EbX" id="FLP-lN-pmA"/>
-                        <segue destination="JEh-Cz-2hp" kind="show" identifier="goToResultView" id="7dB-tT-0G5"/>
+                        <segue destination="JEh-Cz-2hp" kind="show" identifier="goToMovieInfoView" id="7dB-tT-0G5"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="KIr-IK-mpn" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
@@ -503,17 +533,17 @@
             <objects>
                 <viewController id="whM-HS-m0M" customClass="LoginViewController" customModule="MovieRanking" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="YAa-xJ-JPd">
-                        <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
+                        <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <stackView opaque="NO" contentMode="scaleToFill" spacing="10" translatesAutoresizingMaskIntoConstraints="NO" id="4eJ-NO-t0O">
-                                <rect key="frame" x="15" y="106" width="570" height="169"/>
+                                <rect key="frame" x="15" y="150" width="384" height="169"/>
                                 <subviews>
                                     <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" alignment="top" spacing="29" translatesAutoresizingMaskIntoConstraints="NO" id="Xvu-G2-ydo">
-                                        <rect key="frame" x="0.0" y="0.0" width="480" height="169"/>
+                                        <rect key="frame" x="0.0" y="0.0" width="294" height="169"/>
                                         <subviews>
                                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="ySy-A9-UND" userLabel="ID View">
-                                                <rect key="frame" x="0.0" y="0.0" width="480" height="90"/>
+                                                <rect key="frame" x="0.0" y="0.0" width="294" height="90"/>
                                                 <subviews>
                                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="ID" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="zYC-d7-0my">
                                                         <rect key="frame" x="0.0" y="0.0" width="25" height="90"/>
@@ -522,16 +552,16 @@
                                                         <nil key="highlightedColor"/>
                                                     </label>
                                                     <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" alignment="top" translatesAutoresizingMaskIntoConstraints="NO" id="pql-60-u4p">
-                                                        <rect key="frame" x="50" y="0.0" width="430" height="90"/>
+                                                        <rect key="frame" x="50" y="0.0" width="244" height="90"/>
                                                         <subviews>
                                                             <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="이메일" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="Zia-7K-1NF">
-                                                                <rect key="frame" x="0.0" y="0.0" width="430" height="89"/>
+                                                                <rect key="frame" x="0.0" y="0.0" width="244" height="89"/>
                                                                 <color key="textColor" red="0.91764706370000004" green="0.20392158630000001" blue="0.36078432199999999" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
                                                                 <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                                                 <textInputTraits key="textInputTraits"/>
                                                             </textField>
                                                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="ar2-md-d2J">
-                                                                <rect key="frame" x="0.0" y="89" width="430" height="1"/>
+                                                                <rect key="frame" x="0.0" y="89" width="244" height="1"/>
                                                                 <color key="backgroundColor" red="0.91764706370000004" green="0.20392158630000001" blue="0.36078432199999999" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
                                                                 <constraints>
                                                                     <constraint firstAttribute="height" constant="1" id="Fz8-Tx-Fbu"/>
@@ -564,7 +594,7 @@
                                                 </constraints>
                                             </view>
                                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="S1D-Hk-qmX" userLabel="Password View">
-                                                <rect key="frame" x="0.0" y="119" width="480" height="50"/>
+                                                <rect key="frame" x="0.0" y="119" width="294" height="50"/>
                                                 <subviews>
                                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="PW" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="aVF-Qi-fOO">
                                                         <rect key="frame" x="0.0" y="0.0" width="40.5" height="50"/>
@@ -573,16 +603,16 @@
                                                         <nil key="highlightedColor"/>
                                                     </label>
                                                     <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" alignment="top" translatesAutoresizingMaskIntoConstraints="NO" id="3KF-39-Nlm">
-                                                        <rect key="frame" x="50.5" y="0.0" width="429.5" height="50"/>
+                                                        <rect key="frame" x="50.5" y="0.0" width="243.5" height="50"/>
                                                         <subviews>
                                                             <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="비밀번호" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="pLh-N0-IYC">
-                                                                <rect key="frame" x="0.0" y="0.0" width="429.5" height="49"/>
+                                                                <rect key="frame" x="0.0" y="0.0" width="243.5" height="49"/>
                                                                 <color key="textColor" red="0.91764706370000004" green="0.20392158630000001" blue="0.36078432199999999" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
                                                                 <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                                                 <textInputTraits key="textInputTraits" secureTextEntry="YES"/>
                                                             </textField>
                                                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="ATm-Gb-r7i">
-                                                                <rect key="frame" x="0.0" y="49" width="429.5" height="1"/>
+                                                                <rect key="frame" x="0.0" y="49" width="243.5" height="1"/>
                                                                 <color key="backgroundColor" red="0.91764706370000004" green="0.20392158630000001" blue="0.36078432199999999" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
                                                                 <constraints>
                                                                     <constraint firstAttribute="height" constant="1" id="lXj-9J-uKw"/>
@@ -625,7 +655,7 @@
                                         </constraints>
                                     </stackView>
                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="r3G-2U-hgE">
-                                        <rect key="frame" x="490" y="0.0" width="80" height="169"/>
+                                        <rect key="frame" x="304" y="0.0" width="80" height="169"/>
                                         <subviews>
                                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="iE3-FU-P8o">
                                                 <rect key="frame" x="0.0" y="133" width="80" height="36"/>
@@ -657,7 +687,7 @@
                                 </constraints>
                             </stackView>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="CeS-b1-b69">
-                                <rect key="frame" x="270.5" y="300" width="59" height="33"/>
+                                <rect key="frame" x="177.5" y="344" width="59" height="33"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                 <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
                                 <state key="normal" title="회원가입">
@@ -694,20 +724,20 @@
             <objects>
                 <viewController id="1hc-3D-obl" customClass="AccountViewController" customModule="MovieRanking" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="HCa-fN-pnP">
-                        <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
+                        <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Vvf-kP-mV4">
-                                <rect key="frame" x="10" y="106" width="580" height="435"/>
+                                <rect key="frame" x="10" y="150" width="394" height="653"/>
                                 <subviews>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="로그인된 계정이 없습니다" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Jfg-4n-vSt">
-                                        <rect key="frame" x="165.5" y="65" width="249" height="30"/>
+                                        <rect key="frame" x="72.5" y="65" width="249" height="30"/>
                                         <fontDescription key="fontDescription" type="system" pointSize="25"/>
                                         <color key="textColor" red="0.91764706370000004" green="0.20392158630000001" blue="0.36078432199999999" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
                                         <nil key="highlightedColor"/>
                                     </label>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Rhf-IE-esA">
-                                        <rect key="frame" x="210" y="130" width="160" height="36"/>
+                                        <rect key="frame" x="117" y="130" width="160" height="36"/>
                                         <color key="backgroundColor" red="0.91764706370000004" green="0.20392158630000001" blue="0.36078432199999999" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
                                         <constraints>
                                             <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="160" id="uqq-oQ-I2B"/>
@@ -722,7 +752,7 @@
                                         </connections>
                                     </button>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Y62-cL-MJ8">
-                                        <rect key="frame" x="240.5" y="105" width="99" height="30"/>
+                                        <rect key="frame" x="147.5" y="105" width="99" height="30"/>
                                         <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
                                         <state key="normal" title="로그인 하러 가기">
                                             <color key="titleColor" red="0.91764706370000004" green="0.20392158630000001" blue="0.36078432199999999" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
@@ -833,17 +863,17 @@
             <objects>
                 <viewController id="gx0-9J-M22" customClass="RegisterViewController" customModule="MovieRanking" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="BGC-W4-zuq">
-                        <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
+                        <rect key="frame" x="0.0" y="0.0" width="414" height="842"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <stackView opaque="NO" contentMode="scaleToFill" spacing="10" translatesAutoresizingMaskIntoConstraints="NO" id="b3B-l6-HEt">
-                                <rect key="frame" x="15" y="100" width="570" height="169"/>
+                                <rect key="frame" x="15" y="100" width="384" height="169"/>
                                 <subviews>
                                     <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" alignment="top" spacing="29" translatesAutoresizingMaskIntoConstraints="NO" id="TtO-3K-skH">
-                                        <rect key="frame" x="0.0" y="0.0" width="480" height="169"/>
+                                        <rect key="frame" x="0.0" y="0.0" width="294" height="169"/>
                                         <subviews>
                                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Zrr-aL-p50" userLabel="ID View">
-                                                <rect key="frame" x="0.0" y="0.0" width="480" height="90"/>
+                                                <rect key="frame" x="0.0" y="0.0" width="294" height="90"/>
                                                 <subviews>
                                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="ID" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Ruu-h1-kFY">
                                                         <rect key="frame" x="0.0" y="0.0" width="25" height="90"/>
@@ -852,16 +882,16 @@
                                                         <nil key="highlightedColor"/>
                                                     </label>
                                                     <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" alignment="top" translatesAutoresizingMaskIntoConstraints="NO" id="ife-GF-a31">
-                                                        <rect key="frame" x="50" y="0.0" width="430" height="90"/>
+                                                        <rect key="frame" x="50" y="0.0" width="244" height="90"/>
                                                         <subviews>
                                                             <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="이메일을 입력하세요" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="gsq-q4-uVZ">
-                                                                <rect key="frame" x="0.0" y="0.0" width="430" height="89"/>
+                                                                <rect key="frame" x="0.0" y="0.0" width="244" height="89"/>
                                                                 <color key="textColor" red="0.91764706370000004" green="0.20392158630000001" blue="0.36078432199999999" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
                                                                 <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                                                 <textInputTraits key="textInputTraits"/>
                                                             </textField>
                                                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="dHM-p1-Tp5">
-                                                                <rect key="frame" x="0.0" y="89" width="430" height="1"/>
+                                                                <rect key="frame" x="0.0" y="89" width="244" height="1"/>
                                                                 <color key="backgroundColor" red="0.91764706370000004" green="0.20392158630000001" blue="0.36078432199999999" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
                                                                 <constraints>
                                                                     <constraint firstAttribute="height" constant="1" id="iUN-SG-wHz"/>
@@ -894,7 +924,7 @@
                                                 </constraints>
                                             </view>
                                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="F2g-vv-yeU" userLabel="Password View">
-                                                <rect key="frame" x="0.0" y="119" width="480" height="50"/>
+                                                <rect key="frame" x="0.0" y="119" width="294" height="50"/>
                                                 <subviews>
                                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="PW" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="YIt-ZY-5yi">
                                                         <rect key="frame" x="0.0" y="0.0" width="40.5" height="50"/>
@@ -903,16 +933,16 @@
                                                         <nil key="highlightedColor"/>
                                                     </label>
                                                     <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" alignment="top" translatesAutoresizingMaskIntoConstraints="NO" id="YDe-QF-IGd">
-                                                        <rect key="frame" x="50.5" y="0.0" width="429.5" height="50"/>
+                                                        <rect key="frame" x="50.5" y="0.0" width="243.5" height="50"/>
                                                         <subviews>
                                                             <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="6자리 이상" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="B4T-hx-7aG">
-                                                                <rect key="frame" x="0.0" y="0.0" width="429.5" height="49"/>
+                                                                <rect key="frame" x="0.0" y="0.0" width="243.5" height="49"/>
                                                                 <color key="textColor" red="0.91764706370000004" green="0.20392158630000001" blue="0.36078432199999999" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
                                                                 <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                                                 <textInputTraits key="textInputTraits" secureTextEntry="YES"/>
                                                             </textField>
                                                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="FW5-QE-yrr">
-                                                                <rect key="frame" x="0.0" y="49" width="429.5" height="1"/>
+                                                                <rect key="frame" x="0.0" y="49" width="243.5" height="1"/>
                                                                 <color key="backgroundColor" red="0.91764706370000004" green="0.20392158630000001" blue="0.36078432199999999" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
                                                                 <constraints>
                                                                     <constraint firstAttribute="height" constant="1" id="KCz-fk-Pls"/>
@@ -955,7 +985,7 @@
                                         </constraints>
                                     </stackView>
                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Qpx-NM-Obb">
-                                        <rect key="frame" x="490" y="0.0" width="80" height="169"/>
+                                        <rect key="frame" x="304" y="0.0" width="80" height="169"/>
                                         <subviews>
                                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="6rQ-0e-rwQ">
                                                 <rect key="frame" x="0.0" y="133" width="80" height="36"/>
@@ -987,7 +1017,7 @@
                                 </constraints>
                             </stackView>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="0O6-Nq-Bfl">
-                                <rect key="frame" x="285" y="294" width="30" height="33"/>
+                                <rect key="frame" x="192" y="294" width="30" height="33"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                 <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
                                 <state key="normal" title="취소">
@@ -998,7 +1028,7 @@
                                 </connections>
                             </button>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="회원가입" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="mnP-bf-Fpy">
-                                <rect key="frame" x="257" y="30" width="86.5" height="30"/>
+                                <rect key="frame" x="164" y="30" width="86.5" height="30"/>
                                 <fontDescription key="fontDescription" type="boldSystem" pointSize="25"/>
                                 <color key="textColor" red="0.91764706370000004" green="0.20392158630000001" blue="0.36078432199999999" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
                                 <nil key="highlightedColor"/>
@@ -1042,11 +1072,11 @@
                 </navigationController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="eoC-oQ-u8L" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-1049" y="-952"/>
+            <point key="canvasLocation" x="-1143" y="-952"/>
         </scene>
     </scenes>
     <inferredMetricsTieBreakers>
-        <segue reference="3vi-Ab-nMX"/>
+        <segue reference="7dB-tT-0G5"/>
     </inferredMetricsTieBreakers>
     <resources>
         <image name="background_image" width="875" height="555"/>

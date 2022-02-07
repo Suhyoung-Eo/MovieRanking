@@ -12,7 +12,7 @@ class Service {
     // 1. fetchDailyBoxOffice/ fetchWeeklyBoxOffice: 박스오피스 Top 10 영화리스트 정보 취득 - 영화진흥위원회
     // 2. fetchMovieInfo: 1번에서 취득한 movieNm과 openDt 조합으로 필요한 영화 정보 취득 - 한국영화데이터베이스
     
-    private let repository = Repository()
+    private let apiService = ApiService()
     
     //MARK: - for BoxOfficeViewModel
     
@@ -21,7 +21,7 @@ class Service {
         guard let boxOfficeDay = getBoxofficeDate(day: -1),
               let url = URL.urlForBoxOfficeApi(targetDt: boxOfficeDay) else { return }
         
-        repository.fetchDailyBoxOffice(with: url) { [weak self] boxOfficeList, error in
+        apiService.fetchDailyBoxOffice(with: url) { [weak self] boxOfficeList, error in
             guard error == nil else { completion(BoxOfficeListModel([BoxOffice.empty]), MovieInfoListModel([MovieInfo.empty]), error); return }
             
             self?.loadMovieInfo(BoxOfficeListModel(boxOfficeList)) { results in
@@ -35,7 +35,7 @@ class Service {
         guard let boxOfficeDay = getBoxofficeDate(day: -7),
               let url = URL.urlForBoxOfficeApi(weekGb: boxOfficeType, targetDt: boxOfficeDay) else { return }
         
-        repository.fetchWeeklyBoxOffice(with: url) { [weak self] boxOfficeList, error in
+        apiService.fetchWeeklyBoxOffice(with: url) { [weak self] boxOfficeList, error in
             guard error == nil else { completion(BoxOfficeListModel([BoxOffice.empty]), MovieInfoListModel([MovieInfo.empty]), error); return }
             
             self?.loadMovieInfo(BoxOfficeListModel(boxOfficeList)) { results in
@@ -79,7 +79,7 @@ class Service {
         guard let movieName = movieName.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed),
               let url = URL.urlForMovieInfoApi(movieName: movieName, releaseDts: releaseDts) else { return }
         
-        repository.fetchMovieInfo(with: url) { movieInfo, error in
+        apiService.fetchMovieInfo(with: url) { movieInfo, error in
             guard error == nil else { completion(MovieInfoListModel([MovieInfo.empty])); return }
             completion(MovieInfoListModel(movieInfo))
         }
@@ -91,7 +91,7 @@ class Service {
         guard let movieName = movieName.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed),
               let url = URL.urlForMovieInfoApi(movieName: movieName) else { return }
         
-        repository.fetchMovieInfo(with: url) { movieInfo, error in
+        apiService.fetchMovieInfo(with: url) { movieInfo, error in
             guard error == nil else { completion(MovieInfoListModel([MovieInfo.empty]), error); return }
             completion(MovieInfoListModel(movieInfo), nil)
         }

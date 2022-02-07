@@ -1,6 +1,6 @@
 //
 //  SearchMovieCell.swift
-//  MovingMovie
+//  MovieRanking
 //
 //  Created by Suhyoung Eo on 2022/02/05.
 //
@@ -31,7 +31,6 @@ class SearchMovieCell: UITableViewCell {
     override func prepareForReuse() {
         super.prepareForReuse()
         
-        // cell 재사용 시 이미지 다운로드 완료전 이전 이미지 겹침 문제 발생 방지
         thumbnailImageView.image = nil
     }
 }

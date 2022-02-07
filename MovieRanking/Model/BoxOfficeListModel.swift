@@ -1,5 +1,5 @@
 //
-//  BoxOfficeViewModel.swift
+//  BoxOfficeListModel.swift
 //  MovieRanking
 //
 //  Created by Suhyoung Eo on 2022/02/03.
@@ -16,6 +16,10 @@ class BoxOfficeListModel {
 }
 
 extension BoxOfficeListModel {
+    
+    var count: Int {
+        return boxOfficeList.count
+    }
     
     func boxOfficeModel(_ index: Int) -> BoxOfficeModel {
         return BoxOfficeModel(boxOfficeList[index])
