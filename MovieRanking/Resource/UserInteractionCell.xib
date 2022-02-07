@@ -23,7 +23,7 @@
                         <rect key="frame" x="318" y="0.0" width="60" height="60"/>
                         <subviews>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" adjustsImageWhenHighlighted="NO" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Yjb-3t-lbV">
-                                <rect key="frame" x="21" y="5" width="18.5" height="25"/>
+                                <rect key="frame" x="21" y="7.5" width="18.5" height="25"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="25" id="ATW-fH-9iC"/>
                                 </constraints>
@@ -35,8 +35,8 @@
                                 </connections>
                             </button>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="코멘트" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="fgA-xl-G1b">
-                                <rect key="frame" x="13" y="39" width="34" height="16"/>
-                                <fontDescription key="fontDescription" type="system" weight="light" pointSize="13"/>
+                                <rect key="frame" x="14.5" y="40.5" width="31.5" height="14.5"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="12"/>
                                 <nil key="textColor"/>
                                 <nil key="highlightedColor"/>
                             </label>
@@ -47,7 +47,7 @@
                             <constraint firstAttribute="bottom" secondItem="fgA-xl-G1b" secondAttribute="bottom" constant="5" id="Mvt-Pq-4IF"/>
                             <constraint firstItem="fgA-xl-G1b" firstAttribute="centerX" secondItem="931-Vc-AsA" secondAttribute="centerX" id="Wok-HB-IaI"/>
                             <constraint firstItem="Yjb-3t-lbV" firstAttribute="centerX" secondItem="931-Vc-AsA" secondAttribute="centerX" id="XcT-Id-Wn2"/>
-                            <constraint firstItem="Yjb-3t-lbV" firstAttribute="top" secondItem="931-Vc-AsA" secondAttribute="top" constant="5" id="bAu-u2-4TG"/>
+                            <constraint firstItem="Yjb-3t-lbV" firstAttribute="top" secondItem="931-Vc-AsA" secondAttribute="top" constant="7.5" id="bAu-u2-4TG"/>
                             <constraint firstAttribute="height" constant="60" id="k6h-63-bym"/>
                         </constraints>
                     </view>
@@ -55,13 +55,13 @@
                         <rect key="frame" x="253" y="0.0" width="60" height="60"/>
                         <subviews>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="보고싶어요" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="neM-KM-yCl">
-                                <rect key="frame" x="2" y="39" width="56.5" height="16"/>
-                                <fontDescription key="fontDescription" type="system" weight="light" pointSize="13"/>
+                                <rect key="frame" x="4" y="40.5" width="52" height="14.5"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="12"/>
                                 <nil key="textColor"/>
                                 <nil key="highlightedColor"/>
                             </label>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" adjustsImageWhenHighlighted="NO" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="BAW-Ru-okR">
-                                <rect key="frame" x="20.5" y="7" width="19.5" height="18.5"/>
+                                <rect key="frame" x="20.5" y="9" width="19.5" height="18.5"/>
                                 <color key="tintColor" white="0.33333333333333331" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
                                 <state key="normal">
@@ -74,7 +74,7 @@
                         </subviews>
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                         <constraints>
-                            <constraint firstItem="BAW-Ru-okR" firstAttribute="top" secondItem="mXq-v1-4AY" secondAttribute="top" constant="7" id="7r8-mX-iMc"/>
+                            <constraint firstItem="BAW-Ru-okR" firstAttribute="top" secondItem="mXq-v1-4AY" secondAttribute="top" constant="9" id="7r8-mX-iMc"/>
                             <constraint firstAttribute="bottom" secondItem="neM-KM-yCl" secondAttribute="bottom" constant="5" id="IVx-EE-KVv"/>
                             <constraint firstItem="BAW-Ru-okR" firstAttribute="centerX" secondItem="mXq-v1-4AY" secondAttribute="centerX" id="O1Y-kR-Xxk"/>
                             <constraint firstAttribute="height" constant="60" id="Vlu-vK-7h3"/>
