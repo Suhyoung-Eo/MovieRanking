@@ -44,6 +44,12 @@
 		FEA886C727B004A400A0320B /* StaffsInfoCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = FEA886C627B004A400A0320B /* StaffsInfoCell.swift */; };
 		FEA886C927B004C000A0320B /* StaffsInfoCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = FEA886C827B004C000A0320B /* StaffsInfoCell.xib */; };
 		FEF75EBA27B008770022A1EE /* StaffsInfoTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FEF75EB927B008770022A1EE /* StaffsInfoTableViewController.swift */; };
+		FEF75EC027B0E49E0022A1EE /* UserInteractionCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = FEF75EBF27B0E49E0022A1EE /* UserInteractionCell.xib */; };
+		FEF75EC227B0E4E20022A1EE /* UserInteractionCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = FEF75EC127B0E4E20022A1EE /* UserInteractionCell.swift */; };
+		FEF75EC427B105D10022A1EE /* CommentHeadCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = FEF75EC327B105D10022A1EE /* CommentHeadCell.xib */; };
+		FEF75EC627B106B40022A1EE /* CommentHeadCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = FEF75EC527B106B40022A1EE /* CommentHeadCell.swift */; };
+		FEF75EC827B109BE0022A1EE /* CommentCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = FEF75EC727B109BE0022A1EE /* CommentCell.xib */; };
+		FEF75ECA27B109CD0022A1EE /* CommentCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = FEF75EC927B109CD0022A1EE /* CommentCell.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -86,6 +92,12 @@
 		FEA886C627B004A400A0320B /* StaffsInfoCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StaffsInfoCell.swift; sourceTree = "<group>"; };
 		FEA886C827B004C000A0320B /* StaffsInfoCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = StaffsInfoCell.xib; sourceTree = "<group>"; };
 		FEF75EB927B008770022A1EE /* StaffsInfoTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StaffsInfoTableViewController.swift; sourceTree = "<group>"; };
+		FEF75EBF27B0E49E0022A1EE /* UserInteractionCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = UserInteractionCell.xib; sourceTree = "<group>"; };
+		FEF75EC127B0E4E20022A1EE /* UserInteractionCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UserInteractionCell.swift; sourceTree = "<group>"; };
+		FEF75EC327B105D10022A1EE /* CommentHeadCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = CommentHeadCell.xib; sourceTree = "<group>"; };
+		FEF75EC527B106B40022A1EE /* CommentHeadCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommentHeadCell.swift; sourceTree = "<group>"; };
+		FEF75EC727B109BE0022A1EE /* CommentCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = CommentCell.xib; sourceTree = "<group>"; };
+		FEF75EC927B109CD0022A1EE /* CommentCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CommentCell.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -193,12 +205,18 @@
 				FEA886B627AFBD8C00A0320B /* MovieImageCell.xib */,
 				FEA886C227AFF9B000A0320B /* DetailInfoCell.xib */,
 				FEA886C827B004C000A0320B /* StaffsInfoCell.xib */,
+				FEF75EBF27B0E49E0022A1EE /* UserInteractionCell.xib */,
+				FEF75EC327B105D10022A1EE /* CommentHeadCell.xib */,
+				FEF75EC727B109BE0022A1EE /* CommentCell.xib */,
 				FE7C445727AB5BBB00AA33AC /* BoxOfficeCell.swift */,
 				FEA886AC27ADFEE400A0320B /* SearchMovieCell.swift */,
 				FEA886B827AFBD9B00A0320B /* MovieImageCell.swift */,
 				FEA886BE27AFC66C00A0320B /* ImageCollectionViewCell.swift */,
 				FEA886C427AFF9BE00A0320B /* DetailInfoCell.swift */,
 				FEA886C627B004A400A0320B /* StaffsInfoCell.swift */,
+				FEF75EC127B0E4E20022A1EE /* UserInteractionCell.swift */,
+				FEF75EC527B106B40022A1EE /* CommentHeadCell.swift */,
+				FEF75EC927B109CD0022A1EE /* CommentCell.swift */,
 			);
 			path = ViewCell;
 			sourceTree = "<group>";
@@ -306,12 +324,15 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				FEF75EC027B0E49E0022A1EE /* UserInteractionCell.xib in Resources */,
 				FE7C444027AB55BF00AA33AC /* LaunchScreen.storyboard in Resources */,
 				FE7C443D27AB55BF00AA33AC /* Assets.xcassets in Resources */,
 				FEA886C927B004C000A0320B /* StaffsInfoCell.xib in Resources */,
 				FEA886B727AFBD8C00A0320B /* MovieImageCell.xib in Resources */,
 				FE7C443B27AB55BE00AA33AC /* Main.storyboard in Resources */,
 				FEA886AF27ADFEF300A0320B /* MovieInfoCell.xib in Resources */,
+				FEF75EC427B105D10022A1EE /* CommentHeadCell.xib in Resources */,
+				FEF75EC827B109BE0022A1EE /* CommentCell.xib in Resources */,
 				FE7C445627AB5BB300AA33AC /* BoxOfficeCell.xib in Resources */,
 				FEA886C327AFF9B000A0320B /* DetailInfoCell.xib in Resources */,
 			);
@@ -329,11 +350,13 @@
 				FEA886A127ADE98D00A0320B /* ModalPresentationController.swift in Sources */,
 				FEA886C127AFC8F200A0320B /* ImageDownloadService.swift in Sources */,
 				FEA886AD27ADFEE400A0320B /* SearchMovieCell.swift in Sources */,
+				FEF75EC227B0E4E20022A1EE /* UserInteractionCell.swift in Sources */,
 				FE7C445427AB5AEC00AA33AC /* K.swift in Sources */,
 				FEA886C727B004A400A0320B /* StaffsInfoCell.swift in Sources */,
 				FE7C443427AB55BE00AA33AC /* AppDelegate.swift in Sources */,
 				FEA886A727ADEA7A00A0320B /* Service.swift in Sources */,
 				FE7C445827AB5BBB00AA33AC /* BoxOfficeCell.swift in Sources */,
+				FEF75EC627B106B40022A1EE /* CommentHeadCell.swift in Sources */,
 				FEA8869027ABBBC600A0320B /* MovieInfoListModel.swift in Sources */,
 				FE7C443627AB55BE00AA33AC /* SceneDelegate.swift in Sources */,
 				FEA886A927ADEC0000A0320B /* BoxOfficeViewController.swift in Sources */,
@@ -353,6 +376,7 @@
 				FEA886C527AFF9BE00A0320B /* DetailInfoCell.swift in Sources */,
 				FEA886B527AFBC5E00A0320B /* MovieInfoViewController.swift in Sources */,
 				FEF75EBA27B008770022A1EE /* StaffsInfoTableViewController.swift in Sources */,
+				FEF75ECA27B109CD0022A1EE /* CommentCell.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -504,6 +528,8 @@
 				DEVELOPMENT_TEAM = 7NYS62N9WB;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = MovieRanking/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = "Movie ranKing";
+				INFOPLIST_KEY_NSPhotoLibraryAddUsageDescription = "사진을 저장하기 위해서 권한이 필요합니다.";
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
 				INFOPLIST_KEY_UIMainStoryboardFile = Main;
@@ -532,6 +558,8 @@
 				DEVELOPMENT_TEAM = 7NYS62N9WB;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = MovieRanking/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = "Movie ranKing";
+				INFOPLIST_KEY_NSPhotoLibraryAddUsageDescription = "사진을 저장하기 위해서 권한이 필요합니다.";
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
 				INFOPLIST_KEY_UIMainStoryboardFile = Main;

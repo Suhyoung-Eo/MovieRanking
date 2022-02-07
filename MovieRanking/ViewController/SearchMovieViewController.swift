@@ -49,6 +49,19 @@ class SearchMovieViewController: UIViewController {
         navigationController?.navigationBar.setBackgroundImage(UIImage(), for:.default)
         navigationController?.navigationBar.shadowImage = UIImage()
     }
+    
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        guard let destinationVC = segue.destination as? MovieInfoViewController else {
+            fatalError("Could not found segue destination")
+        }
+        
+        if let indexPath = tableView.indexPathForSelectedRow {
+            destinationVC.movieInfo = viewModel.movieInfoList.movieInfoModel(indexPath.row)
+        }
+        let backItem = UIBarButtonItem()
+        backItem.title = ""
+        navigationItem.backBarButtonItem = backItem
+    }
 
 }
 
@@ -97,7 +110,7 @@ extension SearchMovieViewController: UITableViewDataSource {
 extension SearchMovieViewController: UITableViewDelegate {
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-
+        performSegue(withIdentifier: K.SegueIdentifier.movieInfoView, sender: nil)
     }
 }
 

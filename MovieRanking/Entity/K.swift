@@ -30,6 +30,9 @@ struct K {
         static let imageCollectionViewCell = "ImageCollectionViewCell"
         static let detailInfoCell = "DetailInfoCell"
         static let staffsInfoCell = "StaffsInfoCell"
+        static let userInteractionCell = "UserInteractionCell"
+        static let commentHeadCell = "CommentHeadCell"
+        static let commentCell = "CommentCell"
     }
     
     struct SegueIdentifier {

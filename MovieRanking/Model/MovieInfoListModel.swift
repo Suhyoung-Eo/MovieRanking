@@ -10,16 +10,16 @@ import Foundation
 struct MovieInfoListModel {
     let movieInfoList: [MovieInfo]
     
-    var count: Int {
-        return movieInfoList.count
-    }
-    
     init(_ movieInfoList: [MovieInfo]) {
         self.movieInfoList = movieInfoList
     }
 }
 
 extension MovieInfoListModel {
+    
+    var count: Int {
+        return movieInfoList.count
+    }
     
     func movieInfoModel(_ index: Int) -> MovieInfoModel {
         return MovieInfoModel(movieInfoList[index])

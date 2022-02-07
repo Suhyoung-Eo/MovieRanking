@@ -8,7 +8,7 @@
 import UIKit
 
 protocol StaffsInfoCellDelegate: AnyObject {
-    func didPushButton(data: Any)
+    func pushedStaffsInfoViewButton(data: Any)
 }
 
 class StaffsInfoCell: UITableViewCell {
@@ -30,6 +30,6 @@ class StaffsInfoCell: UITableViewCell {
     }
     
     @IBAction func staffsInfoViewButton(_ sender: Any) {
-        delegate?.didPushButton(data: "staffView")
+        delegate?.pushedStaffsInfoViewButton(data: "staffView")
     }
 }

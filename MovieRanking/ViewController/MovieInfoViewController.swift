@@ -17,8 +17,11 @@ class MovieInfoViewController: UIViewController {
         super.viewDidLoad()
         
         tableView.register(UINib(nibName: "MovieImageCell", bundle: nil), forCellReuseIdentifier: K.CellIdentifier.movieImageCell)
+        tableView.register(UINib(nibName: "UserInteractionCell", bundle: nil), forCellReuseIdentifier: K.CellIdentifier.userInteractionCell)
         tableView.register(UINib(nibName: "DetailInfoCell", bundle: nil), forCellReuseIdentifier: K.CellIdentifier.detailInfoCell)
         tableView.register(UINib(nibName: "StaffsInfoCell", bundle: nil), forCellReuseIdentifier: K.CellIdentifier.staffsInfoCell)
+        tableView.register(UINib(nibName: "CommentHeadCell", bundle: nil), forCellReuseIdentifier: K.CellIdentifier.commentHeadCell)
+        tableView.register(UINib(nibName: "CommentCell", bundle: nil), forCellReuseIdentifier: K.CellIdentifier.commentCell)
         tableView.dataSource = self
         tableView.delegate = self
         
@@ -94,11 +97,16 @@ extension MovieInfoViewController {
 extension MovieInfoViewController: UITableViewDataSource {
     
     func numberOfSections(in tableView: UITableView) -> Int {
-        return 3
+        return 6
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return 1
+        switch section {
+        case 5:
+            return 3
+        default:
+            return 1
+        }
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
@@ -146,6 +154,18 @@ extension MovieInfoViewController: UITableViewDataSource {
             
             return cell
         case 1:
+            guard let cell = tableView.dequeueReusableCell(withIdentifier: K.CellIdentifier.userInteractionCell) as? UserInteractionCell else {
+                fatalError("Could not found ViewCell")
+            }
+            // cell 속성
+            cell.selectionStyle = .none
+            
+            // cell value
+            cell.delegate = self
+            cell.gradeLabel.text = "평균 평점"
+            
+            return cell
+        case 2:
             guard let cell = tableView.dequeueReusableCell(withIdentifier: K.CellIdentifier.detailInfoCell) as? DetailInfoCell else {
                 fatalError("Could not found ViewCell")
             }
@@ -173,7 +193,7 @@ extension MovieInfoViewController: UITableViewDataSource {
             cell.movieNameOrgLabel.text = movieInfo.movieNameOrg
             
             return cell
-        case 2:
+        case 3:
             guard let cell = tableView.dequeueReusableCell(withIdentifier: K.CellIdentifier.staffsInfoCell) as? StaffsInfoCell else {
                 fatalError("Could not found ViewCell")
             }
@@ -190,6 +210,36 @@ extension MovieInfoViewController: UITableViewDataSource {
             cell.firstActorLabel.text = movieInfo.actors[0].actorNm
             cell.secondActorLabel.text = movieInfo.actors.count > 1 ? movieInfo.actors[1].actorNm : ""
             
+            return cell
+        case 4:
+            guard let cell = tableView.dequeueReusableCell(withIdentifier: K.CellIdentifier.commentHeadCell) as? CommentHeadCell else {
+                fatalError("Could not found ViewCell")
+            }
+            cell.selectionStyle = .none
+            return cell
+        case 5:
+            guard let cell = tableView.dequeueReusableCell(withIdentifier: K.CellIdentifier.commentCell) as? CommentCell else {
+                fatalError("Could not found ViewCell")
+            }
+            // cell 속성
+            cell.selectionStyle = .none
+            
+            // cell value
+            cell.userNameLabel.text = "어수형"
+            cell.commentLabel.text = "정말 잼 있어요"
+            cell.dateLabel.text = "2022.02.07"
+            
+            DispatchQueue.main.async {
+                // emotion image
+                cell.emotionImageView.image = UIImage(named: K.Image.veryGoodFace)
+                
+                // star image
+                cell.firstStarImageView.image = UIImage(named: K.Image.starFull)
+                cell.secondStarImageView.image = UIImage(named: K.Image.starFull)
+                cell.thirdStarImageView.image = UIImage(named: K.Image.starFull)
+                cell.fourthStarImageView.image = UIImage(named: K.Image.starFull)
+                cell.fifthStarImageView.image = UIImage(named: K.Image.starFull)
+            }
             return cell
         default:
             return UITableViewCell()
@@ -213,10 +263,19 @@ extension MovieInfoViewController: UITableViewDelegate {
     }
 }
 
-//MARK: - StaffsInfoCellDelegate methods
+//MARK: - Cell Delegate methods
 
-extension MovieInfoViewController: StaffsInfoCellDelegate {
-    func didPushButton(data: Any) {
+extension MovieInfoViewController: StaffsInfoCellDelegate, UserInteractionCellDelegate {
+    
+    func pushedStaffsInfoViewButton(data: Any) {
         performSegue(withIdentifier: K.SegueIdentifier.staffsInfoTableView, sender: data)
+    }
+    
+    func pushedAddCommentButton(data: Any) {
+        print("pushedAddCommentButton")
+    }
+    
+    func pushedWishToWatchButton() {
+        print("pushedWishToWatchButton")
     }
 }

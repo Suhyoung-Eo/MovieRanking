@@ -17,6 +17,10 @@ class BoxOfficeListModel {
 
 extension BoxOfficeListModel {
     
+    var count: Int {
+        return boxOfficeList.count
+    }
+    
     func boxOfficeModel(_ index: Int) -> BoxOfficeModel {
         return BoxOfficeModel(boxOfficeList[index])
     }
