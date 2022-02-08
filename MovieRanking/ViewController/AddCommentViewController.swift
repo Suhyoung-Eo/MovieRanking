@@ -13,7 +13,7 @@ class AddCommentViewController: UIViewController {
     @IBOutlet weak var gradeLabel: UILabel!
     @IBOutlet weak var commentTextView: UITextView!
 
-    var movieId: String = ""
+    var DOCID: String = ""
     var movieName: String = ""
 
     private var grade: Float = 0.0
@@ -55,6 +55,9 @@ class AddCommentViewController: UIViewController {
         dismiss(animated: true, completion: nil)
     }
     
+    deinit {
+        print("deinit AddCommentViewController")
+    }
 }
 
 //MARK: - UITextView delegate methods

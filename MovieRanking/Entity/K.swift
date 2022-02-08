@@ -58,11 +58,13 @@ struct K {
     }
     
     struct FStore {
-        static let senderField = "sender"
-        static let titleField = "title"
-        static let gradeField = "grade"
-        static let bodyField = "body"
-        static let dateField = "date"
+        static let movieId = "movieId"
+        static let movieSeq = "movieSeq"
+        static let movieName = "movieName"
+        static let userId = "userId"
+        static let grade = "grade"
+        static let comment = "comment"
+        static let date = "date"
     }
     
 }

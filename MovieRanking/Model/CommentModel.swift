@@ -6,9 +6,12 @@
 //
 
 struct CommentModel {
-    let senderField: String
-    let title: String
+    let DOCID: String
+    let movieId: String
+    let movieSeq: String
+    let movieName: String
+    let userId: String
     let grade: Float
-    let bodyField: String
+    let comment: String
     let date: String
 }

@@ -68,7 +68,7 @@ class MovieInfoViewController: UIViewController {
                 guard let destinationVC = segue.destination as? AddCommentViewController else {
                     fatalError("Could not found segue destination")
                 }
-                destinationVC.movieId = movieInfo.movieId
+                destinationVC.DOCID = movieInfo.DOCID
                 destinationVC.movieName = movieInfo.movieName
             default:
                 return

@@ -186,7 +186,7 @@ extension BoxOfficeViewController: UITableViewDataSource {
 extension BoxOfficeViewController: UITableViewDelegate {
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        if viewModel.movieInfoList.movieInfoModel(indexPath.row).movieId != "" {
+        if viewModel.movieInfoList.movieInfoModel(indexPath.row).DOCID != "" {
             performSegue(withIdentifier: K.SegueIdentifier.movieInfoView, sender: "movieInfoView")
         } else {
             DispatchQueue.main.async {

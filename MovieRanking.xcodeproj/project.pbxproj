@@ -43,6 +43,9 @@
 		FEA886C527AFF9BE00A0320B /* DetailInfoCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = FEA886C427AFF9BE00A0320B /* DetailInfoCell.swift */; };
 		FEA886C727B004A400A0320B /* StaffsInfoCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = FEA886C627B004A400A0320B /* StaffsInfoCell.swift */; };
 		FEA886C927B004C000A0320B /* StaffsInfoCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = FEA886C827B004C000A0320B /* StaffsInfoCell.xib */; };
+		FEBF229427B26ACB00190D8F /* AccountViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FEBF229327B26ACB00190D8F /* AccountViewController.swift */; };
+		FEBF229627B26BA100190D8F /* LoginViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FEBF229527B26BA100190D8F /* LoginViewController.swift */; };
+		FEBF229827B26C2600190D8F /* RegisterViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FEBF229727B26C2600190D8F /* RegisterViewController.swift */; };
 		FEF75EBA27B008770022A1EE /* StaffsInfoTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FEF75EB927B008770022A1EE /* StaffsInfoTableViewController.swift */; };
 		FEF75EC027B0E49E0022A1EE /* UserInteractionCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = FEF75EBF27B0E49E0022A1EE /* UserInteractionCell.xib */; };
 		FEF75EC227B0E4E20022A1EE /* UserInteractionCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = FEF75EC127B0E4E20022A1EE /* UserInteractionCell.swift */; };
@@ -95,6 +98,9 @@
 		FEA886C427AFF9BE00A0320B /* DetailInfoCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DetailInfoCell.swift; sourceTree = "<group>"; };
 		FEA886C627B004A400A0320B /* StaffsInfoCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StaffsInfoCell.swift; sourceTree = "<group>"; };
 		FEA886C827B004C000A0320B /* StaffsInfoCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = StaffsInfoCell.xib; sourceTree = "<group>"; };
+		FEBF229327B26ACB00190D8F /* AccountViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AccountViewController.swift; sourceTree = "<group>"; };
+		FEBF229527B26BA100190D8F /* LoginViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LoginViewController.swift; sourceTree = "<group>"; };
+		FEBF229727B26C2600190D8F /* RegisterViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RegisterViewController.swift; sourceTree = "<group>"; };
 		FEF75EB927B008770022A1EE /* StaffsInfoTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StaffsInfoTableViewController.swift; sourceTree = "<group>"; };
 		FEF75EBF27B0E49E0022A1EE /* UserInteractionCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = UserInteractionCell.xib; sourceTree = "<group>"; };
 		FEF75EC127B0E4E20022A1EE /* UserInteractionCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UserInteractionCell.swift; sourceTree = "<group>"; };
@@ -165,6 +171,9 @@
 				FEA886BA27AFC5F000A0320B /* ImageViewController.swift */,
 				FEF75EB927B008770022A1EE /* StaffsInfoTableViewController.swift */,
 				FEF75ECB27B118A30022A1EE /* AddCommentViewController.swift */,
+				FEBF229327B26ACB00190D8F /* AccountViewController.swift */,
+				FEBF229527B26BA100190D8F /* LoginViewController.swift */,
+				FEBF229727B26C2600190D8F /* RegisterViewController.swift */,
 			);
 			path = ViewController;
 			sourceTree = "<group>";
@@ -357,9 +366,11 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				FEBF229427B26ACB00190D8F /* AccountViewController.swift in Sources */,
 				FE7C445B27AB5CFB00AA33AC /* BoxOfficeListModel.swift in Sources */,
 				FEA886BF27AFC66C00A0320B /* ImageCollectionViewCell.swift in Sources */,
 				FEA886A127ADE98D00A0320B /* ModalPresentationController.swift in Sources */,
+				FEBF229627B26BA100190D8F /* LoginViewController.swift in Sources */,
 				FEA886C127AFC8F200A0320B /* ImageDownloadService.swift in Sources */,
 				FEA886AD27ADFEE400A0320B /* SearchMovieCell.swift in Sources */,
 				FEF75EC227B0E4E20022A1EE /* UserInteractionCell.swift in Sources */,
@@ -391,6 +402,7 @@
 				FEA886C527AFF9BE00A0320B /* DetailInfoCell.swift in Sources */,
 				FEA886B527AFBC5E00A0320B /* MovieInfoViewController.swift in Sources */,
 				FEF75EBA27B008770022A1EE /* StaffsInfoTableViewController.swift in Sources */,
+				FEBF229827B26C2600190D8F /* RegisterViewController.swift in Sources */,
 				FEF75ED027B1656E0022A1EE /* CommentViewModel.swift in Sources */,
 				FEF75ECA27B109CD0022A1EE /* CommentCell.swift in Sources */,
 			);

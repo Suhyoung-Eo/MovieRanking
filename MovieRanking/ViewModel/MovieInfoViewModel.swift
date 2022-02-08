@@ -35,7 +35,7 @@ class MovieInfoViewModel {
         movieInfoList = nil
         
         service.fetchMovieInfo(title: movieName) { [weak self] movieInfoList, error in
-            guard movieInfoList.movieInfoModel(0).movieId != "",
+            guard movieInfoList.movieInfoModel(0).DOCID != "",
                   error == nil else { completion(error); return }
             
             self?.movieInfoList = movieInfoList

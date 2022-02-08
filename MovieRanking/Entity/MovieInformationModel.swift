@@ -19,6 +19,8 @@ struct Info: Codable {
 
 struct MovieInfo: Codable {
     let DOCID: String?
+    let movieId: String?
+    let movieSeq: String?
     let title: String?
     let titleEng: String?
     let titleOrg: String?
@@ -83,20 +85,22 @@ extension MovieInformationModel {
 extension MovieInfo {
     static var empty: MovieInfo {
         return MovieInfo(DOCID: "",
-                      title: "",
-                      titleEng: "",
-                      titleOrg: "",
-                      prodYear: "",
-                      directors: Directors(director: [Director.empty]),
-                      actors: Actors(actor: [Actor.empty]),
-                      nation: "",
-                      plots: Plots(plot: [Plot.empty]),
-                      runtime: "",
-                      rating: "",
-                      genre: "",
-                      posters: "",
-                      stlls: "",
-                      staffs: Staffs(staff: [Staff.empty]))
+                         movieId: "",
+                         movieSeq: "",
+                         title: "",
+                         titleEng: "",
+                         titleOrg: "",
+                         prodYear: "",
+                         directors: Directors(director: [Director.empty]),
+                         actors: Actors(actor: [Actor.empty]),
+                         nation: "",
+                         plots: Plots(plot: [Plot.empty]),
+                         runtime: "",
+                         rating: "",
+                         genre: "",
+                         posters: "",
+                         stlls: "",
+                         staffs: Staffs(staff: [Staff.empty]))
     }
 }
 
