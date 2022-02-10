@@ -11,7 +11,16 @@ class MovieInfoViewController: UIViewController {
     
     @IBOutlet weak var tableView: UITableView!
     
-    var movieInfo = MovieInfoModel(MovieInfo.empty)
+    private let viewModel = FirebaseViewModel()
+    private var comments: [CommentModel] = []
+    private var gradeTotal: Float = 0.0
+    private var commentCount: Int = 0
+    
+    var movieInfo = MovieInfoModel(MovieInfo.empty) {
+        didSet {
+            loadComments()
+        }
+    }
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -96,6 +105,20 @@ extension MovieInfoViewController {
             performSegue(withIdentifier: K.SegueIdentifier.imageView, sender: "stllImageView")
         }
     }
+    
+    private func loadComments() {
+        viewModel.loadComments(DOCID: movieInfo.DOCID) { [weak self] comments, gradeTotal, commentCount, error in
+            guard error == nil else { return }
+            
+            self?.comments = comments
+            self?.gradeTotal = gradeTotal
+            self?.commentCount = commentCount
+            
+            DispatchQueue.main.async {
+                self?.tableView.reloadData()
+            }
+        }
+    }
 }
 
 //MARK: - tableView dataSource methods
@@ -109,7 +132,7 @@ extension MovieInfoViewController: UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         switch section {
         case 5:
-            return 3
+            return comments.isEmpty ? 1 : comments.count
         default:
             return 1
         }
@@ -227,25 +250,22 @@ extension MovieInfoViewController: UITableViewDataSource {
             guard let cell = tableView.dequeueReusableCell(withIdentifier: K.CellIdentifier.commentCell) as? CommentCell else {
                 fatalError("Could not found ViewCell")
             }
-            // cell 속성
-            cell.selectionStyle = .none
             
-            // cell value
-            cell.userNameLabel.text = "어수형"
-            cell.commentLabel.text = "정말 잼 있어요"
-            cell.dateLabel.text = "2022.02.07"
-            
-            DispatchQueue.main.async {
-                // emotion image
-                cell.emotionImageView.image = UIImage(named: K.Image.veryGoodFace)
+            if comments.isEmpty {
+                cell.stateEmptyLabel.isHidden = false
+            } else {
+                cell.stateEmptyLabel.isHidden = true
+                let comment = comments[indexPath.row]
+                // cell 속성
+                cell.selectionStyle = .none
                 
-                // star image
-                cell.firstStarImageView.image = UIImage(named: K.Image.starFull)
-                cell.secondStarImageView.image = UIImage(named: K.Image.starFull)
-                cell.thirdStarImageView.image = UIImage(named: K.Image.starFull)
-                cell.fourthStarImageView.image = UIImage(named: K.Image.starFull)
-                cell.fifthStarImageView.image = UIImage(named: K.Image.starFull)
+                // cell value
+                cell.grade = comment.grade
+                cell.userNameLabel.text = comment.userId
+                cell.commentLabel.text = comment.comment
+                cell.dateLabel.text = comment.date
             }
+            
             return cell
         default:
             return UITableViewCell()
