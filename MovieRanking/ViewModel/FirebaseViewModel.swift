@@ -29,82 +29,97 @@ class FirebaseViewModel {
         }
     }
     
-    func logOut(completion: @escaping (String?) -> Void) {
-        
+    func logOut(completion: @escaping (Error?) -> Void) {
         do {
             try Auth.auth().signOut()
             completion(nil)
         } catch let error as NSError {
-            let error = "\(error)"
             completion(error)
         }
     }
     
     func addComment(DOCID: String, movieName: String, grade: Float, comment: String, completion: @escaping (Error?) -> Void) {
-
-        if let userId = self.userId {
-            let date = getFormattedDate()
+        
+        guard let userId = self.userId else { completion(nil); return }
+        
+        let date = getFormattedDate()
+        let docRef = db.collection(DOCID).document(userId)
+        
+        docRef.getDocument { document, error in
             
-            db.collection(DOCID).addDocument(data: [K.FStore.userId : userId,
-                                                    K.FStore.movieName: movieName,
-                                                    K.FStore.grade : grade,
-                                                    K.FStore.comment: comment,
-                                                    K.FStore.date: date]) { error in
-                if let error = error {
-                    completion(error)
-                } else {
-                    completion(nil)
-                }
+            docRef.setData([K.FStore.userId : userId,
+                            K.FStore.movieName: movieName,
+                            K.FStore.grade : grade,
+                            K.FStore.comment: comment,
+                            K.FStore.date: date]) { error in
+                
+                guard error == nil else { completion(error); return }
+                completion(nil)
             }
         }
     }
     
-    func loadComments(DOCID: String, completion: @escaping ([CommentModel], String, Error?) -> Void) {
+    func loadUserComment(DOCID: String, completion: @escaping (CommentModel?) -> Void) {
+        
+        guard let userId = self.userId else { completion(nil); return }
+        
+        let docRef = db.collection(DOCID).document(userId)
+        
+        docRef.getDocument { document, error in
+            
+            guard let document = document, document.exists,
+                  let data = document.data() else { completion(nil); return }
+            
+            if let userId = data[K.FStore.userId] as? String,
+               let movieName = data[K.FStore.movieName] as? String,
+               let grade = data[K.FStore.grade] as? Float,
+               let comment = data[K.FStore.comment] as? String,
+               let date = data[K.FStore.date] as? String {
+                
+                let UserComment = CommentModel(userId: userId,
+                                               movieName: movieName,
+                                               grade: grade,
+                                               comment: comment,
+                                               date: date)
+                completion(UserComment)
+            }
+        }
+    }
+    
+    func loadComments(DOCID: String, completion: @escaping ([CommentModel], Float, Int, Error?) -> Void) {
         
         db.collection(DOCID).order(by: K.FStore.date, descending: true).addSnapshotListener { querySnapshot, error in
             
+            guard error == nil else { completion([], 0.0, 0, error); return }
+            
             var comments: [CommentModel] = []
             var gradeTotal: Float = 0.0
-            var gradeAverage: Float = 0.0
-            var gradeAverageString = ""
             
-            if let error = error {
-                completion([], "", error)
-            } else {
-                if let snapshotDocuments = querySnapshot?.documents {
-                    for doc in snapshotDocuments {
-                        let data = doc.data()
+            if let snapshotDocuments = querySnapshot?.documents {
+                for doc in snapshotDocuments {
+                    let data = doc.data()
+                    
+                    if let userId = data[K.FStore.userId] as? String,
+                       let movieName = data[K.FStore.movieName] as? String,
+                       let grade = data[K.FStore.grade] as? Float,
+                       let comment = data[K.FStore.comment] as? String,
+                       let date = data[K.FStore.date] as? String {
                         
-                        if let userId = data[K.FStore.userId] as? String,
-                           let movieName = data[K.FStore.movieName] as? String,
-                           let grade = data[K.FStore.grade] as? Float,
-                           let comment = data[K.FStore.comment] as? String,
-                           let date = data[K.FStore.date] as? String {
-                            
-                            let newCommet = CommentModel(userId: userId,
-                                                         movieName: movieName,
-                                                         grade: grade,
-                                                         comment: comment,
-                                                         date: date)
-                            comments.append(newCommet)
-                        }
-                    }
-                    
-                    for comment in comments {
-                        gradeTotal += comment.grade
-                    }
-                    
-                    gradeAverage = gradeTotal / Float(comments.count)
-                    
-                    if comments.count == 0 {
-                        gradeAverageString = "첫 평점을 등록해 주세요"
-                        completion(comments, gradeAverageString, nil)
-                    } else {
-                        let average = String(format: "%.1f", gradeAverage)
-                        gradeAverageString = "평균 ★ \(average)"
-                        completion(comments, gradeAverageString, nil)
+                        let newComment = CommentModel(userId: userId,
+                                                      movieName: movieName,
+                                                      grade: grade,
+                                                      comment: comment,
+                                                      date: date)
+                        comments.append(newComment)
                     }
                 }
+                
+                // 평균 평점을 계산하기 위해 필요
+                for comment in comments {
+                    gradeTotal += comment.grade
+                }
+                
+                completion(comments, gradeTotal, comments.count, nil)
             }
         }
     }
