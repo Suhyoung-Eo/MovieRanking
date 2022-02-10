@@ -124,6 +124,12 @@ class FirebaseViewModel {
         }
     }
     
+    func deleteComment(DOCID: String, userId: String, completion: @escaping (Error?) -> Void) {
+        db.collection(DOCID).document(userId).delete() { error in
+            guard error == nil else { completion(error); return }
+        }
+    }
+    
     private func getFormattedDate() -> String {
         let date = Date()
         let dateformat = DateFormatter()

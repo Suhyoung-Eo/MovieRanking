@@ -26,6 +26,7 @@ class MovieInfoViewController: UIViewController {
         super.viewDidLoad()
         
         tableView.register(UINib(nibName: "MovieImageCell", bundle: nil), forCellReuseIdentifier: K.CellIdentifier.movieImageCell)
+        tableView.register(UINib(nibName: "RatingStarsCell", bundle: nil), forCellReuseIdentifier: K.CellIdentifier.ratingStarsCell)
         tableView.register(UINib(nibName: "UserInteractionCell", bundle: nil), forCellReuseIdentifier: K.CellIdentifier.userInteractionCell)
         tableView.register(UINib(nibName: "DetailInfoCell", bundle: nil), forCellReuseIdentifier: K.CellIdentifier.detailInfoCell)
         tableView.register(UINib(nibName: "StaffsInfoCell", bundle: nil), forCellReuseIdentifier: K.CellIdentifier.staffsInfoCell)
@@ -126,12 +127,12 @@ extension MovieInfoViewController {
 extension MovieInfoViewController: UITableViewDataSource {
     
     func numberOfSections(in tableView: UITableView) -> Int {
-        return 6
+        return 7
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         switch section {
-        case 5:
+        case 6:
             return comments.isEmpty ? 1 : comments.count
         default:
             return 1
@@ -183,6 +184,17 @@ extension MovieInfoViewController: UITableViewDataSource {
             
             return cell
         case 1:
+            guard let cell = tableView.dequeueReusableCell(withIdentifier: K.CellIdentifier.ratingStarsCell) as? RatingStarsCell else {
+                fatalError("Could not found ViewCell")
+            }
+            
+            cell.selectionStyle = .none
+            cell.parent = self
+            cell.DOCID = movieInfo.DOCID
+            cell.movieName = movieInfo.movieName
+            
+            return cell
+        case 2:
             guard let cell = tableView.dequeueReusableCell(withIdentifier: K.CellIdentifier.userInteractionCell) as? UserInteractionCell else {
                 fatalError("Could not found ViewCell")
             }
@@ -194,7 +206,7 @@ extension MovieInfoViewController: UITableViewDataSource {
             cell.gradeLabel.text = "평균 평점"
             
             return cell
-        case 2:
+        case 3:
             guard let cell = tableView.dequeueReusableCell(withIdentifier: K.CellIdentifier.detailInfoCell) as? DetailInfoCell else {
                 fatalError("Could not found ViewCell")
             }
@@ -222,7 +234,7 @@ extension MovieInfoViewController: UITableViewDataSource {
             cell.movieNameOrgLabel.text = movieInfo.movieNameOrg
             
             return cell
-        case 3:
+        case 4:
             guard let cell = tableView.dequeueReusableCell(withIdentifier: K.CellIdentifier.staffsInfoCell) as? StaffsInfoCell else {
                 fatalError("Could not found ViewCell")
             }
@@ -240,13 +252,13 @@ extension MovieInfoViewController: UITableViewDataSource {
             cell.secondActorLabel.text = movieInfo.actors.count > 1 ? movieInfo.actors[1].actorNm : ""
             
             return cell
-        case 4:
+        case 5:
             guard let cell = tableView.dequeueReusableCell(withIdentifier: K.CellIdentifier.commentHeadCell) as? CommentHeadCell else {
                 fatalError("Could not found ViewCell")
             }
             cell.selectionStyle = .none
             return cell
-        case 5:
+        case 6:
             guard let cell = tableView.dequeueReusableCell(withIdentifier: K.CellIdentifier.commentCell) as? CommentCell else {
                 fatalError("Could not found ViewCell")
             }
@@ -278,7 +290,14 @@ extension MovieInfoViewController: UITableViewDataSource {
 extension MovieInfoViewController: UITableViewDelegate {
     
     func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
-        return 3
+        switch section {
+        case 0:
+            return 0
+        case 1:
+            return 0
+        default:
+            return 3
+        }
     }
     
     func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {

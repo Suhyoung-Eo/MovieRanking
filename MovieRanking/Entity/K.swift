@@ -33,6 +33,7 @@ struct K {
         static let userInteractionCell = "UserInteractionCell"
         static let commentHeadCell = "CommentHeadCell"
         static let commentCell = "CommentCell"
+        static let ratingStarsCell = "RatingStarsCell"
     }
     
     struct SegueIdentifier {
