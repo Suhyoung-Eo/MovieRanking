@@ -83,14 +83,15 @@ class FirebaseViewModel {
         }
     }
     
-    func loadComments(DOCID: String, completion: @escaping ([CommentModel], Float, Int, Error?) -> Void) {
+    func loadComments(DOCID: String, completion: @escaping ([CommentModel], Float, Error?) -> Void) {
         
         db.collection(DOCID).order(by: K.FStore.date, descending: true).addSnapshotListener { querySnapshot, error in
             
-            guard error == nil else { completion([], 0.0, 0, error); return }
+            guard error == nil else { completion([], 0.0, error); return }
             
             var comments: [CommentModel] = []
             var gradeTotal: Float = 0.0
+            var gradeAverage: Float = 0.0
             
             if let snapshotDocuments = querySnapshot?.documents {
                 for doc in snapshotDocuments {
@@ -111,12 +112,17 @@ class FirebaseViewModel {
                     }
                 }
                 
-                // 평균 평점을 계산하기 위해 필요
-                for comment in comments {
-                    gradeTotal += comment.grade
+                // 평균 평점
+                if comments.count == 0 {
+                    gradeAverage = 0
+                } else {
+                    for comment in comments {
+                        gradeTotal += comment.grade
+                    }
+                    gradeAverage = gradeTotal / Float(comments.count)
                 }
                 
-                completion(comments, gradeTotal, comments.count, nil)
+                completion(comments, gradeAverage, nil)
             }
         }
     }

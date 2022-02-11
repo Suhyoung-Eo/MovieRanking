@@ -4,11 +4,6 @@
 //
 //  Created by Suhyoung Eo on 2022/02/07.
 //
-
-struct MovieModel {
-    let gradeAverage: Float
-}
-
 struct CommentModel {
     let userId: String
     let movieName: String

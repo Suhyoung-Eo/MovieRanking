@@ -13,8 +13,7 @@ class MovieInfoViewController: UIViewController {
     
     private let viewModel = FirebaseViewModel()
     private var comments: [CommentModel] = []
-    private var gradeTotal: Float = 0.0
-    private var commentCount: Int = 0
+    private var gradeAverage: Float = 0.0
     
     var movieInfo = MovieInfoModel(MovieInfo.empty) {
         didSet {
@@ -108,12 +107,11 @@ extension MovieInfoViewController {
     }
     
     private func loadComments() {
-        viewModel.loadComments(DOCID: movieInfo.DOCID) { [weak self] comments, gradeTotal, commentCount, error in
+        viewModel.loadComments(DOCID: movieInfo.DOCID) { [weak self] comments, gradeAverage, error in
             guard error == nil else { return }
             
             self?.comments = comments
-            self?.gradeTotal = gradeTotal
-            self?.commentCount = commentCount
+            self?.gradeAverage = gradeAverage
             
             DispatchQueue.main.async {
                 self?.tableView.reloadData()
@@ -203,7 +201,7 @@ extension MovieInfoViewController: UITableViewDataSource {
             
             // cell value
             cell.delegate = self
-            cell.gradeLabel.text = "평균 평점"
+            cell.gradeLabel.text = gradeAverage == 0 ? "첫 평점을 등록해 주세요" : "평균 ★ \(String(format: "%.1f", gradeAverage))"
             
             return cell
         case 3:

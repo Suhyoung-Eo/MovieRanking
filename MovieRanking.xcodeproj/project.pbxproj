@@ -253,12 +253,12 @@
 				FEA886AC27ADFEE400A0320B /* SearchMovieCell.swift */,
 				FEA886B827AFBD9B00A0320B /* MovieImageCell.swift */,
 				FEA886BE27AFC66C00A0320B /* ImageCollectionViewCell.swift */,
+				FE430A8E27B50BE1004AF8EE /* RatingStarsCell.swift */,
+				FEF75EC127B0E4E20022A1EE /* UserInteractionCell.swift */,
 				FEA886C427AFF9BE00A0320B /* DetailInfoCell.swift */,
 				FEA886C627B004A400A0320B /* StaffsInfoCell.swift */,
-				FEF75EC127B0E4E20022A1EE /* UserInteractionCell.swift */,
 				FEF75EC527B106B40022A1EE /* CommentHeadCell.swift */,
 				FEF75EC927B109CD0022A1EE /* CommentCell.swift */,
-				FE430A8E27B50BE1004AF8EE /* RatingStarsCell.swift */,
 			);
 			path = ViewCell;
 			sourceTree = "<group>";
@@ -301,12 +301,12 @@
 				FE7C445527AB5BB300AA33AC /* BoxOfficeCell.xib */,
 				FEA886AE27ADFEF300A0320B /* MovieInfoCell.xib */,
 				FEA886B627AFBD8C00A0320B /* MovieImageCell.xib */,
+				FE430A8F27B50BE1004AF8EE /* RatingStarsCell.xib */,
+				FEF75EBF27B0E49E0022A1EE /* UserInteractionCell.xib */,
 				FEA886C227AFF9B000A0320B /* DetailInfoCell.xib */,
 				FEA886C827B004C000A0320B /* StaffsInfoCell.xib */,
-				FEF75EBF27B0E49E0022A1EE /* UserInteractionCell.xib */,
 				FEF75EC327B105D10022A1EE /* CommentHeadCell.xib */,
 				FEF75EC727B109BE0022A1EE /* CommentCell.xib */,
-				FE430A8F27B50BE1004AF8EE /* RatingStarsCell.xib */,
 			);
 			path = Resource;
 			sourceTree = "<group>";
