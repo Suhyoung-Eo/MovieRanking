@@ -12,13 +12,19 @@ class AddCommentViewController: UIViewController {
     @IBOutlet weak var movieNameLabel: UILabel!
     @IBOutlet weak var gradeLabel: UILabel!
     @IBOutlet weak var commentTextView: UITextView!
-
-    var DOCID: String = ""
-    var movieName: String = ""
+    @IBOutlet weak var firstStarView: UIImageView!
+    @IBOutlet weak var secondStarView: UIImageView!
+    @IBOutlet weak var thirdStarView: UIImageView!
+    @IBOutlet weak var fourthStarView: UIImageView!
+    @IBOutlet weak var fifthStarView: UIImageView!
     
     private let viewModel = FirebaseViewModel()
     private var comment: CommentModel!
+    private var starImages: [UIImage] = []
     private var grade: Float = 0.0
+    
+    var movieName: String = ""
+    var DOCID: String = ""
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -33,14 +39,14 @@ class AddCommentViewController: UIViewController {
         
         // 이전에 코멘트를 남긴 경우 불러옴
         viewModel.loadUserComment(DOCID: DOCID) { [weak self] comment in
+            self?.comment = comment
+            self?.grade = comment?.grade ?? 0
+            self?.loadStarImages(by: comment?.grade ?? 0) {
+                self?.setStarImage()
+            }
             
-            if let comment = comment {
-                let intGradeValue = Int(comment.grade * 2)
-                self?.rating(by: intGradeValue)
-                self?.commentTextView.text = comment.comment
-            } else {
-                self?.rating(by: 0)
-                self?.commentTextView.text = ""
+            DispatchQueue.main.async {
+                self?.commentTextView.text = comment?.comment
             }
         }
     }
@@ -62,10 +68,7 @@ class AddCommentViewController: UIViewController {
                              grade: grade,
                              comment: comment) { [weak self] error in
             
-            if error == nil {
-                self?.dismiss(animated: true, completion: nil)
-                return
-            }
+            if error == nil { self?.dismiss(animated: true, completion: nil); return }
             
             DispatchQueue.main.async {
                 AlertService.shared.alert(viewController: self,
@@ -78,29 +81,44 @@ class AddCommentViewController: UIViewController {
     
     @IBAction func ratingSlider(_ sender: UISlider) {
         let intGradeValue = Int(sender.value.rounded()) // range: 0 ~ 10
-        rating(by: intGradeValue)
+        grade = Float(intGradeValue) / 2
+        
+        loadStarImages(by: grade) { [weak self] in
+            self?.setStarImage()
+        }
     }
     
     @IBAction func cancelButton(_ sender: Any) {
         dismiss(animated: true, completion: nil)
     }
     
-    private func rating(by intGradeValue: Int) {
-        // tag되어 있는 별(UIImageView) 사용
+    private func loadStarImages(by grade: Float, completion: @escaping () -> Void) {
+        starImages = []
+        var starImage: UIImage?
+        
         for i in 1...5 {
-            if let starImage = view.viewWithTag(i) as? UIImageView {
-                if i * 2 <= intGradeValue {
-                    starImage.image = UIImage(named: K.Image.starFull)
-                } else if (i * 2) - intGradeValue == 1 {
-                    starImage.image = UIImage(named: K.Image.starHalf)
-                } else {
-                    starImage.image = UIImage(named: K.Image.starEmpty)
-                }
+            if Float(i) <= grade {
+                starImage = UIImage(named: K.Image.starFull)
+            } else if Float(i) - grade == 0.5 {
+                starImage = UIImage(named: K.Image.starHalf)
+            } else {
+                starImage = UIImage(named: K.Image.starEmpty)
             }
+            starImages.append(starImage ?? UIImage())
         }
         
-        grade = Float(intGradeValue) / 2
         gradeLabel.text = String(format: "%.1f", grade)
+        completion()
+    }
+    
+    private func setStarImage() {
+        DispatchQueue.main.async { [weak self] in
+            self?.firstStarView.image = self?.starImages[0]
+            self?.secondStarView.image = self?.starImages[1]
+            self?.thirdStarView.image = self?.starImages[2]
+            self?.fourthStarView.image = self?.starImages[3]
+            self?.fifthStarView.image = self?.starImages[4]
+        }
     }
     
     private func alertService() {

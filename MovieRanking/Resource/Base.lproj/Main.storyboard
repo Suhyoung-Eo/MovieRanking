@@ -341,8 +341,13 @@
                     </view>
                     <connections>
                         <outlet property="commentTextView" destination="i5u-4P-8my" id="SHM-wa-WVz"/>
+                        <outlet property="fifthStarView" destination="vUl-hb-Nbc" id="ulw-tA-CcW"/>
+                        <outlet property="firstStarView" destination="5wZ-l9-BcJ" id="Lx1-9T-lXX"/>
+                        <outlet property="fourthStarView" destination="tiO-Dp-SDg" id="8UD-YG-OAG"/>
                         <outlet property="gradeLabel" destination="7pa-1S-l9G" id="ZII-dP-mzl"/>
                         <outlet property="movieNameLabel" destination="FHJ-s1-MAc" id="esH-uw-jnf"/>
+                        <outlet property="secondStarView" destination="Ri1-Qu-ELI" id="IDI-T2-7JG"/>
+                        <outlet property="thirdStarView" destination="e0p-MX-xYE" id="R6c-f7-Hmg"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="uBe-rt-zfp" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>

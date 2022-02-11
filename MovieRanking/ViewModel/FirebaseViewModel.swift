@@ -63,10 +63,7 @@ class FirebaseViewModel {
         
         guard let userId = self.userId else { completion(nil); return }
         
-        let docRef = db.collection(DOCID).document(userId)
-        
-        docRef.getDocument { document, error in
-            
+        db.collection(DOCID).document(userId).addSnapshotListener { document, error in
             guard let document = document, document.exists,
                   let data = document.data() else { completion(nil); return }
             
@@ -125,8 +122,11 @@ class FirebaseViewModel {
     }
     
     func deleteComment(DOCID: String, userId: String, completion: @escaping (Error?) -> Void) {
+        
+        guard let userId = self.userId else { completion(nil); return }
         db.collection(DOCID).document(userId).delete() { error in
             guard error == nil else { completion(error); return }
+            completion(nil)
         }
     }
     
