@@ -16,12 +16,7 @@ class MovieInfoViewController: UIViewController {
     private var gradeAverage: Float = 0.0
     private var wishToWatch: Bool = false
     
-    var movieInfo = MovieInfoModel(MovieInfo.empty) {
-        didSet {
-            loadUserInfose()
-            loadWishToWatch()
-        }
-    }
+    var movieInfo: MovieInfoModel!
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -35,6 +30,9 @@ class MovieInfoViewController: UIViewController {
         tableView.register(UINib(nibName: "CommentCell", bundle: nil), forCellReuseIdentifier: K.CellIdentifier.commentCell)
         tableView.dataSource = self
         tableView.delegate = self
+        
+        loadUserInfose()
+        loadWishToWatch()
         
         // ios15에서 setionHeader에 여백이 생기는 이슈
         if #available(iOS 15.0, *) {

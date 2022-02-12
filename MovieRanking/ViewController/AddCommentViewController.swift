@@ -23,7 +23,7 @@ class AddCommentViewController: UIViewController {
     private var starImages: [UIImage] = []
     private var grade: Float = 0.0
     
-    var movieInfo = MovieInfoModel(MovieInfo.empty)
+    var movieInfo: MovieInfoModel!
     
     override func viewDidLoad() {
         super.viewDidLoad()
