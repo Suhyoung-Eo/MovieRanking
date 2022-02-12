@@ -83,17 +83,8 @@ extension SearchMovieViewController: UITableViewDataSource {
         }
 
         let movieInfo = viewModel.movieInfoList.movieInfoModel(indexPath.row)
-        // cell 속성
-        cell.selectionStyle = .none
-        cell.movieNameLabel.font = .systemFont(ofSize: 18)
-        cell.movieNameENLabel.font = .systemFont(ofSize: 13)
-        cell.movieNameENLabel.textColor = UIColor.black.withAlphaComponent(0.5)
-        cell.dicrectorLabel.font = .systemFont(ofSize: 13)
-        cell.dicrectorLabel.textColor = UIColor.black.withAlphaComponent(0.5)
-        cell.ratingLabel.font = .systemFont(ofSize: 13)
-        cell.ratingLabel.textColor = UIColor.black.withAlphaComponent(0.5)
         
-        // cell value
+        cell.selectionStyle = .none
         cell.thumbnailImageView.setImage(from: movieInfo.thumbNailLinks[0])
         cell.movieNameLabel.text = movieInfo.movieName
         cell.movieNameENLabel.text = movieInfo.movieNameOrg
