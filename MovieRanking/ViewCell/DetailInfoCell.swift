@@ -23,6 +23,15 @@ class DetailInfoCell: UITableViewCell {
         super.awakeFromNib()
         
         scrollView.showsHorizontalScrollIndicator = false
+        storyLabel.font = .systemFont(ofSize: 15)
+        storyLabel.textColor = UIColor.black.withAlphaComponent(0.8)
+        directorsLabel.font = .systemFont(ofSize: 13)
+        runtimeLabel.font = .systemFont(ofSize: 13)
+        ratingLabel.font = .systemFont(ofSize: 13)
+        genreLabel.font = .systemFont(ofSize: 13)
+        nationLabel.font = .systemFont(ofSize: 13)
+        prodYearLabel.font = .systemFont(ofSize: 13)
+        movieNameOrgLabel.font = .systemFont(ofSize: 13)
     }
 
     override func setSelected(_ selected: Bool, animated: Bool) {

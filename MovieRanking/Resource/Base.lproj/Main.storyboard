@@ -166,6 +166,7 @@
                                         <subviews>
                                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="fnS-LY-Q8U">
                                                 <rect key="frame" x="0.0" y="0.0" width="40" height="30"/>
+                                                <color key="tintColor" red="0.91764706370000004" green="0.20392158630000001" blue="0.36078432199999999" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
                                                 <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
                                                 <state key="normal" title="취소"/>
                                                 <connections>
@@ -188,6 +189,7 @@
                                         <subviews>
                                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Tid-YG-GEd">
                                                 <rect key="frame" x="0.0" y="0.0" width="40" height="30"/>
+                                                <color key="tintColor" red="0.91764706370000004" green="0.20392158630000001" blue="0.36078432199999999" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
                                                 <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
                                                 <state key="normal" title="확인"/>
                                                 <connections>
@@ -339,8 +341,13 @@
                     </view>
                     <connections>
                         <outlet property="commentTextView" destination="i5u-4P-8my" id="SHM-wa-WVz"/>
+                        <outlet property="fifthStarView" destination="vUl-hb-Nbc" id="ulw-tA-CcW"/>
+                        <outlet property="firstStarView" destination="5wZ-l9-BcJ" id="Lx1-9T-lXX"/>
+                        <outlet property="fourthStarView" destination="tiO-Dp-SDg" id="8UD-YG-OAG"/>
                         <outlet property="gradeLabel" destination="7pa-1S-l9G" id="ZII-dP-mzl"/>
                         <outlet property="movieNameLabel" destination="FHJ-s1-MAc" id="esH-uw-jnf"/>
+                        <outlet property="secondStarView" destination="Ri1-Qu-ELI" id="IDI-T2-7JG"/>
+                        <outlet property="thirdStarView" destination="e0p-MX-xYE" id="R6c-f7-Hmg"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="uBe-rt-zfp" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
@@ -665,6 +672,11 @@
                                                 <state key="normal" title="로그인">
                                                     <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                 </state>
+                                                <userDefinedRuntimeAttributes>
+                                                    <userDefinedRuntimeAttribute type="number" keyPath="layer.cornerRadius">
+                                                        <integer key="value" value="8"/>
+                                                    </userDefinedRuntimeAttribute>
+                                                </userDefinedRuntimeAttributes>
                                                 <connections>
                                                     <action selector="loginButton:" destination="whM-HS-m0M" eventType="touchUpInside" id="a3a-dg-hwA"/>
                                                 </connections>
@@ -694,7 +706,7 @@
                                     <color key="titleColor" red="0.91764706370000004" green="0.20392158630000001" blue="0.36078432199999999" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
                                 </state>
                                 <connections>
-                                    <action selector="goToResigerButton:" destination="whM-HS-m0M" eventType="touchUpInside" id="TOI-4e-9nG"/>
+                                    <segue destination="gx0-9J-M22" kind="presentation" id="ruo-uF-33Z"/>
                                 </connections>
                             </button>
                         </subviews>
@@ -712,7 +724,6 @@
                     <connections>
                         <outlet property="emailTextField" destination="Zia-7K-1NF" id="VSi-A9-Wma"/>
                         <outlet property="passwordTextField" destination="pLh-N0-IYC" id="rHW-50-zAc"/>
-                        <segue destination="gx0-9J-M22" kind="presentation" identifier="goToRegisterView" id="OdA-ub-QIz"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="EGM-Kn-AKP" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
@@ -731,45 +742,114 @@
                                 <rect key="frame" x="10" y="150" width="394" height="653"/>
                                 <subviews>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="로그인된 계정이 없습니다" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Jfg-4n-vSt">
-                                        <rect key="frame" x="72.5" y="65" width="249" height="30"/>
-                                        <fontDescription key="fontDescription" type="system" pointSize="25"/>
+                                        <rect key="frame" x="112" y="65" width="170.5" height="20.5"/>
+                                        <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                         <color key="textColor" red="0.91764706370000004" green="0.20392158630000001" blue="0.36078432199999999" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
                                         <nil key="highlightedColor"/>
                                     </label>
-                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Rhf-IE-esA">
-                                        <rect key="frame" x="117" y="130" width="160" height="36"/>
-                                        <color key="backgroundColor" red="0.91764706370000004" green="0.20392158630000001" blue="0.36078432199999999" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
+                                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="fWl-XR-BRb">
+                                        <rect key="frame" x="77" y="120.5" width="240" height="70"/>
+                                        <subviews>
+                                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="fbO-r4-Khz">
+                                                <rect key="frame" x="0.0" y="10" width="120" height="60"/>
+                                                <subviews>
+                                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" adjustsImageWhenHighlighted="NO" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="XKm-Hy-Pag">
+                                                        <rect key="frame" x="40" y="0.0" width="40" height="40"/>
+                                                        <constraints>
+                                                            <constraint firstAttribute="width" constant="40" id="Bo6-FB-uS4"/>
+                                                            <constraint firstAttribute="height" constant="40" id="IgH-ip-mYj"/>
+                                                        </constraints>
+                                                        <color key="tintColor" red="0.91764706370000004" green="0.20392158630000001" blue="0.36078432199999999" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
+                                                        <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
+                                                        <state key="normal">
+                                                            <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                            <imageReference key="image" image="bookmark.fill" catalog="system" symbolScale="medium"/>
+                                                        </state>
+                                                        <userDefinedRuntimeAttributes>
+                                                            <userDefinedRuntimeAttribute type="number" keyPath="layer.cornerRadius">
+                                                                <integer key="value" value="8"/>
+                                                            </userDefinedRuntimeAttribute>
+                                                        </userDefinedRuntimeAttributes>
+                                                        <connections>
+                                                            <action selector="wishListButton:" destination="1hc-3D-obl" eventType="touchUpInside" id="eeW-5a-GZ2"/>
+                                                        </connections>
+                                                    </button>
+                                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="보고싶어요" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="6Se-PN-mAc">
+                                                        <rect key="frame" x="32" y="44" width="56.5" height="16"/>
+                                                        <fontDescription key="fontDescription" type="system" pointSize="13"/>
+                                                        <color key="textColor" red="0.91764706370000004" green="0.20392158630000001" blue="0.36078432199999999" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
+                                                        <nil key="highlightedColor"/>
+                                                    </label>
+                                                </subviews>
+                                                <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                                                <constraints>
+                                                    <constraint firstItem="XKm-Hy-Pag" firstAttribute="centerX" secondItem="fbO-r4-Khz" secondAttribute="centerX" id="X4S-L5-wbE"/>
+                                                    <constraint firstItem="6Se-PN-mAc" firstAttribute="centerX" secondItem="fbO-r4-Khz" secondAttribute="centerX" id="ZdI-w9-6dt"/>
+                                                    <constraint firstAttribute="width" constant="120" id="pq0-8o-nvb"/>
+                                                    <constraint firstAttribute="bottom" secondItem="6Se-PN-mAc" secondAttribute="bottom" id="rzt-To-Oau"/>
+                                                    <constraint firstItem="XKm-Hy-Pag" firstAttribute="top" secondItem="fbO-r4-Khz" secondAttribute="top" id="uki-67-qkg"/>
+                                                    <constraint firstAttribute="height" constant="60" id="x5C-NG-Y85"/>
+                                                </constraints>
+                                            </view>
+                                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="4hE-aV-p2j">
+                                                <rect key="frame" x="120" y="10" width="120" height="60"/>
+                                                <subviews>
+                                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" adjustsImageWhenHighlighted="NO" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="LBu-j0-JHb">
+                                                        <rect key="frame" x="40" y="0.0" width="40" height="40"/>
+                                                        <constraints>
+                                                            <constraint firstAttribute="height" constant="40" id="eHu-kb-ARz"/>
+                                                            <constraint firstAttribute="width" constant="40" id="mGG-aK-Vf9"/>
+                                                        </constraints>
+                                                        <color key="tintColor" red="0.91764706370000004" green="0.20392158630000001" blue="0.36078432199999999" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
+                                                        <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
+                                                        <state key="normal">
+                                                            <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                            <imageReference key="image" image="square.and.pencil" catalog="system" symbolScale="medium"/>
+                                                        </state>
+                                                        <userDefinedRuntimeAttributes>
+                                                            <userDefinedRuntimeAttribute type="number" keyPath="layer.cornerRadius">
+                                                                <integer key="value" value="8"/>
+                                                            </userDefinedRuntimeAttribute>
+                                                        </userDefinedRuntimeAttributes>
+                                                        <connections>
+                                                            <action selector="assessmentListButton:" destination="1hc-3D-obl" eventType="touchUpInside" id="ypL-cv-BhI"/>
+                                                        </connections>
+                                                    </button>
+                                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="평가한 영화" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="YG9-QP-Jtz">
+                                                        <rect key="frame" x="30" y="44" width="60" height="16"/>
+                                                        <fontDescription key="fontDescription" type="system" pointSize="13"/>
+                                                        <color key="textColor" red="0.91764706370000004" green="0.20392158630000001" blue="0.36078432199999999" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
+                                                        <nil key="highlightedColor"/>
+                                                    </label>
+                                                </subviews>
+                                                <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                                                <constraints>
+                                                    <constraint firstAttribute="height" constant="60" id="5hI-FQ-Ih8"/>
+                                                    <constraint firstAttribute="bottom" secondItem="YG9-QP-Jtz" secondAttribute="bottom" id="M91-Fy-ntN"/>
+                                                    <constraint firstAttribute="width" constant="120" id="QXl-YV-beE"/>
+                                                    <constraint firstItem="LBu-j0-JHb" firstAttribute="top" secondItem="4hE-aV-p2j" secondAttribute="top" id="UFB-i9-HYy"/>
+                                                    <constraint firstItem="LBu-j0-JHb" firstAttribute="centerX" secondItem="4hE-aV-p2j" secondAttribute="centerX" id="bx9-Aw-Bff"/>
+                                                    <constraint firstItem="YG9-QP-Jtz" firstAttribute="centerX" secondItem="4hE-aV-p2j" secondAttribute="centerX" id="weP-En-DEf"/>
+                                                </constraints>
+                                            </view>
+                                        </subviews>
+                                        <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                                         <constraints>
-                                            <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="160" id="uqq-oQ-I2B"/>
+                                            <constraint firstAttribute="width" constant="240" id="GEM-Av-7Ll"/>
+                                            <constraint firstAttribute="trailing" secondItem="4hE-aV-p2j" secondAttribute="trailing" id="MqK-1q-gXd"/>
+                                            <constraint firstItem="fbO-r4-Khz" firstAttribute="leading" secondItem="fWl-XR-BRb" secondAttribute="leading" id="V9y-2b-Xrv"/>
+                                            <constraint firstAttribute="bottom" secondItem="4hE-aV-p2j" secondAttribute="bottom" id="VVq-Qc-1WV"/>
+                                            <constraint firstAttribute="bottom" secondItem="fbO-r4-Khz" secondAttribute="bottom" id="ZLT-XO-ntj"/>
+                                            <constraint firstAttribute="height" constant="70" id="siW-tg-akH"/>
                                         </constraints>
-                                        <fontDescription key="fontDescription" type="boldSystem" pointSize="20"/>
-                                        <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
-                                        <state key="normal" title="로그아웃">
-                                            <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                        </state>
-                                        <connections>
-                                            <action selector="logoutButton:" destination="1hc-3D-obl" eventType="touchUpInside" id="3r5-dl-GVC"/>
-                                        </connections>
-                                    </button>
-                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Y62-cL-MJ8">
-                                        <rect key="frame" x="147.5" y="105" width="99" height="30"/>
-                                        <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
-                                        <state key="normal" title="로그인 하러 가기">
-                                            <color key="titleColor" red="0.91764706370000004" green="0.20392158630000001" blue="0.36078432199999999" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
-                                        </state>
-                                        <connections>
-                                            <action selector="goToLoginButton:" destination="1hc-3D-obl" eventType="touchUpInside" id="1d1-nU-YfO"/>
-                                        </connections>
-                                    </button>
+                                    </view>
                                 </subviews>
                                 <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                                 <constraints>
-                                    <constraint firstItem="Y62-cL-MJ8" firstAttribute="top" secondItem="Jfg-4n-vSt" secondAttribute="bottom" constant="10" id="EJD-Ge-WQU"/>
-                                    <constraint firstItem="Rhf-IE-esA" firstAttribute="centerX" secondItem="Vvf-kP-mV4" secondAttribute="centerX" id="FRK-Ko-8Wb"/>
+                                    <constraint firstItem="fWl-XR-BRb" firstAttribute="centerX" secondItem="Vvf-kP-mV4" secondAttribute="centerX" id="70i-MX-azJ"/>
+                                    <constraint firstItem="fWl-XR-BRb" firstAttribute="top" secondItem="Jfg-4n-vSt" secondAttribute="bottom" constant="35" id="YkB-r3-l0f"/>
                                     <constraint firstItem="Jfg-4n-vSt" firstAttribute="top" secondItem="Vvf-kP-mV4" secondAttribute="top" constant="65" id="ev6-Qa-mtm"/>
-                                    <constraint firstItem="Rhf-IE-esA" firstAttribute="top" secondItem="Jfg-4n-vSt" secondAttribute="bottom" constant="35" id="isv-aU-fqw"/>
                                     <constraint firstItem="Jfg-4n-vSt" firstAttribute="centerX" secondItem="Vvf-kP-mV4" secondAttribute="centerX" id="llg-J1-fSI"/>
-                                    <constraint firstItem="Y62-cL-MJ8" firstAttribute="centerX" secondItem="Vvf-kP-mV4" secondAttribute="centerX" id="nV5-SV-nYC"/>
                                 </constraints>
                             </view>
                         </subviews>
@@ -782,17 +862,24 @@
                             <constraint firstItem="hsg-lH-1Dh" firstAttribute="bottom" secondItem="Vvf-kP-mV4" secondAttribute="bottom" constant="10" id="Sp2-Px-fzi"/>
                         </constraints>
                     </view>
-                    <navigationItem key="navigationItem" id="tiU-2h-OFi"/>
+                    <navigationItem key="navigationItem" id="tiU-2h-OFi">
+                        <barButtonItem key="rightBarButtonItem" title="로그인" id="5g8-eF-JLf">
+                            <connections>
+                                <action selector="accountButton:" destination="1hc-3D-obl" id="79f-8y-CD9"/>
+                            </connections>
+                        </barButtonItem>
+                    </navigationItem>
                     <connections>
+                        <outlet property="accountButton" destination="5g8-eF-JLf" id="Ouc-yi-CaR"/>
                         <outlet property="accountTextLabel" destination="Jfg-4n-vSt" id="iIL-i5-amV"/>
-                        <outlet property="goToLoginButton" destination="Y62-cL-MJ8" id="5gM-2g-7DP"/>
-                        <outlet property="logoutButton" destination="Rhf-IE-esA" id="ady-zP-hCY"/>
-                        <segue destination="whM-HS-m0M" kind="show" identifier="goToLoginView" id="p7j-O5-5fz"/>
+                        <outlet property="assessmentListButton" destination="LBu-j0-JHb" id="f78-XL-L9j"/>
+                        <outlet property="wishListButton" destination="XKm-Hy-Pag" id="Ilr-nZ-VRG"/>
+                        <segue destination="whM-HS-m0M" kind="show" identifier="goToLoginView" id="0Mg-Ng-8i4"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="g0M-TQ-mcm" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-1900" y="498"/>
+            <point key="canvasLocation" x="-1900.0000000000002" y="497.54464285714283"/>
         </scene>
         <!--검색-->
         <scene sceneID="pR4-CF-F58">
@@ -805,7 +892,7 @@
                     <navigationBar key="navigationBar" contentMode="scaleToFill" backIndicatorImage="chevron.left" catalog="system" largeTitles="YES" backIndicatorTransitionMaskImage="chevron.left" id="3Xr-lA-7q5">
                         <rect key="frame" x="0.0" y="44" width="414" height="96"/>
                         <autoresizingMask key="autoresizingMask"/>
-                        <color key="tintColor" white="0.33333333329999998" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        <color key="tintColor" red="0.91764706370000004" green="0.20392158630000001" blue="0.36078432199999999" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
                     </navigationBar>
                     <nil name="viewControllers"/>
                     <connections>
@@ -827,7 +914,7 @@
                     <navigationBar key="navigationBar" contentMode="scaleToFill" backIndicatorImage="chevron.left" catalog="system" largeTitles="YES" backIndicatorTransitionMaskImage="chevron.left" id="kGu-P2-684">
                         <rect key="frame" x="0.0" y="44" width="414" height="96"/>
                         <autoresizingMask key="autoresizingMask"/>
-                        <color key="tintColor" white="0.33333333329999998" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        <color key="tintColor" red="0.91764706370000004" green="0.20392158630000001" blue="0.36078432199999999" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
                     </navigationBar>
                     <nil name="viewControllers"/>
                     <connections>
@@ -995,6 +1082,11 @@
                                                 <state key="normal" title="확인">
                                                     <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                 </state>
+                                                <userDefinedRuntimeAttributes>
+                                                    <userDefinedRuntimeAttribute type="number" keyPath="layer.cornerRadius">
+                                                        <integer key="value" value="8"/>
+                                                    </userDefinedRuntimeAttribute>
+                                                </userDefinedRuntimeAttributes>
                                                 <connections>
                                                     <action selector="registerButton:" destination="gx0-9J-M22" eventType="touchUpInside" id="9JO-QE-Acr"/>
                                                 </connections>
@@ -1080,11 +1172,13 @@
     </inferredMetricsTieBreakers>
     <resources>
         <image name="background_image" width="875" height="555"/>
+        <image name="bookmark.fill" catalog="system" width="112" height="128"/>
         <image name="chevron.left" catalog="system" width="96" height="128"/>
         <image name="house" catalog="system" width="128" height="106"/>
         <image name="magnifyingglass" catalog="system" width="128" height="115"/>
         <image name="person.fill" catalog="system" width="128" height="120"/>
         <image name="square.and.arrow.down" catalog="system" width="121" height="128"/>
+        <image name="square.and.pencil" catalog="system" width="128" height="115"/>
         <image name="star_empty" width="48" height="48"/>
         <image name="xmark" catalog="system" width="128" height="113"/>
         <systemColor name="labelColor">

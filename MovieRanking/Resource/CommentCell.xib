@@ -131,11 +131,22 @@
                             <constraint firstItem="ltj-d7-ldB" firstAttribute="top" secondItem="wuK-jS-YK9" secondAttribute="bottom" constant="10" id="r8a-yZ-Pwf"/>
                         </constraints>
                     </stackView>
+                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="등록된 코멘트가 없습니다." textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="mKy-1I-DdW">
+                        <rect key="frame" x="0.0" y="0.0" width="870" height="448"/>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        <fontDescription key="fontDescription" type="system" pointSize="15"/>
+                        <color key="textColor" white="0.33333333333333331" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        <nil key="highlightedColor"/>
+                    </label>
                 </subviews>
                 <constraints>
                     <constraint firstItem="geF-fy-poJ" firstAttribute="top" secondItem="H2p-sc-9uM" secondAttribute="top" constant="10" id="Cec-Fp-v3c"/>
                     <constraint firstAttribute="trailing" secondItem="geF-fy-poJ" secondAttribute="trailing" constant="10" id="Kg4-uS-tlr"/>
+                    <constraint firstAttribute="trailing" secondItem="mKy-1I-DdW" secondAttribute="trailing" id="RO6-Hv-nj2"/>
                     <constraint firstItem="geF-fy-poJ" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leading" constant="10" id="aXt-Ni-BgM"/>
+                    <constraint firstItem="mKy-1I-DdW" firstAttribute="top" secondItem="H2p-sc-9uM" secondAttribute="top" id="d3o-O4-Yop"/>
+                    <constraint firstItem="mKy-1I-DdW" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leading" id="dc9-bb-rno"/>
+                    <constraint firstAttribute="bottom" secondItem="mKy-1I-DdW" secondAttribute="bottom" id="tPg-5L-w9h"/>
                     <constraint firstAttribute="bottom" secondItem="geF-fy-poJ" secondAttribute="bottom" constant="10" id="tTl-CJ-66F"/>
                 </constraints>
             </tableViewCellContentView>
@@ -148,6 +159,7 @@
                 <outlet property="firstStarImageView" destination="yf9-ib-xGJ" id="0Yb-0N-bfz"/>
                 <outlet property="fourthStarImageView" destination="JRU-as-nd7" id="COa-jJ-jw6"/>
                 <outlet property="secondStarImageView" destination="H9T-hT-v62" id="Rrt-Hc-Tcd"/>
+                <outlet property="stateEmptyLabel" destination="mKy-1I-DdW" id="WOv-Ad-Rqe"/>
                 <outlet property="thirdStarImageView" destination="0Bn-WQ-378" id="Jpd-IZ-7w5"/>
                 <outlet property="userNameLabel" destination="4wN-Gj-u6S" id="1DY-or-8hx"/>
             </connections>

@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="19529" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+    <device id="retina6_1" orientation="portrait" appearance="light"/>
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="19519"/>
+        <capability name="Safe area layout guides" minToolsVersion="9.0"/>
+        <capability name="System colors in document resources" minToolsVersion="11.0"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <tableViewCell contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="RatingStarsCell" rowHeight="77" id="KGk-i7-Jjw" customClass="RatingStarsCell" customModule="MovieRanking" customModuleProvider="target">
+            <rect key="frame" x="0.0" y="0.0" width="537" height="77"/>
+            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+            <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" ambiguous="YES" tableViewCell="KGk-i7-Jjw" id="H2p-sc-9uM">
+                <rect key="frame" x="0.0" y="0.0" width="537" height="77"/>
+                <autoresizingMask key="autoresizingMask"/>
+                <subviews>
+                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Ohg-CM-ijw">
+                        <rect key="frame" x="0.0" y="0.0" width="537" height="65"/>
+                        <subviews>
+                            <stackView opaque="NO" contentMode="scaleToFill" distribution="fillEqually" spacing="5" translatesAutoresizingMaskIntoConstraints="NO" id="kom-eQ-keC" userLabel="Star Stack View">
+                                <rect key="frame" x="158.5" y="12.5" width="220" height="40"/>
+                                <subviews>
+                                    <imageView clipsSubviews="YES" userInteractionEnabled="NO" tag="1" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="star_empty" translatesAutoresizingMaskIntoConstraints="NO" id="WT7-yT-akh" userLabel="1st Image View">
+                                        <rect key="frame" x="0.0" y="0.0" width="40" height="40"/>
+                                        <color key="tintColor" systemColor="systemYellowColor"/>
+                                        <constraints>
+                                            <constraint firstAttribute="height" constant="40" id="Kqk-zB-6j3"/>
+                                            <constraint firstAttribute="width" constant="40" id="gc7-I9-wUV"/>
+                                        </constraints>
+                                    </imageView>
+                                    <imageView clipsSubviews="YES" userInteractionEnabled="NO" tag="2" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="star_empty" translatesAutoresizingMaskIntoConstraints="NO" id="ocS-OL-cYP" userLabel="2nd Image View">
+                                        <rect key="frame" x="45" y="0.0" width="40" height="40"/>
+                                        <color key="tintColor" systemColor="systemYellowColor"/>
+                                        <constraints>
+                                            <constraint firstAttribute="height" constant="40" id="8TC-sR-gHO"/>
+                                            <constraint firstAttribute="width" constant="40" id="KFX-2z-a6p"/>
+                                        </constraints>
+                                    </imageView>
+                                    <imageView clipsSubviews="YES" userInteractionEnabled="NO" tag="3" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="star_empty" translatesAutoresizingMaskIntoConstraints="NO" id="hve-Nn-StL" userLabel="3rd Image View">
+                                        <rect key="frame" x="90" y="0.0" width="40" height="40"/>
+                                        <color key="tintColor" systemColor="systemYellowColor"/>
+                                        <constraints>
+                                            <constraint firstAttribute="height" constant="40" id="mJb-oB-pbQ"/>
+                                            <constraint firstAttribute="width" constant="40" id="nQg-S7-GKL"/>
+                                        </constraints>
+                                    </imageView>
+                                    <imageView clipsSubviews="YES" userInteractionEnabled="NO" tag="4" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="star_empty" translatesAutoresizingMaskIntoConstraints="NO" id="Epm-ZQ-xD0" userLabel="4th Image View">
+                                        <rect key="frame" x="135" y="0.0" width="40" height="40"/>
+                                        <color key="tintColor" systemColor="systemYellowColor"/>
+                                        <constraints>
+                                            <constraint firstAttribute="height" constant="40" id="0aw-DU-jPW"/>
+                                            <constraint firstAttribute="width" constant="40" id="jKB-Te-EJn"/>
+                                        </constraints>
+                                    </imageView>
+                                    <imageView clipsSubviews="YES" userInteractionEnabled="NO" tag="5" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="star_empty" translatesAutoresizingMaskIntoConstraints="NO" id="dLS-fF-97P" userLabel="5th Image View">
+                                        <rect key="frame" x="180" y="0.0" width="40" height="40"/>
+                                        <color key="tintColor" systemColor="systemYellowColor"/>
+                                        <constraints>
+                                            <constraint firstAttribute="width" constant="40" id="Zr3-Re-oEC"/>
+                                            <constraint firstAttribute="height" constant="40" id="mvI-eA-YIk"/>
+                                        </constraints>
+                                    </imageView>
+                                </subviews>
+                            </stackView>
+                            <slider opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" minValue="0.0" maxValue="10" translatesAutoresizingMaskIntoConstraints="NO" id="5h4-xe-U10" customClass="RatingUISlider" customModule="MovieRanking" customModuleProvider="target">
+                                <rect key="frame" x="161.5" y="12.5" width="214" height="41"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="40" id="eBN-f2-WOw"/>
+                                    <constraint firstAttribute="width" constant="210" id="hQw-5B-vmE"/>
+                                </constraints>
+                                <color key="minimumTrackTintColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <color key="maximumTrackTintColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <color key="thumbTintColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <connections>
+                                    <action selector="ratingSlider:" destination="KGk-i7-Jjw" eventType="valueChanged" id="tCS-ji-GvF"/>
+                                </connections>
+                            </slider>
+                        </subviews>
+                        <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                        <constraints>
+                            <constraint firstItem="5h4-xe-U10" firstAttribute="centerX" secondItem="Ohg-CM-ijw" secondAttribute="centerX" id="3ve-3R-VAM"/>
+                            <constraint firstItem="kom-eQ-keC" firstAttribute="centerX" secondItem="Ohg-CM-ijw" secondAttribute="centerX" id="6Xd-xw-VsS"/>
+                            <constraint firstAttribute="height" constant="65" id="FBY-Zl-1Lv"/>
+                            <constraint firstItem="5h4-xe-U10" firstAttribute="centerY" secondItem="Ohg-CM-ijw" secondAttribute="centerY" id="ai6-LN-beF"/>
+                            <constraint firstItem="kom-eQ-keC" firstAttribute="centerY" secondItem="Ohg-CM-ijw" secondAttribute="centerY" id="log-jN-2YP"/>
+                        </constraints>
+                    </view>
+                </subviews>
+                <constraints>
+                    <constraint firstAttribute="bottom" secondItem="Ohg-CM-ijw" secondAttribute="bottom" id="PCU-d6-YgC"/>
+                    <constraint firstAttribute="trailing" secondItem="Ohg-CM-ijw" secondAttribute="trailing" id="dxe-yT-IW3"/>
+                    <constraint firstItem="Ohg-CM-ijw" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leading" id="tcO-Cq-Rty"/>
+                    <constraint firstItem="Ohg-CM-ijw" firstAttribute="top" secondItem="H2p-sc-9uM" secondAttribute="top" id="wHu-Ny-pTW"/>
+                </constraints>
+            </tableViewCellContentView>
+            <viewLayoutGuide key="safeArea" id="njF-e1-oar"/>
+            <connections>
+                <outlet property="fifthStarView" destination="dLS-fF-97P" id="959-Vh-KIz"/>
+                <outlet property="firstStarView" destination="WT7-yT-akh" id="MoZ-v5-qg6"/>
+                <outlet property="fourthStarView" destination="Epm-ZQ-xD0" id="KbF-gt-nSq"/>
+                <outlet property="secondStarView" destination="ocS-OL-cYP" id="Pdd-ag-BYJ"/>
+                <outlet property="thirdStarView" destination="hve-Nn-StL" id="AQE-AT-We5"/>
+            </connections>
+            <point key="canvasLocation" x="289.13043478260875" y="142.96875"/>
+        </tableViewCell>
+    </objects>
+    <resources>
+        <image name="star_empty" width="48" height="48"/>
+        <systemColor name="systemBackgroundColor">
+            <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+        </systemColor>
+        <systemColor name="systemYellowColor">
+            <color red="1" green="0.80000000000000004" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </systemColor>
+    </resources>
+</document>

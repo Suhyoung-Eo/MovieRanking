@@ -29,10 +29,10 @@ struct BoxOffice: Codable {
 extension BoxOffice {
     static var empty: BoxOffice {
         return BoxOffice(rank: "",
-                             rankOldAndNew: "",
-                             movieCd: "",
-                             movieNm: "",
-                             openDt: "",
-                             audiAcc: "")
+                         rankOldAndNew: "",
+                         movieCd: "",
+                         movieNm: "",
+                         openDt: "",
+                         audiAcc: "")
     }
 }

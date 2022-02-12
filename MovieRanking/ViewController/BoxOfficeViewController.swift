@@ -24,6 +24,7 @@ class BoxOfficeViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
         tableView.register(UINib(nibName: "BoxOfficeCell", bundle: nil), forCellReuseIdentifier: K.CellIdentifier.boxOfficeCell)
         tableView.dataSource = self
         tableView.delegate = self
@@ -156,17 +157,8 @@ extension BoxOfficeViewController: UITableViewDataSource {
 
         let boxOfficeList = viewModel.boxOfficeList.boxOfficeModel(indexPath.row)
         let movieInfoList = viewModel.movieInfoList.movieInfoModel(indexPath.row)
-        // cell 속성
+
         cell.selectionStyle = .none
-        cell.titleLabel.font = .systemFont(ofSize: 18)
-        cell.rankLabel.font = .boldSystemFont(ofSize: 18)
-        cell.rankLabel.textColor = UIColor.black.withAlphaComponent(0.5)
-        cell.openDateLabel.font = .systemFont(ofSize: 13)
-        cell.openDateLabel.textColor = UIColor.black.withAlphaComponent(0.5)
-        cell.audiAccLabel.font = .systemFont(ofSize: 13)
-        cell.audiAccLabel.textColor = UIColor.black.withAlphaComponent(0.5)
-        
-        // cell value
         cell.thumbnailImageView.setImage(from: movieInfoList.thumbNailLinks[0])
         cell.titleLabel.text = boxOfficeList.movieName
         cell.rankLabel.text = boxOfficeList.movieRank
@@ -186,7 +178,7 @@ extension BoxOfficeViewController: UITableViewDataSource {
 extension BoxOfficeViewController: UITableViewDelegate {
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        if viewModel.movieInfoList.movieInfoModel(indexPath.row).movieId != "" {
+        if viewModel.movieInfoList.movieInfoModel(indexPath.row).DOCID != "" {
             performSegue(withIdentifier: K.SegueIdentifier.movieInfoView, sender: "movieInfoView")
         } else {
             DispatchQueue.main.async {

@@ -20,6 +20,13 @@ class BoxOfficeCell: UITableViewCell {
         super.awakeFromNib()
         
         thumbnailImageView.layer.cornerRadius = thumbnailImageView.frame.height / 15
+        titleLabel.font = .systemFont(ofSize: 18)
+        rankLabel.font = .boldSystemFont(ofSize: 18)
+        rankLabel.textColor = UIColor.black.withAlphaComponent(0.5)
+        openDateLabel.font = .systemFont(ofSize: 13)
+        openDateLabel.textColor = UIColor.black.withAlphaComponent(0.5)
+        audiAccLabel.font = .systemFont(ofSize: 13)
+        audiAccLabel.textColor = UIColor.black.withAlphaComponent(0.5)
     }
     
     override func setSelected(_ selected: Bool, animated: Bool) {

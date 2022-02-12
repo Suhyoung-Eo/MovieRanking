@@ -11,12 +11,23 @@ class MovieInfoViewController: UIViewController {
     
     @IBOutlet weak var tableView: UITableView!
     
-    var movieInfo = MovieInfoModel(MovieInfo.empty)
+    private let viewModel = FirebaseViewModel()
+    private var userInfose: [UserInfoModel] = []
+    private var gradeAverage: Float = 0.0
+    private var wishToWatch: Bool = false
+    
+    var movieInfo = MovieInfoModel(MovieInfo.empty) {
+        didSet {
+            loadUserInfose()
+            loadWishToWatch()
+        }
+    }
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
         tableView.register(UINib(nibName: "MovieImageCell", bundle: nil), forCellReuseIdentifier: K.CellIdentifier.movieImageCell)
+        tableView.register(UINib(nibName: "RatingStarsCell", bundle: nil), forCellReuseIdentifier: K.CellIdentifier.ratingStarsCell)
         tableView.register(UINib(nibName: "UserInteractionCell", bundle: nil), forCellReuseIdentifier: K.CellIdentifier.userInteractionCell)
         tableView.register(UINib(nibName: "DetailInfoCell", bundle: nil), forCellReuseIdentifier: K.CellIdentifier.detailInfoCell)
         tableView.register(UINib(nibName: "StaffsInfoCell", bundle: nil), forCellReuseIdentifier: K.CellIdentifier.staffsInfoCell)
@@ -64,6 +75,11 @@ class MovieInfoViewController: UIViewController {
                     fatalError("Could not found segue destination")
                 }
                 destinationVC.staffs = movieInfo.staffs
+            case "addCommentView":
+                guard let destinationVC = segue.destination as? AddCommentViewController else {
+                    fatalError("Could not found segue destination")
+                }
+                destinationVC.movieInfo = movieInfo
             default:
                 return
             }
@@ -90,6 +106,28 @@ extension MovieInfoViewController {
             performSegue(withIdentifier: K.SegueIdentifier.imageView, sender: "stllImageView")
         }
     }
+    
+    private func loadUserInfose() {
+        viewModel.loadUserInfose(DOCID: movieInfo.DOCID) { [weak self] userInfose, gradeAverage, error in
+            guard error == nil else { return }
+            self?.userInfose = userInfose
+            self?.gradeAverage = gradeAverage
+
+            DispatchQueue.main.async {
+                self?.tableView.reloadData()
+            }
+        }
+    }
+    
+    private func loadWishToWatch() {
+        viewModel.loadWishToWatch(DOCID: movieInfo.DOCID) { [weak self] isWish in
+            self?.wishToWatch = isWish
+            
+            DispatchQueue.main.async {
+                self?.tableView.reloadData()
+            }
+        }
+    }
 }
 
 //MARK: - tableView dataSource methods
@@ -97,13 +135,13 @@ extension MovieInfoViewController {
 extension MovieInfoViewController: UITableViewDataSource {
     
     func numberOfSections(in tableView: UITableView) -> Int {
-        return 6
+        return 7
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         switch section {
-        case 5:
-            return 3
+        case 6:
+            return userInfose.isEmpty ? 1 : userInfose.count
         default:
             return 1
         }
@@ -122,67 +160,54 @@ extension MovieInfoViewController: UITableViewDataSource {
                 fatalError("Could not found ViewCell")
             }
             
-            let posterImagetapped = UITapGestureRecognizer(target: self, action: #selector(tappedPosterImage))
-            posterImagetapped.numberOfTapsRequired = 1
-            cell.posterImageView.addGestureRecognizer(posterImagetapped)
+            let posterImageTapped = UITapGestureRecognizer(target: self, action: #selector(tappedPosterImage))
+            posterImageTapped.numberOfTapsRequired = 1
+            cell.posterImageView.addGestureRecognizer(posterImageTapped)
             
-            let stllImagetapped = UITapGestureRecognizer(target: self, action: #selector(tappedstllImage))
-            stllImagetapped.numberOfTapsRequired = 1
-            cell.stllImageView.addGestureRecognizer(stllImagetapped)
-            
-            // cell 속성
+            let stllImageTapped = UITapGestureRecognizer(target: self, action: #selector(tappedstllImage))
+            stllImageTapped.numberOfTapsRequired = 1
+            cell.stllImageView.addGestureRecognizer(stllImageTapped)
+
             cell.selectionStyle = .none
-            cell.movieNameLabel.font = .boldSystemFont(ofSize: 20)
-            cell.movieInfoLabel.font = .boldSystemFont(ofSize: 15)
-            cell.movieInfoLabel.textColor = UIColor.white.withAlphaComponent(0.8)
-            cell.posterImageView.isUserInteractionEnabled = true
-            cell.posterImageView.tag = 1
-            cell.stllImageView.isUserInteractionEnabled = true
-            cell.stllImageView.tag = 2
+            cell.posterImageView.setImage(from: movieInfo.thumbNailLinks[0])
+            cell.movieNameLabel.text = movieInfo.movieName
+            cell.movieInfoLabel.text = "\(movieInfo.prodYear) \(movieInfo.nation) \(movieInfo.genre)"
             
-            
-            // cell value
             if !movieInfo.stllsLinks[0].isEmpty {
                 cell.stllImageView.setImage(from: movieInfo.stllsLinks[0])
             } else {
                 cell.stllImageView.backgroundColor = UIColor.black.withAlphaComponent(0.8)
             }
             
-            cell.posterImageView.setImage(from: movieInfo.thumbNailLinks[0])
-            cell.movieNameLabel.text = movieInfo.movieName
-            cell.movieInfoLabel.text = "\(movieInfo.prodYear) \(movieInfo.nation) \(movieInfo.genre)"
-            
             return cell
         case 1:
-            guard let cell = tableView.dequeueReusableCell(withIdentifier: K.CellIdentifier.userInteractionCell) as? UserInteractionCell else {
+            guard let cell = tableView.dequeueReusableCell(withIdentifier: K.CellIdentifier.ratingStarsCell) as? RatingStarsCell else {
                 fatalError("Could not found ViewCell")
             }
-            // cell 속성
-            cell.selectionStyle = .none
             
-            // cell value
-            cell.delegate = self
-            cell.gradeLabel.text = "평균 평점"
+            cell.selectionStyle = .none
+            cell.parent = self
+            cell.movieInfo = movieInfo
             
             return cell
         case 2:
+            guard let cell = tableView.dequeueReusableCell(withIdentifier: K.CellIdentifier.userInteractionCell) as? UserInteractionCell else {
+                fatalError("Could not found ViewCell")
+            }
+            
+            cell.selectionStyle = .none
+            cell.delegate = self
+            cell.gradeLabel.text = gradeAverage == 0 ? "첫 평점을 등록해 주세요" : "평균 ★ \(String(format: "%.1f", gradeAverage))"
+            cell.wishToWatchButton.setImage(wishToWatch ? UIImage(systemName: "bookmark.fill") : UIImage(systemName: "plus"), for: .normal)
+            cell.wishToWatchButton.tintColor = wishToWatch ? UIColor(red: 0.92, green: 0.20, blue: 0.36, alpha: 1.00) : UIColor.darkGray
+            
+            return cell
+        case 3:
             guard let cell = tableView.dequeueReusableCell(withIdentifier: K.CellIdentifier.detailInfoCell) as? DetailInfoCell else {
                 fatalError("Could not found ViewCell")
             }
             
-            // cell 속성
             cell.selectionStyle = .none
-            cell.storyLabel.font = .systemFont(ofSize: 15)
-            cell.storyLabel.textColor = UIColor.black.withAlphaComponent(0.8)
-            cell.directorsLabel.font = .systemFont(ofSize: 13)
-            cell.runtimeLabel.font = .systemFont(ofSize: 13)
-            cell.ratingLabel.font = .systemFont(ofSize: 13)
-            cell.genreLabel.font = .systemFont(ofSize: 13)
-            cell.nationLabel.font = .systemFont(ofSize: 13)
-            cell.prodYearLabel.font = .systemFont(ofSize: 13)
-            cell.movieNameOrgLabel.font = .systemFont(ofSize: 13)
-            
-            // cell value
             cell.storyLabel.text = movieInfo.story[0].plotText
             cell.directorsLabel.text = movieInfo.directors[0].directorNm
             cell.runtimeLabel.text = movieInfo.runtime
@@ -193,53 +218,43 @@ extension MovieInfoViewController: UITableViewDataSource {
             cell.movieNameOrgLabel.text = movieInfo.movieNameOrg
             
             return cell
-        case 3:
+        case 4:
             guard let cell = tableView.dequeueReusableCell(withIdentifier: K.CellIdentifier.staffsInfoCell) as? StaffsInfoCell else {
                 fatalError("Could not found ViewCell")
             }
             
-            // cell 속성
             cell.selectionStyle = .none
-            cell.directorLabel.font = .systemFont(ofSize: 17)
-            cell.firstActorLabel.font = .systemFont(ofSize: 17)
-            cell.secondActorLabel.font = .systemFont(ofSize: 17)
-            
-            // cell value
             cell.delegate = self
             cell.directorLabel.text = movieInfo.directors[0].directorNm
             cell.firstActorLabel.text = movieInfo.actors[0].actorNm
             cell.secondActorLabel.text = movieInfo.actors.count > 1 ? movieInfo.actors[1].actorNm : ""
             
             return cell
-        case 4:
+        case 5:
             guard let cell = tableView.dequeueReusableCell(withIdentifier: K.CellIdentifier.commentHeadCell) as? CommentHeadCell else {
                 fatalError("Could not found ViewCell")
             }
             cell.selectionStyle = .none
+            
             return cell
-        case 5:
+        case 6:
             guard let cell = tableView.dequeueReusableCell(withIdentifier: K.CellIdentifier.commentCell) as? CommentCell else {
                 fatalError("Could not found ViewCell")
             }
-            // cell 속성
+            
             cell.selectionStyle = .none
             
-            // cell value
-            cell.userNameLabel.text = "어수형"
-            cell.commentLabel.text = "정말 잼 있어요"
-            cell.dateLabel.text = "2022.02.07"
-            
-            DispatchQueue.main.async {
-                // emotion image
-                cell.emotionImageView.image = UIImage(named: K.Image.veryGoodFace)
-                
-                // star image
-                cell.firstStarImageView.image = UIImage(named: K.Image.starFull)
-                cell.secondStarImageView.image = UIImage(named: K.Image.starFull)
-                cell.thirdStarImageView.image = UIImage(named: K.Image.starFull)
-                cell.fourthStarImageView.image = UIImage(named: K.Image.starFull)
-                cell.fifthStarImageView.image = UIImage(named: K.Image.starFull)
+            if userInfose.isEmpty {
+                cell.stateEmptyLabel.isHidden = false
+            } else {
+                let userInfo = userInfose[indexPath.row]
+                cell.stateEmptyLabel.isHidden = true
+                cell.grade = userInfo.grade
+                cell.userNameLabel.text = userInfo.userId
+                cell.commentLabel.text = userInfo.comment
+                cell.dateLabel.text = userInfo.date
             }
+            
             return cell
         default:
             return UITableViewCell()
@@ -252,7 +267,14 @@ extension MovieInfoViewController: UITableViewDataSource {
 extension MovieInfoViewController: UITableViewDelegate {
     
     func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
-        return 3
+        switch section {
+        case 0:
+            return 0
+        case 1:
+            return 0
+        default:
+            return 3
+        }
     }
     
     func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
@@ -272,10 +294,25 @@ extension MovieInfoViewController: StaffsInfoCellDelegate, UserInteractionCellDe
     }
     
     func pushedAddCommentButton(data: Any) {
-        print("pushedAddCommentButton")
+        performSegue(withIdentifier: K.SegueIdentifier.addCommentView, sender: data)
     }
     
     func pushedWishToWatchButton() {
-        print("pushedWishToWatchButton")
+        wishToWatch = viewModel.userId == nil ? false : !wishToWatch
+        viewModel.updateWishToWatch(DOCID: movieInfo.DOCID,
+                                    movieId: movieInfo.movieId,
+                                    movieSeq: movieInfo.movieSeq,
+                                    movieName: movieInfo.movieName,
+                                    thumbNailLink: movieInfo.thumbNailLinks[0],
+                                    wishToWatch: wishToWatch) { error in
+            guard error != nil else { return }
+            
+            DispatchQueue.main.async {
+                AlertService.shared.alert(viewController: self,
+                                          alertTitle: "보고싶어요 목록 저장에 실패 했습니다",
+                                          message: nil, actionTitle: "확인")
+            }
+        }
+        tableView.reloadData()
     }
 }

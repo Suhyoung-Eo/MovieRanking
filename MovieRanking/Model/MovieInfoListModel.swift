@@ -33,8 +33,16 @@ struct MovieInfoModel {
         self.movieInfo = movieInfo
     }
     
-    var movieId: String {
+    var DOCID: String {
         return movieInfo.DOCID ?? ""
+    }
+    
+    var movieId: String {
+        return movieInfo.movieId ?? ""
+    }
+    
+    var movieSeq: String {
+        return movieInfo.movieSeq ?? ""
     }
     
     var movieName: String {
