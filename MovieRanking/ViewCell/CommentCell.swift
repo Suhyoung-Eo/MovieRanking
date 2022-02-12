@@ -93,8 +93,6 @@ class CommentCell: UITableViewCell {
             starImages.append(starImage)
         }
         
-        DispatchQueue.main.async { [weak self] in
-            completion(self?.starImages ?? [])
-        }
+        completion(starImages)
     }
 }

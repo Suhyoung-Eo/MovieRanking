@@ -19,18 +19,17 @@ class AddCommentViewController: UIViewController {
     @IBOutlet weak var fifthStarView: UIImageView!
     
     private let viewModel = FirebaseViewModel()
-    private var comment: CommentModel!
+    private var currentUserInfo: UserInfoModel!
     private var starImages: [UIImage] = []
     private var grade: Float = 0.0
     
-    var movieName: String = ""
-    var DOCID: String = ""
+    var movieInfo = MovieInfoModel(MovieInfo.empty)
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
         commentTextView.delegate = self
-        movieNameLabel.text = movieName
+        movieNameLabel.text = movieInfo.movieName
         
     }
     
@@ -38,15 +37,15 @@ class AddCommentViewController: UIViewController {
         super.viewWillAppear(animated)
         
         // 이전에 코멘트를 남긴 경우 불러옴
-        viewModel.loadUserComment(DOCID: DOCID) { [weak self] comment in
-            self?.comment = comment
-            self?.grade = comment?.grade ?? 0
-            self?.loadStarImages(by: comment?.grade ?? 0) {
+        viewModel.loadCurrentUserInfo(DOCID: movieInfo.DOCID) { [weak self] currentUserInfo in
+            self?.currentUserInfo = currentUserInfo
+            self?.grade = currentUserInfo?.grade ?? 0
+            self?.loadStarImages(by: currentUserInfo?.grade ?? 0) {
                 self?.setStarImage()
             }
             
             DispatchQueue.main.async {
-                self?.commentTextView.text = comment?.comment
+                self?.commentTextView.text = currentUserInfo?.comment
             }
         }
     }
@@ -63,8 +62,11 @@ class AddCommentViewController: UIViewController {
             return
         }
         
-        viewModel.addComment(DOCID: DOCID,
-                             movieName: movieName,
+        viewModel.addComment(DOCID: movieInfo.DOCID,
+                             movieId: movieInfo.movieName,
+                             movieSeq: movieInfo.movieSeq,
+                             movieName: movieInfo.movieName,
+                             thumbNailLink: movieInfo.thumbNailLinks[0],
                              grade: grade,
                              comment: comment) { [weak self] error in
             

@@ -38,58 +38,105 @@ class FirebaseViewModel {
         }
     }
     
-    func addComment(DOCID: String, movieName: String, grade: Float, comment: String, completion: @escaping (Error?) -> Void) {
+    func updateWishToWatch(DOCID: String,
+                           movieId: String,
+                           movieSeq: String,
+                           movieName: String,
+                           thumbNailLink: String,
+                           wishToWatch: Bool,
+                           completion: @escaping (Error?) -> Void) {
+        
+        guard let userId = self.userId else { completion(nil); return }
+        
+        if wishToWatch {
+            let date = getFormattedDate()
+            
+            db.collection(userId).document("\(K.FStore.wishToWatch)\(DOCID)").setData([K.FStore.movieId: movieId,
+                                                                                       K.FStore.movieSeq : movieSeq,
+                                                                                       K.FStore.movieName: movieName,
+                                                                                       K.FStore.thumbNailLink: thumbNailLink,
+                                                                                       K.FStore.date: date]) { error in
+                completion(error)
+            }
+            
+        } else {
+            db.collection(userId).document("\(K.FStore.wishToWatch)\(DOCID)").delete() { error in
+                completion(error)
+            }
+        }
+    }
+    
+    func loadWishToWatch(DOCID: String, completion: @escaping (Bool) -> Void) {
+        guard let userId = self.userId else { completion(false); return }
+        
+        db.collection(userId).document("\(K.FStore.wishToWatch)\(DOCID)").addSnapshotListener { documentSnapshot, error in
+            
+            guard error == nil, let document = documentSnapshot else { completion(false); return }
+
+            completion(document.exists ? true : false)
+        }
+    }
+    
+    func addComment(DOCID: String,
+                    movieId: String,
+                    movieSeq: String,
+                    movieName: String,
+                    thumbNailLink: String,
+                    grade: Float,
+                    comment: String,
+                    completion: @escaping (Error?) -> Void) {
         
         guard let userId = self.userId else { completion(nil); return }
         
         let date = getFormattedDate()
-        let docRef = db.collection(DOCID).document(userId)
         
-        docRef.getDocument { document, error in
+        db.collection(DOCID).document(userId).setData([K.FStore.userId : userId,
+                                                       K.FStore.movieName: movieName,
+                                                       K.FStore.grade : grade,
+                                                       K.FStore.comment: comment,
+                                                       K.FStore.date: date]) { error in
             
-            docRef.setData([K.FStore.userId : userId,
-                            K.FStore.movieName: movieName,
-                            K.FStore.grade : grade,
-                            K.FStore.comment: comment,
-                            K.FStore.date: date]) { error in
-                
-                guard error == nil else { completion(error); return }
-                completion(nil)
-            }
+            completion(error)
         }
+        
+        // 서비스 제공을 위한 데이터 저장: collection() <----> document() Field Name 바꿔서 저장
+        addAccountInfo(userId: userId,
+                       DOCID: DOCID,
+                       movieId: movieId,
+                       movieSeq: movieSeq,
+                       movieName: movieName,
+                       thumbNailLink: thumbNailLink,
+                       grade: grade,
+                       comment: comment,
+                       date: date)
     }
     
-    func loadUserComment(DOCID: String, completion: @escaping (CommentModel?) -> Void) {
+    private func addAccountInfo(userId: String,
+                                DOCID: String,
+                                movieId: String,
+                                movieSeq: String,
+                                movieName: String,
+                                thumbNailLink: String,
+                                grade: Float,
+                                comment: String,
+                                date: String) {
         
-        guard let userId = self.userId else { completion(nil); return }
-        
-        db.collection(DOCID).document(userId).addSnapshotListener { document, error in
-            guard let document = document, document.exists,
-                  let data = document.data() else { completion(nil); return }
-            
-            if let userId = data[K.FStore.userId] as? String,
-               let movieName = data[K.FStore.movieName] as? String,
-               let grade = data[K.FStore.grade] as? Float,
-               let comment = data[K.FStore.comment] as? String,
-               let date = data[K.FStore.date] as? String {
-                
-                let UserComment = CommentModel(userId: userId,
-                                               movieName: movieName,
-                                               grade: grade,
-                                               comment: comment,
-                                               date: date)
-                completion(UserComment)
-            }
-        }
+        db.collection(userId).document(DOCID).setData([K.FStore.movieId: movieId,
+                                                       K.FStore.movieSeq : movieSeq,
+                                                       K.FStore.movieName: movieName,
+                                                       K.FStore.thumbNailLink: thumbNailLink,
+                                                       K.FStore.grade : grade,
+                                                       K.FStore.comment: comment,
+                                                       K.FStore.date: date]) { _ in }
     }
     
-    func loadComments(DOCID: String, completion: @escaping ([CommentModel], Float, Error?) -> Void) {
+    func loadUserInfose(DOCID: String, completion: @escaping ([UserInfoModel], Float, Error?) -> Void) {
         
         db.collection(DOCID).order(by: K.FStore.date, descending: true).addSnapshotListener { querySnapshot, error in
             
             guard error == nil else { completion([], 0.0, error); return }
             
-            var comments: [CommentModel] = []
+            var userInfose: [UserInfoModel] = []
             var gradeTotal: Float = 0.0
             var gradeAverage: Float = 0.0
             
@@ -103,26 +150,50 @@ class FirebaseViewModel {
                        let comment = data[K.FStore.comment] as? String,
                        let date = data[K.FStore.date] as? String {
                         
-                        let newComment = CommentModel(userId: userId,
-                                                      movieName: movieName,
-                                                      grade: grade,
-                                                      comment: comment,
-                                                      date: date)
-                        comments.append(newComment)
+                        let newUserInfo = UserInfoModel(userId: userId,
+                                                        movieName: movieName,
+                                                        grade: grade,
+                                                        comment: comment,
+                                                        date: date)
+                        userInfose.append(newUserInfo)
                     }
                 }
                 
                 // 평균 평점
-                if comments.count == 0 {
+                if userInfose.count == 0 {
                     gradeAverage = 0
                 } else {
-                    for comment in comments {
-                        gradeTotal += comment.grade
+                    for userInfo in userInfose {
+                        gradeTotal += userInfo.grade
                     }
-                    gradeAverage = gradeTotal / Float(comments.count)
+                    gradeAverage = gradeTotal / Float(userInfose.count)
                 }
                 
-                completion(comments, gradeAverage, nil)
+                completion(userInfose, gradeAverage, nil)
+            }
+        }
+    }
+    
+    func loadCurrentUserInfo(DOCID: String, completion: @escaping (UserInfoModel?) -> Void) {
+        
+        guard let userId = self.userId else { completion(nil); return }
+        
+        db.collection(DOCID).document(userId).addSnapshotListener { documentSnapshot, error in
+            
+            guard error == nil, let document = documentSnapshot, let data = document.data() else { completion(nil); return }
+            
+            if let userId = data[K.FStore.userId] as? String,
+               let movieName = data[K.FStore.movieName] as? String,
+               let grade = data[K.FStore.grade] as? Float,
+               let comment = data[K.FStore.comment] as? String,
+               let date = data[K.FStore.date] as? String {
+                
+                let UserInfo = UserInfoModel(userId: userId,
+                                             movieName: movieName,
+                                             grade: grade,
+                                             comment: comment,
+                                             date: date)
+                completion(UserInfo)
             }
         }
     }
@@ -131,9 +202,14 @@ class FirebaseViewModel {
         
         guard let userId = self.userId else { completion(nil); return }
         db.collection(DOCID).document(userId).delete() { error in
-            guard error == nil else { completion(error); return }
-            completion(nil)
+            completion(error)
         }
+        
+        deleteAccountInfo(userId: userId, DOCID: DOCID)
+    }
+    
+    private func deleteAccountInfo(userId: String, DOCID: String) {
+        db.collection(userId).document(DOCID).delete() { _ in }
     }
     
     private func getFormattedDate() -> String {

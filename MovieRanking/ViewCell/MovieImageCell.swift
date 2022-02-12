@@ -18,7 +18,9 @@ class MovieImageCell: UITableViewCell {
         super.awakeFromNib()
         
         posterImageView.layer.cornerRadius = posterImageView.frame.height / 15
-        
+        movieNameLabel.font = .boldSystemFont(ofSize: 20)
+        movieInfoLabel.font = .boldSystemFont(ofSize: 15)
+        movieInfoLabel.textColor = UIColor.white.withAlphaComponent(0.8)
     }
 
     override func setSelected(_ selected: Bool, animated: Bool) {

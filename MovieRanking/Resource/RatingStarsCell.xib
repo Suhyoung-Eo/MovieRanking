@@ -66,7 +66,7 @@
                                     </imageView>
                                 </subviews>
                             </stackView>
-                            <slider opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" minValue="0.0" maxValue="10" translatesAutoresizingMaskIntoConstraints="NO" id="5h4-xe-U10" customClass="RatingUISlider" customModule="MovingMovie" customModuleProvider="target">
+                            <slider opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" minValue="0.0" maxValue="10" translatesAutoresizingMaskIntoConstraints="NO" id="5h4-xe-U10" customClass="RatingUISlider" customModule="MovieRanking" customModuleProvider="target">
                                 <rect key="frame" x="161.5" y="12.5" width="214" height="41"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="40" id="eBN-f2-WOw"/>

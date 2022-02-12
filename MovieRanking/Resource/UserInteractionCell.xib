@@ -23,9 +23,10 @@
                         <rect key="frame" x="318" y="0.0" width="60" height="60"/>
                         <subviews>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" adjustsImageWhenHighlighted="NO" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Yjb-3t-lbV">
-                                <rect key="frame" x="21" y="7.5" width="18.5" height="25"/>
+                                <rect key="frame" x="17.5" y="7.5" width="25" height="25"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="25" id="ATW-fH-9iC"/>
+                                    <constraint firstAttribute="width" constant="25" id="U3j-3Q-byD"/>
                                 </constraints>
                                 <color key="tintColor" white="0.33333333333333331" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
@@ -54,14 +55,12 @@
                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="mXq-v1-4AY">
                         <rect key="frame" x="253" y="0.0" width="60" height="60"/>
                         <subviews>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="보고싶어요" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="neM-KM-yCl">
-                                <rect key="frame" x="4" y="40.5" width="52" height="14.5"/>
-                                <fontDescription key="fontDescription" type="system" pointSize="12"/>
-                                <nil key="textColor"/>
-                                <nil key="highlightedColor"/>
-                            </label>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" adjustsImageWhenHighlighted="NO" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="BAW-Ru-okR">
-                                <rect key="frame" x="20.5" y="9" width="19.5" height="18.5"/>
+                                <rect key="frame" x="17.5" y="9" width="25" height="25"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="25" id="XBM-Pd-tQ5"/>
+                                    <constraint firstAttribute="width" constant="25" id="jV2-RD-uhU"/>
+                                </constraints>
                                 <color key="tintColor" white="0.33333333333333331" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
                                 <state key="normal">
@@ -71,6 +70,12 @@
                                     <action selector="wishToWatchButton:" destination="KGk-i7-Jjw" eventType="touchUpInside" id="xSP-MP-iXU"/>
                                 </connections>
                             </button>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="보고싶어요" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="neM-KM-yCl">
+                                <rect key="frame" x="4" y="40.5" width="52" height="14.5"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="12"/>
+                                <nil key="textColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
                         </subviews>
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                         <constraints>
@@ -103,6 +108,7 @@
             <viewLayoutGuide key="safeArea" id="njF-e1-oar"/>
             <connections>
                 <outlet property="gradeLabel" destination="6dG-ei-op1" id="Q1h-dH-8BE"/>
+                <outlet property="wishToWatchButton" destination="BAW-Ru-okR" id="cFm-hg-w1n"/>
             </connections>
             <point key="canvasLocation" x="-168.11594202898553" y="-15.736607142857142"/>
         </tableViewCell>

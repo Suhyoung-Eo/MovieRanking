@@ -14,9 +14,9 @@ protocol UserInteractionCellDelegate: AnyObject {
 
 class UserInteractionCell: UITableViewCell {
 
-    
     @IBOutlet weak var gradeLabel: UILabel!
-    
+    @IBOutlet weak var wishToWatchButton: UIButton!
+
     weak var delegate: UserInteractionCellDelegate?
     
     override func awakeFromNib() {
@@ -30,7 +30,7 @@ class UserInteractionCell: UITableViewCell {
     }
     
     @IBAction func addCommentButton(_ sender: Any) {
-        delegate?.pushedAddCommentButton(data: "commentView")
+        delegate?.pushedAddCommentButton(data: "addCommentView")
     }
     
     @IBAction func wishToWatchButton(_ sender: Any) {
