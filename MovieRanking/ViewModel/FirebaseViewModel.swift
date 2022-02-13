@@ -10,35 +10,88 @@ import Firebase
 class FirebaseViewModel {
     
     private let db = Firestore.firestore()
+    private let service = FirebaseService()
+    
+    var commentListModel: CommentListModel!
+    var currentUserComment: CommentModel?
+    var currentUserCommentListModel: CurrentUserCommentListModel!
+    var wishToWatchListModel: WishToWatchListModel!
+    
+    var gradeAverage: Float = 0.0
+    
+    var numberOfRowsInSectionForComment: Int {
+        return commentListModel == nil ? 1 : commentListModel.count
+    }
+    
+    var numberOfRowsInSectionForCurrentUserComment: Int {
+        return currentUserCommentListModel == nil ? 0 : currentUserCommentListModel.count
+    }
+    
+    var numberOfRowsInSectionForWishToWatchList: Int {
+        return wishToWatchListModel == nil ? 0 : wishToWatchListModel.count
+    }
     
     var userId: String? {
-        return Auth.auth().currentUser?.email
+        return service.userId
     }
     
     func register(email: String, password: String, completion: @escaping (Error?) -> Void) {
-        Auth.auth().createUser(withEmail: email, password: password) { _, error in
-            guard error == nil else { completion(error); return }
-            completion(nil)
-        }
+        service.register(email: email, password: password) { error in completion(error) }
     }
     
     func logIn(email: String, password: String, completion: @escaping (Error?) -> Void) {
-        Auth.auth().signIn(withEmail: email, password: password) { _, error in
-            guard error == nil else { completion(error); return }
-            completion(nil)
-        }
+        service.logIn(email: email, password: password) { error in completion(error) }
     }
     
     func logOut(completion: @escaping (Error?) -> Void) {
-        do {
-            try Auth.auth().signOut()
+        service.logOut { [weak self] error in
+            guard error == nil else { completion(error); return }
+            self?.currentUserCommentListModel = nil
+            self?.wishToWatchListModel = nil
             completion(nil)
-        } catch let error as NSError {
-            completion(error)
         }
     }
     
-    func updateWishToWatch(DOCID: String,
+    func loadComment(DOCID: String, completion: @escaping (Error?) -> Void) {
+        commentListModel = nil
+        service.loadComment(DOCID: DOCID) { [weak self] commentListModel, gradeAverage, error in
+            guard error == nil else { completion(error); return }
+            self?.commentListModel = commentListModel
+            self?.gradeAverage = gradeAverage
+            completion(nil)
+        }
+    }
+    
+    func loadCurrentUserComment(DOCID: String, completion: @escaping (Error?) -> Void) {
+        currentUserComment = nil
+        service.loadCurrentUserComment(DOCID: DOCID) { [weak self] currentUserComment, error in
+            guard error == nil else { completion(error); return }
+            self?.currentUserComment = currentUserComment
+            completion(nil)
+        }
+    }
+    
+    
+    func loadCurrentUserCommentList(completion: @escaping (Error?) -> Void) {
+        currentUserCommentListModel = nil
+        service.loadCurrentUserCommentList { [weak self] currentUserCommentListModel, error in
+            guard error == nil else { completion(error); return }
+            self?.currentUserCommentListModel = currentUserCommentListModel
+            completion(nil)
+        }
+    }
+
+
+    func loadWishToWatchList(completion: @escaping (Error?) -> Void) {
+        wishToWatchListModel = nil
+        service.loadWishToWatchList { [weak self] wishToWatchListModel, error in
+            guard error == nil else { completion(error); return }
+            self?.wishToWatchListModel = wishToWatchListModel
+            completion(nil)
+        }
+    }
+    
+    func addWishToWatchList(DOCID: String,
                            movieId: String,
                            movieSeq: String,
                            movieName: String,
@@ -55,6 +108,7 @@ class FirebaseViewModel {
                                                                                        K.FStore.movieSeq : movieSeq,
                                                                                        K.FStore.movieName: movieName,
                                                                                        K.FStore.thumbNailLink: thumbNailLink,
+                                                                                       K.FStore.wishToWatch: wishToWatch,
                                                                                        K.FStore.date: date]) { error in
                 completion(error)
             }
@@ -66,7 +120,7 @@ class FirebaseViewModel {
         }
     }
     
-    func loadWishToWatch(DOCID: String, completion: @escaping (Bool) -> Void) {
+    func getWishToWatchInfo(DOCID: String, completion: @escaping (Bool) -> Void) {
         guard let userId = self.userId else { completion(false); return }
         
         db.collection(userId).document("\(K.FStore.wishToWatch)\(DOCID)").addSnapshotListener { documentSnapshot, error in
@@ -128,74 +182,6 @@ class FirebaseViewModel {
                                                        K.FStore.grade : grade,
                                                        K.FStore.comment: comment,
                                                        K.FStore.date: date]) { _ in }
-    }
-    
-    func loadUserInfose(DOCID: String, completion: @escaping ([UserInfoModel], Float, Error?) -> Void) {
-        
-        db.collection(DOCID).order(by: K.FStore.date, descending: true).addSnapshotListener { querySnapshot, error in
-            
-            guard error == nil else { completion([], 0.0, error); return }
-            
-            var userInfose: [UserInfoModel] = []
-            var gradeTotal: Float = 0.0
-            var gradeAverage: Float = 0.0
-            
-            if let snapshotDocuments = querySnapshot?.documents {
-                for doc in snapshotDocuments {
-                    let data = doc.data()
-                    
-                    if let userId = data[K.FStore.userId] as? String,
-                       let movieName = data[K.FStore.movieName] as? String,
-                       let grade = data[K.FStore.grade] as? Float,
-                       let comment = data[K.FStore.comment] as? String,
-                       let date = data[K.FStore.date] as? String {
-                        
-                        let newUserInfo = UserInfoModel(userId: userId,
-                                                        movieName: movieName,
-                                                        grade: grade,
-                                                        comment: comment,
-                                                        date: date)
-                        userInfose.append(newUserInfo)
-                    }
-                }
-                
-                // 평균 평점
-                if userInfose.count == 0 {
-                    gradeAverage = 0
-                } else {
-                    for userInfo in userInfose {
-                        gradeTotal += userInfo.grade
-                    }
-                    gradeAverage = gradeTotal / Float(userInfose.count)
-                }
-                
-                completion(userInfose, gradeAverage, nil)
-            }
-        }
-    }
-    
-    func loadCurrentUserInfo(DOCID: String, completion: @escaping (UserInfoModel?) -> Void) {
-        
-        guard let userId = self.userId else { completion(nil); return }
-        
-        db.collection(DOCID).document(userId).addSnapshotListener { documentSnapshot, error in
-            
-            guard error == nil, let document = documentSnapshot, let data = document.data() else { completion(nil); return }
-            
-            if let userId = data[K.FStore.userId] as? String,
-               let movieName = data[K.FStore.movieName] as? String,
-               let grade = data[K.FStore.grade] as? Float,
-               let comment = data[K.FStore.comment] as? String,
-               let date = data[K.FStore.date] as? String {
-                
-                let UserInfo = UserInfoModel(userId: userId,
-                                             movieName: movieName,
-                                             grade: grade,
-                                             comment: comment,
-                                             date: date)
-                completion(UserInfo)
-            }
-        }
     }
     
     func deleteComment(DOCID: String, userId: String, completion: @escaping (Error?) -> Void) {

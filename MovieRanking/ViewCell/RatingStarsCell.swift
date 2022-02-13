@@ -16,16 +16,24 @@ class RatingStarsCell: UITableViewCell {
     @IBOutlet weak var fifthStarView: UIImageView!
     
     private let viewModel = FirebaseViewModel()
-    private var currentUserInfo: UserInfoModel!
     private var starImages: [UIImage] = []
     
     weak var parent: UIViewController!
     
     var movieInfo = MovieInfoModel(MovieInfo.empty) {
         didSet {
-            viewModel.loadCurrentUserInfo(DOCID: movieInfo.DOCID) { [weak self] currentUserInfo in
-                self?.currentUserInfo = currentUserInfo
-                self?.loadStarImages(by: currentUserInfo?.grade ?? 0) {
+            viewModel.loadCurrentUserComment(DOCID: movieInfo.DOCID) { [weak self] error in
+                guard error == nil else {
+                    DispatchQueue.main.async {
+                        AlertService.shared.alert(viewController: self?.parent,
+                                                  alertTitle: "정보를 불러 오지 못 했습니다",
+                                                  message: "",
+                                                  actionTitle: "확인")
+                    }
+                    return
+                }
+                
+                self?.loadStarImages(by: self?.viewModel.currentUserComment?.grade ?? 0.0) {
                     self?.setStarImage()
                 }
             }
@@ -92,7 +100,7 @@ class RatingStarsCell: UITableViewCell {
                              movieName: movieInfo.movieName,
                              thumbNailLink: movieInfo.thumbNailLinks[0],
                              grade: grade,
-                             comment: currentUserInfo?.comment ?? "") { _ in }
+                             comment: viewModel.currentUserComment?.comment ?? "") { _ in }
     }
     
     private func deleteComment() {
@@ -117,10 +125,10 @@ class RatingStarsCell: UITableViewCell {
         let alert = UIAlertController(title: "삭제 하시겠습니까?", message: nil, preferredStyle: .alert)
         let action = UIAlertAction(title: "확인", style: .default) { [weak self] action in
             self?.viewModel.deleteComment(DOCID: self?.movieInfo.DOCID ?? "",
-                                          userId: self?.currentUserInfo?.userId ?? "") { _ in }
+                                          userId: self?.viewModel.currentUserComment?.userId ?? "") { _ in }
         }
         let cancelAction = UIAlertAction(title: "취소", style: .cancel) { [weak self] action in
-            self?.loadStarImages(by: self?.currentUserInfo?.grade ?? 0) {
+            self?.loadStarImages(by: self?.viewModel.currentUserComment?.grade ?? 0) {
                 self?.setStarImage()
             }
         }

@@ -34,6 +34,7 @@ struct K {
         static let commentHeadCell = "CommentHeadCell"
         static let commentCell = "CommentCell"
         static let ratingStarsCell = "RatingStarsCell"
+        static let storageCell = "StorageCell"
     }
     
     struct SegueIdentifier {
@@ -44,6 +45,7 @@ struct K {
         static let registerView = "goToRegisterView"
         static let imageView = "goToImageView"
         static let movieListOptionView = "goToMovieListOptionView"
+        static let storageView = "goToStorageView"
     }
 
     struct Image {

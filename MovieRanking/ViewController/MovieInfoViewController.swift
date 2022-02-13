@@ -12,7 +12,6 @@ class MovieInfoViewController: UIViewController {
     @IBOutlet weak var tableView: UITableView!
     
     private let viewModel = FirebaseViewModel()
-    private var userInfose: [UserInfoModel] = []
     private var gradeAverage: Float = 0.0
     private var wishToWatch: Bool = false
     
@@ -31,8 +30,8 @@ class MovieInfoViewController: UIViewController {
         tableView.dataSource = self
         tableView.delegate = self
         
-        loadUserInfose()
-        loadWishToWatch()
+        loadComment()
+        getWishToWatchInfo()
         
         // ios15에서 setionHeader에 여백이 생기는 이슈
         if #available(iOS 15.0, *) {
@@ -105,20 +104,25 @@ extension MovieInfoViewController {
         }
     }
     
-    private func loadUserInfose() {
-        viewModel.loadUserInfose(DOCID: movieInfo.DOCID) { [weak self] userInfose, gradeAverage, error in
-            guard error == nil else { return }
-            self?.userInfose = userInfose
-            self?.gradeAverage = gradeAverage
-
-            DispatchQueue.main.async {
-                self?.tableView.reloadData()
+    private func loadComment() {
+        viewModel.loadComment(DOCID: movieInfo.DOCID) { [weak self] error in
+            if error == nil {
+                DispatchQueue.main.async {
+                    self?.tableView.reloadData()
+                }
+            } else {
+                DispatchQueue.main.async {
+                    AlertService.shared.alert(viewController: self,
+                                              alertTitle: "코멘트를 불러 오지 못 했습니다",
+                                              message: "",
+                                              actionTitle: "확인")
+                }
             }
         }
     }
     
-    private func loadWishToWatch() {
-        viewModel.loadWishToWatch(DOCID: movieInfo.DOCID) { [weak self] isWish in
+    private func getWishToWatchInfo() {
+        viewModel.getWishToWatchInfo(DOCID: movieInfo.DOCID) { [weak self] isWish in
             self?.wishToWatch = isWish
             
             DispatchQueue.main.async {
@@ -139,7 +143,7 @@ extension MovieInfoViewController: UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         switch section {
         case 6:
-            return userInfose.isEmpty ? 1 : userInfose.count
+            return viewModel.numberOfRowsInSectionForComment
         default:
             return 1
         }
@@ -195,7 +199,7 @@ extension MovieInfoViewController: UITableViewDataSource {
             
             cell.selectionStyle = .none
             cell.delegate = self
-            cell.gradeLabel.text = gradeAverage == 0 ? "첫 평점을 등록해 주세요" : "평균 ★ \(String(format: "%.1f", gradeAverage))"
+            cell.gradeLabel.text = viewModel.gradeAverage == 0 ? "첫 평점을 등록해 주세요" : "평균 ★ \(String(format: "%.1f", viewModel.gradeAverage))"
             cell.wishToWatchButton.setImage(wishToWatch ? UIImage(systemName: "bookmark.fill") : UIImage(systemName: "plus"), for: .normal)
             cell.wishToWatchButton.tintColor = wishToWatch ? UIColor(red: 0.92, green: 0.20, blue: 0.36, alpha: 1.00) : UIColor.darkGray
             
@@ -242,15 +246,15 @@ extension MovieInfoViewController: UITableViewDataSource {
             
             cell.selectionStyle = .none
             
-            if userInfose.isEmpty {
+            if viewModel.commentListModel.commentList.isEmpty {
                 cell.stateEmptyLabel.isHidden = false
             } else {
-                let userInfo = userInfose[indexPath.row]
+                let commentModel = viewModel.commentListModel.commentModel(indexPath.row)
                 cell.stateEmptyLabel.isHidden = true
-                cell.grade = userInfo.grade
-                cell.userNameLabel.text = userInfo.userId
-                cell.commentLabel.text = userInfo.comment
-                cell.dateLabel.text = userInfo.date
+                cell.grade = commentModel.grade
+                cell.userNameLabel.text = commentModel.userId
+                cell.commentLabel.text = commentModel.comment
+                cell.dateLabel.text = commentModel.date
             }
             
             return cell
@@ -297,7 +301,7 @@ extension MovieInfoViewController: StaffsInfoCellDelegate, UserInteractionCellDe
     
     func pushedWishToWatchButton() {
         wishToWatch = viewModel.userId == nil ? false : !wishToWatch
-        viewModel.updateWishToWatch(DOCID: movieInfo.DOCID,
+        viewModel.addWishToWatchList(DOCID: movieInfo.DOCID,
                                     movieId: movieInfo.movieId,
                                     movieSeq: movieInfo.movieSeq,
                                     movieName: movieInfo.movieName,

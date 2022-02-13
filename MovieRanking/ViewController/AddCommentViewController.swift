@@ -19,7 +19,6 @@ class AddCommentViewController: UIViewController {
     @IBOutlet weak var fifthStarView: UIImageView!
     
     private let viewModel = FirebaseViewModel()
-    private var currentUserInfo: UserInfoModel!
     private var starImages: [UIImage] = []
     private var grade: Float = 0.0
     
@@ -37,15 +36,23 @@ class AddCommentViewController: UIViewController {
         super.viewWillAppear(animated)
         
         // 이전에 코멘트를 남긴 경우 불러옴
-        viewModel.loadCurrentUserInfo(DOCID: movieInfo.DOCID) { [weak self] currentUserInfo in
-            self?.currentUserInfo = currentUserInfo
-            self?.grade = currentUserInfo?.grade ?? 0
-            self?.loadStarImages(by: currentUserInfo?.grade ?? 0) {
-                self?.setStarImage()
+        viewModel.loadCurrentUserComment(DOCID: movieInfo.DOCID) { [weak self] error in
+            guard error == nil else {
+                DispatchQueue.main.async {
+                    AlertService.shared.alert(viewController: self,
+                                              alertTitle: "코멘트를 불러 오지 못 했습니다",
+                                              message: "",
+                                              actionTitle: "확인")
+                }
+                return
             }
             
+            self?.grade = self?.viewModel.currentUserComment?.grade ?? 0 // 수정 해야 함
+            self?.loadStarImages(by: self?.viewModel.currentUserComment?.grade ?? 0) {
+                self?.setStarImage()
+            }
             DispatchQueue.main.async {
-                self?.commentTextView.text = currentUserInfo?.comment
+                self?.commentTextView.text = self?.viewModel.currentUserComment?.comment
             }
         }
     }
