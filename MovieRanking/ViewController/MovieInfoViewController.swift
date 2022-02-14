@@ -20,13 +20,13 @@ class MovieInfoViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        tableView.register(UINib(nibName: "MovieImageCell", bundle: nil), forCellReuseIdentifier: K.CellIdentifier.movieImageCell)
-        tableView.register(UINib(nibName: "RatingStarsCell", bundle: nil), forCellReuseIdentifier: K.CellIdentifier.ratingStarsCell)
-        tableView.register(UINib(nibName: "UserInteractionCell", bundle: nil), forCellReuseIdentifier: K.CellIdentifier.userInteractionCell)
-        tableView.register(UINib(nibName: "DetailInfoCell", bundle: nil), forCellReuseIdentifier: K.CellIdentifier.detailInfoCell)
-        tableView.register(UINib(nibName: "StaffsInfoCell", bundle: nil), forCellReuseIdentifier: K.CellIdentifier.staffsInfoCell)
-        tableView.register(UINib(nibName: "CommentHeadCell", bundle: nil), forCellReuseIdentifier: K.CellIdentifier.commentHeadCell)
-        tableView.register(UINib(nibName: "CommentCell", bundle: nil), forCellReuseIdentifier: K.CellIdentifier.commentCell)
+        tableView.register(UINib(nibName: K.CellIdentifier.movieImageCell, bundle: nil), forCellReuseIdentifier: K.CellIdentifier.movieImageCell)
+        tableView.register(UINib(nibName: K.CellIdentifier.ratingStarsCell, bundle: nil), forCellReuseIdentifier: K.CellIdentifier.ratingStarsCell)
+        tableView.register(UINib(nibName: K.CellIdentifier.userInteractionCell, bundle: nil), forCellReuseIdentifier: K.CellIdentifier.userInteractionCell)
+        tableView.register(UINib(nibName: K.CellIdentifier.detailInfoCell, bundle: nil), forCellReuseIdentifier: K.CellIdentifier.detailInfoCell)
+        tableView.register(UINib(nibName: K.CellIdentifier.staffsInfoCell, bundle: nil), forCellReuseIdentifier: K.CellIdentifier.staffsInfoCell)
+        tableView.register(UINib(nibName: K.CellIdentifier.commentHeadCell, bundle: nil), forCellReuseIdentifier: K.CellIdentifier.commentHeadCell)
+        tableView.register(UINib(nibName: K.CellIdentifier.commentCell, bundle: nil), forCellReuseIdentifier: K.CellIdentifier.commentCell)
         tableView.dataSource = self
         tableView.delegate = self
         
@@ -55,31 +55,31 @@ class MovieInfoViewController: UIViewController {
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         
-        if let sender = sender as? String {
-            switch sender {
-            case "postImageView":
-                guard let destinationVC = segue.destination as? ImageViewController else {
-                    fatalError("Could not found segue destination")
-                }
-                destinationVC.imageLinks = movieInfo.thumbNailLinks
-            case "stllImageView":
-                guard let destinationVC = segue.destination as? ImageViewController else {
-                    fatalError("Could not found segue destination")
-                }
-                destinationVC.imageLinks = movieInfo.stllsLinks
-            case "staffView":
-                guard let destinationVC = segue.destination as? StaffsInfoTableViewController else {
-                    fatalError("Could not found segue destination")
-                }
-                destinationVC.staffs = movieInfo.staffs
-            case "addCommentView":
-                guard let destinationVC = segue.destination as? AddCommentViewController else {
-                    fatalError("Could not found segue destination")
-                }
-                destinationVC.movieInfo = movieInfo
-            default:
-                return
+        guard let sender = sender as? String else { return }
+        
+        switch sender {
+        case K.Prepare.postImageView:
+            guard let destinationVC = segue.destination as? ImageViewController else {
+                fatalError("Could not found segue destination")
             }
+            destinationVC.imageLinks = movieInfo.thumbNailLinks
+        case K.Prepare.stllImageView:
+            guard let destinationVC = segue.destination as? ImageViewController else {
+                fatalError("Could not found segue destination")
+            }
+            destinationVC.imageLinks = movieInfo.stllsLinks
+        case K.Prepare.staffView:
+            guard let destinationVC = segue.destination as? StaffsInfoTableViewController else {
+                fatalError("Could not found segue destination")
+            }
+            destinationVC.staffs = movieInfo.staffs
+        case K.Prepare.addCommentView:
+            guard let destinationVC = segue.destination as? AddCommentViewController else {
+                fatalError("Could not found segue destination")
+            }
+            destinationVC.movieInfo = movieInfo
+        default:
+            return
         }
     }
     
@@ -94,13 +94,13 @@ extension MovieInfoViewController {
     
     @objc private func tappedPosterImage(gesture: UITapGestureRecognizer) {
         if !movieInfo.thumbNailLinks[0].isEmpty {
-            performSegue(withIdentifier: K.SegueIdentifier.imageView, sender: "postImageView")
+            performSegue(withIdentifier: K.SegueIdentifier.imageView, sender: K.Prepare.postImageView)
         }
     }
     
     @objc private func tappedstllImage(gesture: UITapGestureRecognizer) {
         if !movieInfo.stllsLinks[0].isEmpty {
-            performSegue(withIdentifier: K.SegueIdentifier.imageView, sender: "stllImageView")
+            performSegue(withIdentifier: K.SegueIdentifier.imageView, sender: K.Prepare.stllImageView)
         }
     }
     
@@ -136,6 +136,7 @@ extension MovieInfoViewController {
                                    movieSeq: movieInfo.movieSeq,
                                    movieName: movieInfo.movieName,
                                    thumbNailLink: movieInfo.thumbNailLinks[0],
+                                   gradeAverage: viewModel.gradeAverage,
                                    wishToWatch: isWishToWatch) { error in
             if let error = error {
                 DispatchQueue.main.async {

@@ -51,6 +51,10 @@ struct WishToWatchModel {
         return wishToWatchModel.thumbNailLink
     }
     
+    var gradeAverage: Float {
+        return wishToWatchModel.gradeAverage
+    }
+    
     var wishToWatch: Bool {
         return wishToWatchModel.isWishToWatch
     }

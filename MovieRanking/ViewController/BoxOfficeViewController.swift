@@ -25,7 +25,7 @@ class BoxOfficeViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        tableView.register(UINib(nibName: "BoxOfficeCell", bundle: nil), forCellReuseIdentifier: K.CellIdentifier.boxOfficeCell)
+        tableView.register(UINib(nibName: K.CellIdentifier.boxOfficeCell, bundle: nil), forCellReuseIdentifier: K.CellIdentifier.boxOfficeCell)
         tableView.dataSource = self
         tableView.delegate = self
         tableView.separatorStyle = .none
@@ -57,7 +57,7 @@ class BoxOfficeViewController: UIViewController {
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         
-        if let sender = sender as? String, sender == "movieInfoView" {
+        if let sender = sender as? String, sender == K.SegueIdentifier.movieInfoView {
             guard let destinationVC = segue.destination as? MovieInfoViewController else {
                 fatalError("Could not found segue destination")
             }
@@ -179,7 +179,7 @@ extension BoxOfficeViewController: UITableViewDelegate {
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         if viewModel.movieInfoList.movieInfoModel(indexPath.row).DOCID != "" {
-            performSegue(withIdentifier: K.SegueIdentifier.movieInfoView, sender: "movieInfoView")
+            performSegue(withIdentifier: K.SegueIdentifier.movieInfoView, sender: K.SegueIdentifier.movieInfoView)
         } else {
             DispatchQueue.main.async {
                 AlertService.shared.alert(viewController: self,

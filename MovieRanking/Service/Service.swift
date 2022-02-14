@@ -96,6 +96,17 @@ class Service {
         }
     }
     
+    //MARK: - for StorageViewController
+    
+    func fetchMovieInfo(Id movieId: String, Seq movieSeq: String, completion: @escaping(MovieInfoListModel, Error?) -> Void) {
+        guard let url = URL.urlForMovieInfoApi(movieId: movieId, movieSeq: movieSeq) else { return }
+        print(url)
+        apiService.fetchMovieInfo(with: url) { movieInfo, error in
+            guard error == nil else { completion(MovieInfoListModel([MovieInfo.empty]), error); return }
+            completion(MovieInfoListModel(movieInfo), nil)
+        }
+    }
+    
     // 일일 박스오피스 기준일 - 검색 하루 전 value = -1
     // 주간/주말 박스오피스 기준일 - 검색 일주일 전 value = -7
     private func getBoxofficeDate(day: Int) -> String? {

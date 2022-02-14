@@ -132,7 +132,7 @@
                 <outlet property="ratingLabel" destination="YZz-7q-nkP" id="qmz-it-j4S"/>
                 <outlet property="thumbnailImageView" destination="UmX-gN-dED" id="yIt-ua-zcK"/>
             </connections>
-            <point key="canvasLocation" x="-262" y="127"/>
+            <point key="canvasLocation" x="-263.04347826086956" y="126.5625"/>
         </tableViewCell>
     </objects>
     <resources>

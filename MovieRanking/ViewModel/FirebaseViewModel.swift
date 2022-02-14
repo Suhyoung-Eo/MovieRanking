@@ -54,6 +54,25 @@ class FirebaseViewModel {
         }
     }
     
+    //MARK: - For StorageViewController methods
+    
+    func setMovieInfo(by itemTitle: String, index: Int) -> (String, String) {
+        var movieId: String = ""
+        var movieSeq: String = ""
+        
+        if itemTitle == K.Prepare.wishToWatchView {
+            let movieInfo = wishToWatchListModel.wishToWatchListModel(index)
+            movieId = movieInfo.movieId
+            movieSeq = movieInfo.movieSeq
+        }
+        else {
+            let movieInfo = currentUserCommentListModel.currentUserCommentModel(index)
+            movieId = movieInfo.movieId
+            movieSeq = movieInfo.movieSeq
+        }
+        return (movieId, movieSeq)
+    }
+    
     //MARK: - Load data methods
     
     func loadComment(DOCID: String, completion: @escaping (Error?) -> Void) {
@@ -127,6 +146,7 @@ class FirebaseViewModel {
                           movieSeq: String,
                           movieName: String,
                           thumbNailLink: String,
+                          gradeAverage: Float,
                           wishToWatch: Bool,
                           completion: @escaping (Error?) -> Void) {
         
@@ -135,6 +155,7 @@ class FirebaseViewModel {
                                  movieSeq: movieSeq,
                                  movieName: movieName,
                                  thumbNailLink: thumbNailLink,
+                                 gradeAverage: gradeAverage,
                                  wishToWatch: wishToWatch) { error in completion(error) }
     }
     

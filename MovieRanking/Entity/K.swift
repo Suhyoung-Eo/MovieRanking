@@ -34,6 +34,7 @@ struct K {
         static let commentHeadCell = "CommentHeadCell"
         static let commentCell = "CommentCell"
         static let ratingStarsCell = "RatingStarsCell"
+        static let accountCell = "AccountCell"
         static let storageCell = "StorageCell"
     }
     
@@ -67,9 +68,20 @@ struct K {
         static let movieSeq = "movieSeq"
         static let movieName = "movieName"
         static let thumbNailLink = "thumbNailLink"
+        static let gradeAverage = "gradeAverage"
         static let isWishToWatch = "isWishToWatch"
         static let grade = "grade"
         static let comment = "comment"
         static let date = "date"
+    }
+    
+    struct Prepare {
+        static let postImageView = "postImageView"
+        static let stllImageView = "stllImageView"
+        static let staffView = "staffView"
+        static let addCommentView = "addCommentView"
+        static let wishToWatchView = "보고싶어요"
+        static let estimateView = "평가한영화"
+        static let userCommentView = "내코멘트"
     }
 }

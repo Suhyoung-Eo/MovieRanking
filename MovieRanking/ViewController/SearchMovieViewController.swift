@@ -20,7 +20,7 @@ class SearchMovieViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        tableView.register(UINib(nibName: "MovieInfoCell", bundle: nil), forCellReuseIdentifier: K.CellIdentifier.searchMovieCell)
+        tableView.register(UINib(nibName: K.CellIdentifier.searchMovieCell, bundle: nil), forCellReuseIdentifier: K.CellIdentifier.searchMovieCell)
         tableView.dataSource = self
         tableView.delegate = self
         tableView.separatorStyle = .none

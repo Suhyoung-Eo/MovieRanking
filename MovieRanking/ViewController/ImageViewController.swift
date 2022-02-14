@@ -84,19 +84,19 @@ extension ImageViewController {
         switch sender.state {
         case .changed:
             viewTranslation = sender.translation(in: view)
-            UIView.animate(withDuration: 0.5,
+            UIView.animate(withDuration: 0.1,
                            delay: 0,
-                           usingSpringWithDamping: 0.7,
+                           usingSpringWithDamping: 1,
                            initialSpringVelocity: 1,
                            options: .curveEaseOut,
                            animations: {
                 self.view.transform = CGAffineTransform(translationX: 0, y: self.viewTranslation.y)
             })
         case .ended:
-            if viewTranslation.y < 150, viewTranslation.y > -150 {
-                UIView.animate(withDuration: 0.5,
+            if viewTranslation.y < 170, viewTranslation.y > -170 {
+                UIView.animate(withDuration: 0.1,
                                delay: 0,
-                               usingSpringWithDamping: 0.7,
+                               usingSpringWithDamping: 1,
                                initialSpringVelocity: 1,
                                options: .curveEaseOut,
                                animations: {
@@ -104,7 +104,7 @@ extension ImageViewController {
                 })
             } else {
                 let transition = CATransition()
-                transition.duration = 0.4
+                transition.duration = 0
                 transition.type = CATransitionType.fade
                 navigationController?.view.layer.add(transition, forKey: kCATransition)
                 navigationController?.popViewController(animated: false)

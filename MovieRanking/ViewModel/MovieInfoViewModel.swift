@@ -11,6 +11,8 @@ class MovieInfoViewModel {
     var onUpdated: () -> Void = {}
     
     private let service = Service()
+
+    var movieInfoModel: MovieInfoModel!
     
     var movieInfoList: MovieInfoListModel! {
         didSet {
@@ -39,6 +41,18 @@ class MovieInfoViewModel {
                   error == nil else { completion(error); return }
             
             self?.movieInfoList = movieInfoList
+            completion(nil)
+        }
+    }
+    
+    func fetchMovieInfo(Id movieId: String, Seq movieSeq: String, completion: @escaping(Error?) -> Void) {
+        movieInfoModel = nil
+        
+        service.fetchMovieInfo(Id: movieId, Seq: movieSeq) { [weak self] movieInfoList, error in
+            guard movieInfoList.movieInfoModel(0).DOCID != "",
+                  error == nil else { completion(error); return }
+            
+            self?.movieInfoModel = movieInfoList.movieInfoModel(0)
             completion(nil)
         }
     }

@@ -12,6 +12,7 @@ struct FBWishToWatchModel {
     let movieSeq: String
     let movieName: String
     let thumbNailLink: String
+    let gradeAverage: Float
     let isWishToWatch: Bool
     let date: String
 }
@@ -23,6 +24,7 @@ extension FBWishToWatchModel {
                                   movieSeq: "",
                                   movieName: "",
                                   thumbNailLink: "",
+                                  gradeAverage: 0.0,
                                   isWishToWatch: false,
                                   date: "")
     }

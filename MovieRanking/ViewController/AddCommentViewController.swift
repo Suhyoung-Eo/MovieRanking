@@ -97,7 +97,9 @@ class AddCommentViewController: UIViewController {
             self?.setStarImage()
         }
         
-        if grade == 0 { deleteComment() }
+        if grade == 0, viewModel.currentUserComment.grade != 0 {
+            deleteComment()
+        }
     }
     
     @IBAction func cancelButton(_ sender: Any) {

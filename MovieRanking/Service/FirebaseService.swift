@@ -176,6 +176,7 @@ class FirebaseService {
                        let movieSeq = data[K.FStore.movieSeq] as? String,
                        let movieName = data[K.FStore.movieName] as? String,
                        let thumbNailLink = data[K.FStore.thumbNailLink] as? String,
+                       let gradeAverage = data[K.FStore.gradeAverage] as? Float,
                        let wishToWatch = data[K.FStore.isWishToWatch] as? Bool,
                        let date = data[K.FStore.date] as? String {
                         
@@ -183,6 +184,7 @@ class FirebaseService {
                                                          movieSeq: movieSeq,
                                                          movieName: movieName,
                                                          thumbNailLink: thumbNailLink,
+                                                         gradeAverage: gradeAverage,
                                                          isWishToWatch: wishToWatch,
                                                          date: date)
                         wishToWatchList.append(newItem)
@@ -259,6 +261,7 @@ class FirebaseService {
                           movieSeq: String,
                           movieName: String,
                           thumbNailLink: String,
+                          gradeAverage: Float,
                           wishToWatch: Bool,
                           completion: @escaping (Error?) -> Void) {
         
@@ -277,6 +280,7 @@ class FirebaseService {
                       K.FStore.movieSeq : movieSeq,
                       K.FStore.movieName: movieName,
                       K.FStore.thumbNailLink: thumbNailLink,
+                      K.FStore.gradeAverage: gradeAverage,
                       K.FStore.isWishToWatch: wishToWatch,
                       K.FStore.date: date]) { error in completion(error) }
     }

@@ -33,6 +33,6 @@ class StaffsInfoCell: UITableViewCell {
     }
     
     @IBAction func staffsInfoViewButton(_ sender: Any) {
-        delegate?.pushedStaffsInfoViewButton(data: "staffView")
+        delegate?.pushedStaffsInfoViewButton(data: K.Prepare.staffView)
     }
 }
