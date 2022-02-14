@@ -104,23 +104,6 @@ class RatingStarsCell: UITableViewCell {
     }
     
     private func deleteComment() {
-        deleteAlert()
-    }
-    
-    private func addAlert() {
-        if viewModel.userId == nil {
-            let alert = UIAlertController(title: "서비스를 이용하려면 로그인 하세요", message: nil, preferredStyle: .alert)
-            let action = UIAlertAction(title: "확인", style: .default) { [weak self] action in
-                self?.loadStarImages(by: 0) {
-                    self?.setStarImage()
-                }
-            }
-            alert.addAction(action)
-            parent.present(alert, animated: true)
-        }
-    }
-    
-    private func deleteAlert() {
         if viewModel.userId == nil { return }
         let alert = UIAlertController(title: "삭제 하시겠습니까?", message: nil, preferredStyle: .alert)
         let action = UIAlertAction(title: "확인", style: .default) { [weak self] action in
@@ -135,5 +118,18 @@ class RatingStarsCell: UITableViewCell {
         alert.addAction(action)
         alert.addAction(cancelAction)
         parent.present(alert, animated: true)
+    }
+    
+    private func addAlert() {
+        if viewModel.userId == nil {
+            let alert = UIAlertController(title: "서비스를 이용하려면 로그인 하세요", message: nil, preferredStyle: .alert)
+            let action = UIAlertAction(title: "확인", style: .default) { [weak self] action in
+                self?.loadStarImages(by: 0) {
+                    self?.setStarImage()
+                }
+            }
+            alert.addAction(action)
+            parent.present(alert, animated: true)
+        }
     }
 }

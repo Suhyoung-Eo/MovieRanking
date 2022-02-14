@@ -47,10 +47,11 @@ class AddCommentViewController: UIViewController {
                 return
             }
             
-            self?.grade = self?.viewModel.currentUserComment?.grade ?? 0 // 수정 해야 함
-            self?.loadStarImages(by: self?.viewModel.currentUserComment?.grade ?? 0) {
+            self?.grade = self?.viewModel.currentUserComment?.grade ?? 0
+            self?.loadStarImages(by: self?.grade ?? 0) {
                 self?.setStarImage()
             }
+            
             DispatchQueue.main.async {
                 self?.commentTextView.text = self?.viewModel.currentUserComment?.comment
             }
@@ -95,6 +96,8 @@ class AddCommentViewController: UIViewController {
         loadStarImages(by: grade) { [weak self] in
             self?.setStarImage()
         }
+        
+        if grade == 0 { deleteComment() }
     }
     
     @IBAction func cancelButton(_ sender: Any) {
@@ -128,6 +131,23 @@ class AddCommentViewController: UIViewController {
             self?.fourthStarView.image = self?.starImages[3]
             self?.fifthStarView.image = self?.starImages[4]
         }
+    }
+    
+    private func deleteComment() {
+        if viewModel.userId == nil { return }
+        let alert = UIAlertController(title: "삭제 하시겠습니까?", message: nil, preferredStyle: .alert)
+        let action = UIAlertAction(title: "확인", style: .default) { [weak self] action in
+            self?.viewModel.deleteComment(DOCID: self?.movieInfo.DOCID ?? "",
+                                          userId: self?.viewModel.currentUserComment?.userId ?? "") { _ in }
+        }
+        let cancelAction = UIAlertAction(title: "취소", style: .cancel) { [weak self] action in
+            self?.loadStarImages(by: self?.viewModel.currentUserComment?.grade ?? 0) {
+                self?.setStarImage()
+            }
+        }
+        alert.addAction(action)
+        alert.addAction(cancelAction)
+        present(alert, animated: true)
     }
     
     private func alertService() {
