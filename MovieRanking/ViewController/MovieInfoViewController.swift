@@ -13,7 +13,7 @@ class MovieInfoViewController: UIViewController {
     
     private let viewModel = FirebaseViewModel()
     private var gradeAverage: Float = 0.0
-    private var wishToWatch: Bool = false
+    private var isWishToWatch: Bool = false
     
     var movieInfo: MovieInfoModel!
     
@@ -31,7 +31,7 @@ class MovieInfoViewController: UIViewController {
         tableView.delegate = self
         
         loadComment()
-        getWishToWatchInfo()
+        loadIsWishToWatch()
         
         // ios15에서 setionHeader에 여백이 생기는 이슈
         if #available(iOS 15.0, *) {
@@ -106,27 +106,44 @@ extension MovieInfoViewController {
     
     private func loadComment() {
         viewModel.loadComment(DOCID: movieInfo.DOCID) { [weak self] error in
-            if error == nil {
-                DispatchQueue.main.async {
-                    self?.tableView.reloadData()
-                }
-            } else {
+            guard error == nil else {
                 DispatchQueue.main.async {
                     AlertService.shared.alert(viewController: self,
                                               alertTitle: "코멘트를 불러 오지 못 했습니다",
-                                              message: "",
+                                              message: error?.localizedDescription,
                                               actionTitle: "확인")
                 }
+                return
+            }
+            
+            DispatchQueue.main.async {
+                self?.tableView.reloadData()
             }
         }
     }
     
-    private func getWishToWatchInfo() {
-        viewModel.getWishToWatchInfo(DOCID: movieInfo.DOCID) { [weak self] isWish in
-            self?.wishToWatch = isWish
-            
+    private func loadIsWishToWatch() {
+        viewModel.loadIsWishToWatch(DOCID: movieInfo.DOCID) { [weak self] in
             DispatchQueue.main.async {
                 self?.tableView.reloadData()
+            }
+        }
+    }
+    
+    private func setIsWishToWatch(_ isWishToWatch: Bool) {
+        viewModel.setIsWishToWatch(DOCID: movieInfo.DOCID,
+                                   movieId: movieInfo.movieId,
+                                   movieSeq: movieInfo.movieSeq,
+                                   movieName: movieInfo.movieName,
+                                   thumbNailLink: movieInfo.thumbNailLinks[0],
+                                   wishToWatch: isWishToWatch) { error in
+            if let error = error {
+                DispatchQueue.main.async {
+                    AlertService.shared.alert(viewController: self,
+                                              alertTitle: "보고싶어요 목록 저장에 실패 했습니다",
+                                              message: error.localizedDescription,
+                                              actionTitle: "확인")
+                }
             }
         }
     }
@@ -169,7 +186,7 @@ extension MovieInfoViewController: UITableViewDataSource {
             let stllImageTapped = UITapGestureRecognizer(target: self, action: #selector(tappedstllImage))
             stllImageTapped.numberOfTapsRequired = 1
             cell.stllImageView.addGestureRecognizer(stllImageTapped)
-
+            
             cell.selectionStyle = .none
             cell.posterImageView.setImage(from: movieInfo.thumbNailLinks[0])
             cell.movieNameLabel.text = movieInfo.movieName
@@ -200,8 +217,8 @@ extension MovieInfoViewController: UITableViewDataSource {
             cell.selectionStyle = .none
             cell.delegate = self
             cell.gradeLabel.text = viewModel.gradeAverage == 0 ? "첫 평점을 등록해 주세요" : "평균 ★ \(String(format: "%.1f", viewModel.gradeAverage))"
-            cell.wishToWatchButton.setImage(wishToWatch ? UIImage(systemName: "bookmark.fill") : UIImage(systemName: "plus"), for: .normal)
-            cell.wishToWatchButton.tintColor = wishToWatch ? UIColor(red: 0.92, green: 0.20, blue: 0.36, alpha: 1.00) : UIColor.darkGray
+            cell.wishToWatchButton.setImage(viewModel.isWishToWatch ? UIImage(systemName: "bookmark.fill") : UIImage(systemName: "plus"), for: .normal)
+            cell.wishToWatchButton.tintColor = viewModel.isWishToWatch ? UIColor(red: 0.92, green: 0.20, blue: 0.36, alpha: 1.00) : UIColor.darkGray
             
             return cell
         case 3:
@@ -246,7 +263,7 @@ extension MovieInfoViewController: UITableViewDataSource {
             
             cell.selectionStyle = .none
             
-            if viewModel.commentListModel.commentList.isEmpty {
+            if viewModel.commentListModel == nil {
                 cell.stateEmptyLabel.isHidden = false
             } else {
                 let commentModel = viewModel.commentListModel.commentModel(indexPath.row)
@@ -300,21 +317,8 @@ extension MovieInfoViewController: StaffsInfoCellDelegate, UserInteractionCellDe
     }
     
     func pushedWishToWatchButton() {
-        wishToWatch = viewModel.userId == nil ? false : !wishToWatch
-        viewModel.addWishToWatchList(DOCID: movieInfo.DOCID,
-                                    movieId: movieInfo.movieId,
-                                    movieSeq: movieInfo.movieSeq,
-                                    movieName: movieInfo.movieName,
-                                    thumbNailLink: movieInfo.thumbNailLinks[0],
-                                    wishToWatch: wishToWatch) { error in
-            guard error != nil else { return }
-            
-            DispatchQueue.main.async {
-                AlertService.shared.alert(viewController: self,
-                                          alertTitle: "보고싶어요 목록 저장에 실패 했습니다",
-                                          message: nil, actionTitle: "확인")
-            }
-        }
+        isWishToWatch = viewModel.userId == nil ? false : !viewModel.isWishToWatch
+        setIsWishToWatch(isWishToWatch)
         tableView.reloadData()
     }
 }

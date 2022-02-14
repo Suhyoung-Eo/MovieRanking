@@ -16,31 +16,35 @@ extension UIImageView {
     
     func setImage(from link: String) {
         
-        if !link.isEmpty {
-            DispatchQueue.global(qos: .background).async { [weak self] in
-                
-                let cachedKey = NSString(string: link)  // 캐시키로 url link 사용
-                // 캐시메모리에 이미지 있는 경우
-                if let cachedImage = ImageCacheManager.shared.object(forKey: cachedKey) {
-                    DispatchQueue.main.async {
-                        self?.image = cachedImage
-                    }
-                    return
-                }
-                
-                guard let url = URL(string: link) else { return }
-                guard let data = try? Data(contentsOf: url) else { return }
-                
-                if let image = UIImage(data: data) {
-                    ImageCacheManager.shared.setObject(image, forKey: cachedKey)
-                    DispatchQueue.main.async {
-                        self?.image = image
-                    }
-                }
-            }
-        } else {
+        guard !link.isEmpty else {
             DispatchQueue.main.async { [weak self] in
                 self?.image = UIImage(named: K.Image.noImage)
+            }
+            return
+        }
+        
+        DispatchQueue.global(qos: .background).async { [weak self] in
+            // 캐시메모리에 이미지 있는 경우 캐시키로 url link 사용
+            let cachedKey = NSString(string: link)
+            if let cachedImage = ImageCacheManager.shared.object(forKey: cachedKey) {
+                DispatchQueue.main.async {
+                    self?.image = cachedImage
+                }
+                return
+            }
+            
+            guard let url = URL(string: link) else { return }
+            guard let data = try? Data(contentsOf: url) else { return }
+            
+            if let image = UIImage(data: data) {
+                ImageCacheManager.shared.setObject(image, forKey: cachedKey)
+                DispatchQueue.main.async {
+                    self?.image = image
+                }
+            } else {
+                DispatchQueue.main.async {
+                    self?.image = UIImage()
+                }
             }
         }
     }

@@ -67,7 +67,7 @@ struct K {
         static let movieSeq = "movieSeq"
         static let movieName = "movieName"
         static let thumbNailLink = "thumbNailLink"
-        static let wishToWatch = "wishToWatch"
+        static let isWishToWatch = "isWishToWatch"
         static let grade = "grade"
         static let comment = "comment"
         static let date = "date"

@@ -12,7 +12,7 @@ struct FBWishToWatchModel {
     let movieSeq: String
     let movieName: String
     let thumbNailLink: String
-    let wishToWatch: Bool
+    let isWishToWatch: Bool
     let date: String
 }
 
@@ -23,7 +23,7 @@ extension FBWishToWatchModel {
                                   movieSeq: "",
                                   movieName: "",
                                   thumbNailLink: "",
-                                  wishToWatch: false,
+                                  isWishToWatch: false,
                                   date: "")
     }
 }

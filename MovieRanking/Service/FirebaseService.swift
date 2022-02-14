@@ -38,6 +38,8 @@ class FirebaseService {
         }
     }
     
+    //MARK: - Read data methods
+    
     func loadComment(DOCID: String, completion: @escaping (CommentListModel, Float, Error?) -> Void) {
         
         db.collection(DOCID).order(by: K.FStore.date, descending: true).addSnapshotListener { querySnapshot, error in
@@ -174,20 +176,127 @@ class FirebaseService {
                        let movieSeq = data[K.FStore.movieSeq] as? String,
                        let movieName = data[K.FStore.movieName] as? String,
                        let thumbNailLink = data[K.FStore.thumbNailLink] as? String,
-                       let wishToWatch = data[K.FStore.wishToWatch] as? Bool,
+                       let wishToWatch = data[K.FStore.isWishToWatch] as? Bool,
                        let date = data[K.FStore.date] as? String {
                         
                         let newItem = FBWishToWatchModel(movieId: movieId,
-                                                       movieSeq: movieSeq,
-                                                       movieName: movieName,
-                                                       thumbNailLink: thumbNailLink,
-                                                       wishToWatch: wishToWatch,
-                                                       date: date)
+                                                         movieSeq: movieSeq,
+                                                         movieName: movieName,
+                                                         thumbNailLink: thumbNailLink,
+                                                         isWishToWatch: wishToWatch,
+                                                         date: date)
                         wishToWatchList.append(newItem)
                     }
                 }
                 completion(WishToWatchListModel(wishToWatchList), nil)
             }
         }
+    }
+    
+    func loadIsWishToWatch(DOCID: String, completion: @escaping (Bool) -> Void) {
+        guard let userId = self.userId else { completion(false); return }
+        db.collection(userId).document("\(K.FStore.isWishToWatch)\(DOCID)").addSnapshotListener { documentSnapshot, error in
+            guard error == nil, let document = documentSnapshot else { completion(false); return }
+            completion(document.exists ? true : false)  // true 인 경우에만 데이터가 존재 함
+        }
+    }
+    
+    //MARK: - Create/ Update data methods
+    
+    func addComment(DOCID: String,
+                    movieId: String,
+                    movieSeq: String,
+                    movieName: String,
+                    thumbNailLink: String,
+                    grade: Float,
+                    comment: String,
+                    completion: @escaping (Error?) -> Void) {
+        
+        guard let userId = self.userId else { completion(nil); return }
+        
+        let date = getFormattedDate()
+        
+        db.collection(DOCID).document(userId).setData([K.FStore.userId : userId,
+                                                       K.FStore.movieName: movieName,
+                                                       K.FStore.grade : grade,
+                                                       K.FStore.comment: comment,
+                                                       K.FStore.date: date]) { error in completion(error) }
+        
+        // 서비스 제공을 위한 데이터 저장: collection() <----> document() Field Name 바꿔서 저장
+        addAccountInfo(userId: userId,
+                       DOCID: DOCID,
+                       movieId: movieId,
+                       movieSeq: movieSeq,
+                       movieName: movieName,
+                       thumbNailLink: thumbNailLink,
+                       grade: grade,
+                       comment: comment,
+                       date: date) { error in completion(error) }
+    }
+    
+    private func addAccountInfo(userId: String,
+                                DOCID: String,
+                                movieId: String,
+                                movieSeq: String,
+                                movieName: String,
+                                thumbNailLink: String,
+                                grade: Float,
+                                comment: String,
+                                date: String,
+                                completion: @escaping (Error?) -> Void) {
+        
+        db.collection(userId).document(DOCID).setData([K.FStore.movieId: movieId,
+                                                       K.FStore.movieSeq : movieSeq,
+                                                       K.FStore.movieName: movieName,
+                                                       K.FStore.thumbNailLink: thumbNailLink,
+                                                       K.FStore.grade : grade,
+                                                       K.FStore.comment: comment,
+                                                       K.FStore.date: date]) { error in completion(error) }
+    }
+    
+    func setIsWishToWatch(DOCID: String,
+                          movieId: String,
+                          movieSeq: String,
+                          movieName: String,
+                          thumbNailLink: String,
+                          wishToWatch: Bool,
+                          completion: @escaping (Error?) -> Void) {
+        
+        guard let userId = self.userId else { completion(nil); return }
+        
+        guard wishToWatch else {
+            db.collection(userId).document("\(K.FStore.isWishToWatch)\(DOCID)")
+                .delete() { error in completion(error) }
+            return
+        }
+        
+        let date = getFormattedDate()
+        
+        db.collection(userId).document("\(K.FStore.isWishToWatch)\(DOCID)")
+            .setData([K.FStore.movieId: movieId,
+                      K.FStore.movieSeq : movieSeq,
+                      K.FStore.movieName: movieName,
+                      K.FStore.thumbNailLink: thumbNailLink,
+                      K.FStore.isWishToWatch: wishToWatch,
+                      K.FStore.date: date]) { error in completion(error) }
+    }
+    
+    //MARK: - Delete data methods
+    
+    func deleteComment(DOCID: String, userId: String, completion: @escaping (Error?) -> Void) {
+        guard let userId = self.userId else { completion(nil); return }
+        db.collection(DOCID).document(userId).delete() { error in completion(error) }
+        deleteUserComment(userId: userId, DOCID: DOCID)
+    }
+    
+    private func deleteUserComment(userId: String, DOCID: String) {
+        db.collection(userId).document(DOCID).delete() { _ in }
+    }
+    
+    private func getFormattedDate() -> String {
+        let date = Date()
+        let dateformat = DateFormatter()
+        dateformat.dateFormat = "yyyy.MM.dd HH:mm:ss"
+        return dateformat.string(from: date)
     }
 }
