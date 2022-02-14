@@ -8,10 +8,12 @@
 import Foundation
 
 class BoxOfficeListModel {
-    let boxOfficeList: [BoxOffice]
+    let boxOfficeList: [BoxOfficeModel]
     
-    init(_ boxOfficeList: [BoxOffice]) {
-        self.boxOfficeList = boxOfficeList
+    init(_ boxOffice: [BoxOffice]) {
+        self.boxOfficeList = boxOffice.compactMap({ BoxOffice in
+            return BoxOfficeModel.init(BoxOffice)
+        })
     }
 }
 
@@ -22,7 +24,7 @@ extension BoxOfficeListModel {
     }
     
     func boxOfficeModel(_ index: Int) -> BoxOfficeModel {
-        return BoxOfficeModel(boxOfficeList[index])
+        return boxOfficeList[index]
     }
 }
 

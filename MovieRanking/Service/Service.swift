@@ -61,11 +61,10 @@ class Service {
         var results = [MovieInfo]()
         let boxOfficeList = boxOfficeListModel.boxOfficeList
         let group = DispatchGroup()
-        
         for i in 0..<boxOfficeList.count {
             group.enter()
-            fetchMovieInfo(movieName: boxOfficeList[i].movieNm, releaseDate: boxOfficeList[i].openDt) { movieInfoListModel in
-                results.append(movieInfoListModel.movieInfoList[0])
+            fetchMovieInfo(movieName: boxOfficeList[i].movieName, releaseDate: boxOfficeList[i].openDate) { movieInfoListModel in
+                results.append(movieInfoListModel.movieInfoList[0].movieInfo)
                 group.leave()
             }
             group.wait()
