@@ -12,22 +12,26 @@ class FirebaseViewModel {
     private let service = FirebaseService()
     
     var commentListModel: CommentListModel!
-    var currentUserComment: CommentModel?
+    var currentUserComment: CommentModel!
     var currentUserCommentListModel: CurrentUserCommentListModel!
     var wishToWatchListModel: WishToWatchListModel!
     
     var gradeAverage: Float = 0.0
     var isWishToWatch: Bool = false
     
-    var numberOfRowsInSectionForComment: Int {
-        return commentListModel == nil ? 1 : commentListModel.count
+    var commentCount: Int {
+        return (commentListModel == nil || commentListModel.count == 0) ? 1 : commentListModel.count
     }
     
-    var numberOfRowsInSectionForCurrentUserComment: Int {
+    var IsCommentExist: Bool {
+        return (commentListModel == nil || commentListModel.count == 0) ? false : true
+    }
+    
+    var currentUserCommentCount: Int {
         return currentUserCommentListModel == nil ? 0 : currentUserCommentListModel.count
     }
     
-    var numberOfRowsInSectionForWishToWatchList: Int {
+    var wishToWatchListCount: Int {
         return wishToWatchListModel == nil ? 0 : wishToWatchListModel.count
     }
     
@@ -44,9 +48,8 @@ class FirebaseViewModel {
     }
     
     func logOut(completion: @escaping (Error?) -> Void) {
-        service.logOut { [weak self] error in
+        service.logOut { error in
             guard error == nil else { completion(error); return }
-            self?.currentUserCommentListModel = nil
             completion(nil)
         }
     }

@@ -160,7 +160,7 @@ extension MovieInfoViewController: UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         switch section {
         case 6:
-            return viewModel.numberOfRowsInSectionForComment
+            return viewModel.commentCount
         default:
             return 1
         }
@@ -263,15 +263,15 @@ extension MovieInfoViewController: UITableViewDataSource {
             
             cell.selectionStyle = .none
             
-            if viewModel.commentListModel == nil {
-                cell.stateEmptyLabel.isHidden = false
-            } else {
+            if viewModel.IsCommentExist {
                 let commentModel = viewModel.commentListModel.commentModel(indexPath.row)
                 cell.stateEmptyLabel.isHidden = true
                 cell.grade = commentModel.grade
                 cell.userNameLabel.text = commentModel.userId
                 cell.commentLabel.text = commentModel.comment
                 cell.dateLabel.text = commentModel.date
+            } else {
+                cell.stateEmptyLabel.isHidden = false
             }
             
             return cell

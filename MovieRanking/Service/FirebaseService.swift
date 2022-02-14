@@ -87,9 +87,9 @@ class FirebaseService {
         }
     }
     
-    func loadCurrentUserComment(DOCID: String, completion: @escaping (CommentModel, Error?) -> Void) {
+    func loadCurrentUserComment(DOCID: String, completion: @escaping (CommentModel?, Error?) -> Void) {
         
-        guard let userId = self.userId else { return }
+        guard let userId = self.userId else { completion(nil, nil); return }
         
         db.collection(DOCID).document(userId).addSnapshotListener { documentSnapshot, error in
             
@@ -115,12 +115,9 @@ class FirebaseService {
         }
     }
     
-    func loadCurrentUserCommentList(completion: @escaping (CurrentUserCommentListModel, Error?) -> Void) {
+    func loadCurrentUserCommentList(completion: @escaping (CurrentUserCommentListModel?, Error?) -> Void) {
         
-        guard let userId = self.userId else {
-            completion(CurrentUserCommentListModel([FBCurrentUserCommentModel.empty]), nil)
-            return
-        }
+        guard let userId = self.userId else { completion(nil, nil); return }
         
         db.collection(userId).order(by: K.FStore.date, descending: true).addSnapshotListener { querySnapshot, error in
             
@@ -158,13 +155,16 @@ class FirebaseService {
         }
     }
     
-    func loadWishToWatchList(completion: @escaping (WishToWatchListModel, Error?) -> Void) {
+    func loadWishToWatchList(completion: @escaping (WishToWatchListModel?, Error?) -> Void) {
         
-        guard let userId = self.userId else { completion(WishToWatchListModel([FBWishToWatchModel.empty]), nil); return }
+        guard let userId = self.userId else { completion(nil, nil); return }
         
         db.collection(userId).order(by: K.FStore.date, descending: true).addSnapshotListener { querySnapshot, error in
             
-            guard error == nil else { completion(WishToWatchListModel([FBWishToWatchModel.empty]), error); return }
+            guard error == nil else {
+                completion(WishToWatchListModel([FBWishToWatchModel.empty]), error)
+                return
+            }
             
             var wishToWatchList: [FBWishToWatchModel] = []
             
