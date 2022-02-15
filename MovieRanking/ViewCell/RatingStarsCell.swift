@@ -22,7 +22,7 @@ class RatingStarsCell: UITableViewCell {
     
     var movieInfo = MovieInfoModel(MovieInfo.empty) {
         didSet {
-            viewModel.loadCurrentUserComment(DOCID: movieInfo.DOCID) { [weak self] error in
+            viewModel.loadUserComment(DOCID: movieInfo.DOCID) { [weak self] error in
                 guard error == nil else {
                     DispatchQueue.main.async {
                         AlertService.shared.alert(viewController: self?.parent, alertTitle: "정보를 불러 오지 못 했습니다")
@@ -30,7 +30,7 @@ class RatingStarsCell: UITableViewCell {
                     return
                 }
                 
-                self?.loadStarImages(by: self?.viewModel.currentUserComment?.grade ?? 0.0) {
+                self?.loadStarImages(by: self?.viewModel.userComment?.grade ?? 0.0) {
                     self?.setStarImage()
                 }
             }
@@ -97,7 +97,7 @@ class RatingStarsCell: UITableViewCell {
                              movieName: movieInfo.movieName,
                              thumbNailLink: movieInfo.thumbNailLinks[0],
                              grade: grade,
-                             comment: viewModel.currentUserComment?.comment ?? "") { _ in }
+                             comment: viewModel.userComment?.comment ?? "") { _ in }
     }
     
     private func deleteComment() {
@@ -105,10 +105,10 @@ class RatingStarsCell: UITableViewCell {
         let alert = UIAlertController(title: "삭제 하시겠습니까?", message: nil, preferredStyle: .alert)
         let action = UIAlertAction(title: "확인", style: .default) { [weak self] action in
             self?.viewModel.deleteComment(DOCID: self?.movieInfo.DOCID ?? "",
-                                          userId: self?.viewModel.currentUserComment?.userId ?? "") { _ in }
+                                          userId: self?.viewModel.userComment?.userId ?? "") { _ in }
         }
         let cancelAction = UIAlertAction(title: "취소", style: .cancel) { [weak self] action in
-            self?.loadStarImages(by: self?.viewModel.currentUserComment?.grade ?? 0) {
+            self?.loadStarImages(by: self?.viewModel.userComment?.grade ?? 0) {
                 self?.setStarImage()
             }
         }

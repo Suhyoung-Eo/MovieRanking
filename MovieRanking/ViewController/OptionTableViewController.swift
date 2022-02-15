@@ -39,7 +39,7 @@ class OptionTableViewController: UITableViewController {
         
         // cell 속성
         cell.selectionStyle = .none
-        cell.tintColor = UIColor(red: 0.92, green: 0.20, blue: 0.36, alpha: 1.00)
+        cell.tintColor = UIColor(red: 0.98, green: 0.07, blue: 0.34, alpha: 1.00)
         
         // cell value
         cell.textLabel?.text = viewModel.boxOfficeTypes[indexPath.row]

@@ -87,7 +87,7 @@ class FirebaseStore {
         }
     }
     
-    func loadCurrentUserComment(DOCID: String, completion: @escaping (CommentModel?, Error?) -> Void) {
+    func loadUserComment(DOCID: String, completion: @escaping (CommentModel?, Error?) -> Void) {
         
         guard let userId = self.userId else { completion(nil, nil); return }
         
@@ -115,18 +115,18 @@ class FirebaseStore {
         }
     }
     
-    func loadCurrentUserCommentList(completion: @escaping (CurrentUserCommentListModel?, Error?) -> Void) {
+    func loadEstimateList(completion: @escaping (EstimateListModel?, Error?) -> Void) {
         
         guard let userId = self.userId else { completion(nil, nil); return }
         
         db.collection(userId).order(by: K.FStore.date, descending: true).addSnapshotListener { querySnapshot, error in
             
             guard error == nil else {
-                completion(CurrentUserCommentListModel([FBCurrentUserCommentModel.empty]), error)
+                completion(EstimateListModel([FBEstimateModel.empty]), error)
                 return
             }
             
-            var CurrentUserComments: [FBCurrentUserCommentModel] = []
+            var FBEstimateModelList: [FBEstimateModel] = []
             
             if let snapshotDocuments = querySnapshot?.documents {
                 for doc in snapshotDocuments {
@@ -140,17 +140,17 @@ class FirebaseStore {
                        let comment = data[K.FStore.comment] as? String,
                        let date = data[K.FStore.date] as? String {
                         
-                        let newItem = FBCurrentUserCommentModel(movieId: movieId,
+                        let newItem = FBEstimateModel(movieId: movieId,
                                                                 movieSeq: movieSeq,
                                                                 movieName: movieName,
                                                                 thumbNailLink: thumbNailLink,
                                                                 grade: grade,
                                                                 comment: comment,
                                                                 date: date)
-                        CurrentUserComments.append(newItem)
+                        FBEstimateModelList.append(newItem)
                     }
                 }
-                completion(CurrentUserCommentListModel(CurrentUserComments), nil)
+                completion(EstimateListModel(FBEstimateModelList), nil)
             }
         }
     }

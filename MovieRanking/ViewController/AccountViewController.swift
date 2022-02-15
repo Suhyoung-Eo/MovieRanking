@@ -137,17 +137,6 @@ extension AccountViewController: UITableViewDataSource {
 
 extension AccountViewController: UITableViewDelegate {
     
-    func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
-        switch section {
-        case 0:
-            return 0
-        case 1:
-            return 0
-        default:
-            return 0
-        }
-    }
-    
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         
         if viewModel.userId == nil {

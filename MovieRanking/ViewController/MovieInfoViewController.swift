@@ -153,12 +153,7 @@ extension MovieInfoViewController: UITableViewDataSource {
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        switch section {
-        case 6:
-            return viewModel.commentCount
-        default:
-            return 1
-        }
+        return viewModel.sectionCount(by: section)
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {

@@ -7,6 +7,7 @@
 
 import UIKit
 
+// 탭한 위치로 이동
 class RatingUISlider: UISlider {
 
     override func beginTracking(_ touch: UITouch, with event: UIEvent?) -> Bool {

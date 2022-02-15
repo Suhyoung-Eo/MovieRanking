@@ -19,7 +19,6 @@ class StorageViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        // Do any additional setup after loading the view.
         collectionView.dataSource = self
         collectionView.delegate = self
         
@@ -59,7 +58,7 @@ class StorageViewController: UIViewController {
 extension StorageViewController {
     
     private func loadCurrentUserCommentList() {
-        FBViewModel.loadCurrentUserCommentList { [weak self] error in self?.showAlert(by: error) }
+        FBViewModel.loadEstimateList { [weak self] error in self?.showAlert(by: error) }
     }
     
     private func loadWishToWatchList() {
@@ -89,14 +88,7 @@ extension StorageViewController: UICollectionViewDataSource {
     }
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        switch navigationItemTitle {
-        case K.Prepare.wishToWatchView:
-            return FBViewModel.wishToWatchListCount
-        case K.Prepare.estimateView:
-            return FBViewModel.currentUserCommentCount
-        default:
-            return 0
-        }
+        return FBViewModel.storageNumberOfItems(by: navigationItemTitle)
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
@@ -111,7 +103,7 @@ extension StorageViewController: UICollectionViewDataSource {
             cell.gradeLabel.text = cellItem.gradeAverage == 0 ? "평점이 없습니다" : "평균 ★ \(String(format: "%.1f", cellItem.gradeAverage))"
             cell.gradeLabel.textColor = .darkGray
         } else {
-            let cellItem = FBViewModel.currentUserCommentListModel.currentUserCommentModel(indexPath.row)
+            let cellItem = FBViewModel.estimateListModel.estimateModel(indexPath.row)
             cell.imageView.setImage(from: cellItem.thumbNailLink)
             cell.movieNameLabel.text = cellItem.movieName
             cell.gradeLabel.text = "평가함 ★ \(cellItem.grade)"
@@ -128,10 +120,8 @@ extension StorageViewController: UICollectionViewDelegate {
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         
         let movieInfo = FBViewModel.setMovieInfo(by: navigationItemTitle, index: indexPath.row)
-        let movieId = movieInfo.0
-        let movieSeq = movieInfo.1
         
-        viewModel.fetchMovieInfo(Id: movieId, Seq: movieSeq) { [weak self] error in
+        viewModel.fetchMovieInfo(Id: movieInfo.0, Seq: movieInfo.1) { [weak self] error in
             guard error == nil else {
                 DispatchQueue.main.async {
                     AlertService.shared.alert(viewController: self, alertTitle: "네트워크 장애", message: error?.localizedDescription, actionTitle: "다시 검색 해보세요")

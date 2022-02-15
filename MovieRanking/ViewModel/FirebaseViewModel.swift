@@ -12,8 +12,8 @@ class FirebaseViewModel {
     private let FBStore = FirebaseStore()
     
     var commentListModel: CommentListModel!
-    var currentUserComment: CommentModel!
-    var currentUserCommentListModel: CurrentUserCommentListModel!
+    var userComment: CommentModel!
+    var estimateListModel: EstimateListModel!
     var wishToWatchListModel: WishToWatchListModel!
     
     var gradeAverage: Float = 0.0
@@ -27,8 +27,8 @@ class FirebaseViewModel {
         return (commentListModel == nil || commentListModel.count == 0) ? false : true
     }
     
-    var currentUserCommentCount: Int {
-        return currentUserCommentListModel == nil ? 0 : currentUserCommentListModel.count
+    var EstimateListCount: Int {
+        return estimateListModel == nil ? 0 : estimateListModel.count
     }
     
     var wishToWatchListCount: Int {
@@ -54,6 +54,16 @@ class FirebaseViewModel {
         }
     }
     
+    //MARK: - For MovieInfoViewController methods
+    func sectionCount(by section: Int) -> Int {
+        switch section {
+        case 6:
+            return commentCount
+        default:
+            return 1
+        }
+    }
+
     //MARK: - For StorageViewController methods
     
     func setMovieInfo(by itemTitle: String, index: Int) -> (String, String) {
@@ -66,11 +76,22 @@ class FirebaseViewModel {
             movieSeq = movieInfo.movieSeq
         }
         else {
-            let movieInfo = currentUserCommentListModel.currentUserCommentModel(index)
+            let movieInfo = estimateListModel.estimateModel(index)
             movieId = movieInfo.movieId
             movieSeq = movieInfo.movieSeq
         }
         return (movieId, movieSeq)
+    }
+    
+    func storageNumberOfItems(by title: String) -> Int {
+        switch title {
+        case K.Prepare.wishToWatchView:
+            return wishToWatchListCount
+        case K.Prepare.estimateView:
+            return EstimateListCount
+        default:
+            return 0
+        }
     }
     
     //MARK: - Load data methods
@@ -85,21 +106,21 @@ class FirebaseViewModel {
         }
     }
     
-    func loadCurrentUserComment(DOCID: String, completion: @escaping (Error?) -> Void) {
-        currentUserComment = nil
-        FBStore.loadCurrentUserComment(DOCID: DOCID) { [weak self] currentUserComment, error in
+    func loadUserComment(DOCID: String, completion: @escaping (Error?) -> Void) {
+        userComment = nil
+        FBStore.loadUserComment(DOCID: DOCID) { [weak self] userComment, error in
             guard error == nil else { completion(error); return }
-            self?.currentUserComment = currentUserComment
+            self?.userComment = userComment
             completion(nil)
         }
     }
     
     
-    func loadCurrentUserCommentList(completion: @escaping (Error?) -> Void) {
-        currentUserCommentListModel = nil
-        FBStore.loadCurrentUserCommentList { [weak self] currentUserCommentListModel, error in
+    func loadEstimateList(completion: @escaping (Error?) -> Void) {
+        estimateListModel = nil
+        FBStore.loadEstimateList { [weak self] estimateListModel, error in
             guard error == nil else { completion(error); return }
-            self?.currentUserCommentListModel = currentUserCommentListModel
+            self?.estimateListModel = estimateListModel
             completion(nil)
         }
     }

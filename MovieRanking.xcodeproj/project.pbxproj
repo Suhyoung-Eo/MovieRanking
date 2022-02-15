@@ -13,8 +13,8 @@
 		FE49A84027B8F35500C178A4 /* CommentListModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE49A83F27B8F35500C178A4 /* CommentListModel.swift */; };
 		FE49A84227B8FE0100C178A4 /* FBCommentModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE49A84127B8FE0100C178A4 /* FBCommentModel.swift */; };
 		FE49A84427B902AA00C178A4 /* FirebaseStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE49A84327B902AA00C178A4 /* FirebaseStore.swift */; };
-		FE49A84627B934E700C178A4 /* FBCurrentUserCommentModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE49A84527B934E700C178A4 /* FBCurrentUserCommentModel.swift */; };
-		FE49A84827B935EB00C178A4 /* CurrentUserCommentListModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE49A84727B935EB00C178A4 /* CurrentUserCommentListModel.swift */; };
+		FE49A84627B934E700C178A4 /* FBEstimateModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE49A84527B934E700C178A4 /* FBEstimateModel.swift */; };
+		FE49A84827B935EB00C178A4 /* EstimateListModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE49A84727B935EB00C178A4 /* EstimateListModel.swift */; };
 		FE49A84A27B945D200C178A4 /* FBWishToWatchModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE49A84927B945D200C178A4 /* FBWishToWatchModel.swift */; };
 		FE49A84C27B9470700C178A4 /* WishToWatchListModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE49A84B27B9470700C178A4 /* WishToWatchListModel.swift */; };
 		FE7C443427AB55BE00AA33AC /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE7C443327AB55BE00AA33AC /* AppDelegate.swift */; };
@@ -80,8 +80,8 @@
 		FE49A83F27B8F35500C178A4 /* CommentListModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommentListModel.swift; sourceTree = "<group>"; };
 		FE49A84127B8FE0100C178A4 /* FBCommentModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FBCommentModel.swift; sourceTree = "<group>"; };
 		FE49A84327B902AA00C178A4 /* FirebaseStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirebaseStore.swift; sourceTree = "<group>"; };
-		FE49A84527B934E700C178A4 /* FBCurrentUserCommentModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FBCurrentUserCommentModel.swift; sourceTree = "<group>"; };
-		FE49A84727B935EB00C178A4 /* CurrentUserCommentListModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CurrentUserCommentListModel.swift; sourceTree = "<group>"; };
+		FE49A84527B934E700C178A4 /* FBEstimateModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FBEstimateModel.swift; sourceTree = "<group>"; };
+		FE49A84727B935EB00C178A4 /* EstimateListModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EstimateListModel.swift; sourceTree = "<group>"; };
 		FE49A84927B945D200C178A4 /* FBWishToWatchModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FBWishToWatchModel.swift; sourceTree = "<group>"; };
 		FE49A84B27B9470700C178A4 /* WishToWatchListModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WishToWatchListModel.swift; sourceTree = "<group>"; };
 		FE7C443027AB55BE00AA33AC /* MovieRanking.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = MovieRanking.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -234,7 +234,7 @@
 				FE7C446327AB623900AA33AC /* WeeklyBoxOfficeModel.swift */,
 				FE7C446527AB623F00AA33AC /* MovieInformationModel.swift */,
 				FE49A84127B8FE0100C178A4 /* FBCommentModel.swift */,
-				FE49A84527B934E700C178A4 /* FBCurrentUserCommentModel.swift */,
+				FE49A84527B934E700C178A4 /* FBEstimateModel.swift */,
 				FE49A84927B945D200C178A4 /* FBWishToWatchModel.swift */,
 			);
 			path = Entity;
@@ -254,7 +254,7 @@
 				FE7C445A27AB5CFB00AA33AC /* BoxOfficeListModel.swift */,
 				FEA8868F27ABBBC600A0320B /* MovieInfoListModel.swift */,
 				FE49A83F27B8F35500C178A4 /* CommentListModel.swift */,
-				FE49A84727B935EB00C178A4 /* CurrentUserCommentListModel.swift */,
+				FE49A84727B935EB00C178A4 /* EstimateListModel.swift */,
 				FE49A84B27B9470700C178A4 /* WishToWatchListModel.swift */,
 			);
 			path = Model;
@@ -469,7 +469,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				FE49A84827B935EB00C178A4 /* CurrentUserCommentListModel.swift in Sources */,
+				FE49A84827B935EB00C178A4 /* EstimateListModel.swift in Sources */,
 				FEBF229427B26ACB00190D8F /* AccountViewController.swift in Sources */,
 				FE49A84027B8F35500C178A4 /* CommentListModel.swift in Sources */,
 				FE7C445B27AB5CFB00AA33AC /* BoxOfficeListModel.swift in Sources */,
@@ -496,7 +496,7 @@
 				FE7C446227AB623400AA33AC /* DailyBoxOfficeModel.swift in Sources */,
 				FE7C446627AB623F00AA33AC /* MovieInformationModel.swift in Sources */,
 				FEA886A527ADEA3400A0320B /* BoxOfficeViewModel.swift in Sources */,
-				FE49A84627B934E700C178A4 /* FBCurrentUserCommentModel.swift in Sources */,
+				FE49A84627B934E700C178A4 /* FBEstimateModel.swift in Sources */,
 				FE49A84227B8FE0100C178A4 /* FBCommentModel.swift in Sources */,
 				FEA8868C27AB9D3600A0320B /* ApiService.swift in Sources */,
 				FE7C445E27AB5EBB00AA33AC /* AlertService.swift in Sources */,

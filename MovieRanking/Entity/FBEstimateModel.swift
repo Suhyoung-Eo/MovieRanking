@@ -7,7 +7,7 @@
 
 import Foundation
 
-struct FBCurrentUserCommentModel {
+struct FBEstimateModel {
     let movieId: String
     let movieSeq: String
     let movieName: String
@@ -17,10 +17,10 @@ struct FBCurrentUserCommentModel {
     let date: String
 }
 
-extension FBCurrentUserCommentModel {
+extension FBEstimateModel {
     
-    static var empty: FBCurrentUserCommentModel {
-        return FBCurrentUserCommentModel(movieId: "",
+    static var empty: FBEstimateModel {
+        return FBEstimateModel(movieId: "",
                               movieSeq: "",
                               movieName: "",
                               thumbNailLink: "",
