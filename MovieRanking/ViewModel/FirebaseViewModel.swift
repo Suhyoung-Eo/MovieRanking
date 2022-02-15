@@ -9,7 +9,7 @@ import Foundation
 
 class FirebaseViewModel {
     
-    private let service = FirebaseService()
+    private let FBStore = FirebaseStore()
     
     var commentListModel: CommentListModel!
     var currentUserComment: CommentModel!
@@ -36,19 +36,19 @@ class FirebaseViewModel {
     }
     
     var userId: String? {
-        return service.userId
+        return FBStore.userId
     }
     
     func register(email: String, password: String, completion: @escaping (Error?) -> Void) {
-        service.register(email: email, password: password) { error in completion(error) }
+        FBStore.register(email: email, password: password) { error in completion(error) }
     }
     
     func logIn(email: String, password: String, completion: @escaping (Error?) -> Void) {
-        service.logIn(email: email, password: password) { error in completion(error) }
+        FBStore.logIn(email: email, password: password) { error in completion(error) }
     }
     
     func logOut(completion: @escaping (Error?) -> Void) {
-        service.logOut { error in
+        FBStore.logOut { error in
             guard error == nil else { completion(error); return }
             completion(nil)
         }
@@ -77,7 +77,7 @@ class FirebaseViewModel {
     
     func loadComment(DOCID: String, completion: @escaping (Error?) -> Void) {
         commentListModel = nil
-        service.loadComment(DOCID: DOCID) { [weak self] commentListModel, gradeAverage, error in
+        FBStore.loadComment(DOCID: DOCID) { [weak self] commentListModel, gradeAverage, error in
             guard error == nil else { completion(error); return }
             self?.commentListModel = commentListModel
             self?.gradeAverage = gradeAverage
@@ -87,7 +87,7 @@ class FirebaseViewModel {
     
     func loadCurrentUserComment(DOCID: String, completion: @escaping (Error?) -> Void) {
         currentUserComment = nil
-        service.loadCurrentUserComment(DOCID: DOCID) { [weak self] currentUserComment, error in
+        FBStore.loadCurrentUserComment(DOCID: DOCID) { [weak self] currentUserComment, error in
             guard error == nil else { completion(error); return }
             self?.currentUserComment = currentUserComment
             completion(nil)
@@ -97,7 +97,7 @@ class FirebaseViewModel {
     
     func loadCurrentUserCommentList(completion: @escaping (Error?) -> Void) {
         currentUserCommentListModel = nil
-        service.loadCurrentUserCommentList { [weak self] currentUserCommentListModel, error in
+        FBStore.loadCurrentUserCommentList { [weak self] currentUserCommentListModel, error in
             guard error == nil else { completion(error); return }
             self?.currentUserCommentListModel = currentUserCommentListModel
             completion(nil)
@@ -106,7 +106,7 @@ class FirebaseViewModel {
     
     func loadWishToWatchList(completion: @escaping (Error?) -> Void) {
         wishToWatchListModel = nil
-        service.loadWishToWatchList { [weak self] wishToWatchListModel, error in
+        FBStore.loadWishToWatchList { [weak self] wishToWatchListModel, error in
             guard error == nil else { completion(error); return }
             self?.wishToWatchListModel = wishToWatchListModel
             completion(nil)
@@ -115,7 +115,7 @@ class FirebaseViewModel {
     
     func loadIsWishToWatch(DOCID: String, completion: @escaping () -> Void) {
         isWishToWatch = false
-        service.loadIsWishToWatch(DOCID: DOCID) { [weak self] isWishToWatch in
+        FBStore.loadIsWishToWatch(DOCID: DOCID) { [weak self] isWishToWatch in
             self?.isWishToWatch = isWishToWatch
             completion()
         }
@@ -132,7 +132,7 @@ class FirebaseViewModel {
                     comment: String,
                     completion: @escaping (Error?) -> Void) {
         
-        service.addComment(DOCID: DOCID,
+        FBStore.addComment(DOCID: DOCID,
                            movieId: movieId,
                            movieSeq: movieSeq,
                            movieName: movieName,
@@ -150,7 +150,7 @@ class FirebaseViewModel {
                           wishToWatch: Bool,
                           completion: @escaping (Error?) -> Void) {
         
-        service.setIsWishToWatch(DOCID: DOCID,
+        FBStore.setIsWishToWatch(DOCID: DOCID,
                                  movieId: movieId,
                                  movieSeq: movieSeq,
                                  movieName: movieName,
@@ -162,6 +162,6 @@ class FirebaseViewModel {
     //MARK: - Delete data methods
     
     func deleteComment(DOCID: String, userId: String, completion: @escaping (Error?) -> Void) {
-        service.deleteComment(DOCID: DOCID, userId: userId) { error in completion(error) }
+        FBStore.deleteComment(DOCID: DOCID, userId: userId) { error in completion(error) }
     }
 }

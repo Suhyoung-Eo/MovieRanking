@@ -108,10 +108,7 @@ extension MovieInfoViewController {
         viewModel.loadComment(DOCID: movieInfo.DOCID) { [weak self] error in
             guard error == nil else {
                 DispatchQueue.main.async {
-                    AlertService.shared.alert(viewController: self,
-                                              alertTitle: "코멘트를 불러 오지 못 했습니다",
-                                              message: error?.localizedDescription,
-                                              actionTitle: "확인")
+                    AlertService.shared.alert(viewController: self, alertTitle: "코멘트를 불러 오지 못 했습니다", message: error?.localizedDescription)
                 }
                 return
             }
@@ -140,10 +137,7 @@ extension MovieInfoViewController {
                                    wishToWatch: isWishToWatch) { error in
             if let error = error {
                 DispatchQueue.main.async {
-                    AlertService.shared.alert(viewController: self,
-                                              alertTitle: "보고싶어요 목록 저장에 실패 했습니다",
-                                              message: error.localizedDescription,
-                                              actionTitle: "확인")
+                    AlertService.shared.alert(viewController: self, alertTitle: "보고싶어요 목록 저장에 실패 했습니다", message: error.localizedDescription)
                 }
             }
         }
@@ -219,7 +213,7 @@ extension MovieInfoViewController: UITableViewDataSource {
             cell.delegate = self
             cell.gradeLabel.text = viewModel.gradeAverage == 0 ? "첫 평점을 등록해 주세요" : "평균 ★ \(String(format: "%.1f", viewModel.gradeAverage))"
             cell.wishToWatchButton.setImage(viewModel.isWishToWatch ? UIImage(systemName: "bookmark.fill") : UIImage(systemName: "plus"), for: .normal)
-            cell.wishToWatchButton.tintColor = viewModel.isWishToWatch ? UIColor(red: 0.92, green: 0.20, blue: 0.36, alpha: 1.00) : UIColor.darkGray
+            cell.wishToWatchButton.tintColor = viewModel.isWishToWatch ? UIColor(red: 0.98, green: 0.07, blue: 0.34, alpha: 1.00) : UIColor.darkGray
             
             return cell
         case 3:

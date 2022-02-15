@@ -79,22 +79,17 @@ extension AccountViewController {
     
     private func logOutAlert() {
         let alert = UIAlertController(title: "로그아웃 하시겠습니까?", message: nil, preferredStyle: .alert)
-        let action = UIAlertAction(title: "확인", style: .default) { [weak self] action in
-            self?.logOut()
-        }
-        let cancelAction = UIAlertAction(title: "취소", style: .cancel)
-        alert.addAction(action)
-        alert.addAction(cancelAction)
+        alert.addAction(UIAlertAction(title: "확인", style: .default) { [weak self] action in self?.logOut() })
+        alert.addAction(UIAlertAction(title: "취소", style: .cancel))
         present(alert, animated: true)
     }
     
     private func logOut() {
         viewModel.logOut { [weak self] error in
             guard error == nil else {
-                AlertService.shared.alert(viewController: self,
-                                          alertTitle: "로그아웃에 실패했습니다",
-                                          message: error?.localizedDescription,
-                                          actionTitle: "확인")
+                DispatchQueue.main.async {
+                    AlertService.shared.alert(viewController: self, alertTitle: "로그아웃에 실패했습니다", message: error?.localizedDescription)
+                }
                 return
             }
             self?.accountTextLabel.text = "로그인 된 계정이 없습니다"
@@ -120,7 +115,7 @@ extension AccountViewController: UITableViewDataSource {
         
         cell.selectionStyle = .none
         cell.textLabel?.textAlignment = .center
-        cell.textLabel?.textColor = UIColor(red: 0.92, green: 0.20, blue: 0.36, alpha: 1.00)
+        cell.textLabel?.textColor = UIColor(red: 0.98, green: 0.07, blue: 0.34, alpha: 1.00)
         cell.textLabel?.font = UIFont.boldSystemFont(ofSize: 19.0)
         
         switch indexPath.section {
@@ -156,12 +151,7 @@ extension AccountViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         
         if viewModel.userId == nil {
-            DispatchQueue.main.async {
-                AlertService.shared.alert(viewController: self,
-                                          alertTitle: "서비스를 이용하려면 로그인 하세요",
-                                          message: "",
-                                          actionTitle: "확인")
-            }
+            AlertService.shared.alert(viewController: self, alertTitle: "서비스를 이용하려면 로그인 하세요")
             return
         }
         

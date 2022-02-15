@@ -13,9 +13,9 @@ class AlertService {
     
     func alert(viewController: UIViewController?,
                       alertTitle: String,
-                      message: String?,
+                      message: String? = nil,
                       preferredStyle: UIAlertController.Style = .alert,
-                      actionTitle: String,
+                      actionTitle: String = "확인",
                       style: UIAlertAction.Style = .default) {
 
         let alert = UIAlertController(title: alertTitle, message: message, preferredStyle: preferredStyle)

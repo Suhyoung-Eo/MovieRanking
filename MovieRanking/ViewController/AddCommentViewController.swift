@@ -39,10 +39,7 @@ class AddCommentViewController: UIViewController {
         viewModel.loadCurrentUserComment(DOCID: movieInfo.DOCID) { [weak self] error in
             guard error == nil else {
                 DispatchQueue.main.async {
-                    AlertService.shared.alert(viewController: self,
-                                              alertTitle: "코멘트를 불러 오지 못 했습니다",
-                                              message: "",
-                                              actionTitle: "확인")
+                    AlertService.shared.alert(viewController: self, alertTitle: "코멘트를 불러 오지 못 했습니다")
                 }
                 return
             }
@@ -60,13 +57,10 @@ class AddCommentViewController: UIViewController {
     
     @IBAction func confirmButton(_ sender: Any) {
         
-        if viewModel.userId == nil { alertService(); return }
+        if viewModel.userId == nil { showAlert(); return }
         
         guard let comment = commentTextView.text, grade != 0 else {
-            AlertService.shared.alert(viewController: self,
-                                      alertTitle: "코맨트 등록에 실패 했습니다",
-                                      message: "평점 등록은 필수입니다",
-                                      actionTitle: "확인")
+            AlertService.shared.alert(viewController: self, alertTitle: "코맨트 등록에 실패 했습니다", message: "평점 등록은 필수입니다")
             return
         }
         
@@ -78,14 +72,13 @@ class AddCommentViewController: UIViewController {
                              grade: grade,
                              comment: comment) { [weak self] error in
             
-            if error == nil { self?.dismiss(animated: true, completion: nil); return }
-            
-            DispatchQueue.main.async {
-                AlertService.shared.alert(viewController: self,
-                                          alertTitle: "코맨트 등록에 실패 했습니다",
-                                          message: error?.localizedDescription,
-                                          actionTitle: "확인")
+            guard error == nil else {
+                DispatchQueue.main.async {
+                    AlertService.shared.alert(viewController: self, alertTitle: "코맨트 등록에 실패 했습니다", message: error?.localizedDescription)
+                }
+                return
             }
+            self?.dismiss(animated: true, completion: nil)
         }
     }
     
@@ -98,7 +91,7 @@ class AddCommentViewController: UIViewController {
         }
         
         if grade == 0, viewModel.currentUserComment.grade != 0 {
-            deleteComment()
+            deleteAlert()
         }
     }
     
@@ -135,7 +128,7 @@ class AddCommentViewController: UIViewController {
         }
     }
     
-    private func deleteComment() {
+    private func deleteAlert() {
         if viewModel.userId == nil { return }
         let alert = UIAlertController(title: "삭제 하시겠습니까?", message: nil, preferredStyle: .alert)
         let action = UIAlertAction(title: "확인", style: .default) { [weak self] action in
@@ -152,7 +145,7 @@ class AddCommentViewController: UIViewController {
         present(alert, animated: true)
     }
     
-    private func alertService() {
+    private func showAlert() {
         let alert = UIAlertController(title: "서비스를 이용하려면 로그인 하세요", message: nil, preferredStyle: .alert)
         let action = UIAlertAction(title: "확인", style: .default) { [weak self] action in
             self?.dismiss(animated: true, completion: nil)
@@ -171,7 +164,7 @@ class AddCommentViewController: UIViewController {
 extension AddCommentViewController: UITextViewDelegate {
     
     func textViewShouldBeginEditing(_ textView: UITextView) -> Bool {
-        if viewModel.userId == nil { alertService(); return false }
+        if viewModel.userId == nil { showAlert(); return false }
         return true
     }
 }

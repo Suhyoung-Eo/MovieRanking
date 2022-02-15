@@ -119,22 +119,16 @@ extension SearchMovieViewController: UISearchBarDelegate {
             viewModel.fetchMovieInfo(title: movieName) { [weak self] error in
                 guard error == nil else {
                     DispatchQueue.main.async {
+                        AlertService.shared.alert(viewController: self, alertTitle: "네트워크 장애", message: error?.localizedDescription, actionTitle: "다시 검색 해보세요")
                         self?.activityIndicator.stopAnimating()
-                        AlertService.shared.alert(viewController: self,
-                                                  alertTitle: "네트워크 장애",
-                                                  message: error?.localizedDescription,
-                                                  actionTitle: "다시 검색 해보세요")
                     }
                     return
                 }
                 
                 if self?.viewModel.movieInfoList == nil {
                     DispatchQueue.main.async {
+                        AlertService.shared.alert(viewController: self, alertTitle: "검색 된 영화가 없습니다", message: "다른 컨탠츠를 검색 해보세요")
                         self?.activityIndicator.stopAnimating()
-                        AlertService.shared.alert(viewController: self,
-                                                  alertTitle: "검색 된 영화가 없습니다",
-                                                  message: "다른 컨탠츠를 검색 해보세요",
-                                                  actionTitle: "확인")
                     }
                 }
             }

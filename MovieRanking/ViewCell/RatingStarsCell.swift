@@ -25,10 +25,7 @@ class RatingStarsCell: UITableViewCell {
             viewModel.loadCurrentUserComment(DOCID: movieInfo.DOCID) { [weak self] error in
                 guard error == nil else {
                     DispatchQueue.main.async {
-                        AlertService.shared.alert(viewController: self?.parent,
-                                                  alertTitle: "정보를 불러 오지 못 했습니다",
-                                                  message: "",
-                                                  actionTitle: "확인")
+                        AlertService.shared.alert(viewController: self?.parent, alertTitle: "정보를 불러 오지 못 했습니다")
                     }
                     return
                 }

@@ -67,15 +67,9 @@ extension ImageViewController {
     
     @objc private func saveImage(image: UIImage, didFinishSavingWithError error: Error?, contextInfo: UnsafeRawPointer) {
         if let error = error {
-            AlertService.shared.alert(viewController: self,
-                                      alertTitle: "사진 저장에 실패했습니다",
-                                      message: error.localizedDescription,
-                                      actionTitle: "확인")
+            AlertService.shared.alert(viewController: self, alertTitle: "사진 저장에 실패했습니다", message: error.localizedDescription)
         } else {
-            AlertService.shared.alert(viewController: self,
-                                      alertTitle: "사진이 저장되었습니다",
-                                      message: nil,
-                                      actionTitle: "확인")
+            AlertService.shared.alert(viewController: self, alertTitle: "사진이 저장되었습니다")
         }
     }
     

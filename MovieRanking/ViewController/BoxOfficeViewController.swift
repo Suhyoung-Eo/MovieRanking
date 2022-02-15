@@ -126,14 +126,12 @@ extension BoxOfficeViewController {
     }
     
     private func retry(error: Error?) {
+        let alert = UIAlertController(title: "네트워크 장애", message: error?.localizedDescription, preferredStyle: .alert)
+        alert.addAction(UIAlertAction(title: "재시도", style: .default) { [weak self] _ in  self?.fetchBoxOffice() })
+        present(alert, animated: true, completion: nil)
+        
         DispatchQueue.main.async { [weak self] in
             self?.activityIndicator.stopAnimating()
-            let alert = UIAlertController(title: "네트워크 장애", message: error?.localizedDescription, preferredStyle: .alert)
-            let action = UIAlertAction(title: "재시도", style: .default) { action in
-                self?.fetchBoxOffice()
-            }
-            alert.addAction(action)
-            self?.present(alert, animated: true, completion: nil)
         }
     }
 }
@@ -154,10 +152,10 @@ extension BoxOfficeViewController: UITableViewDataSource {
         guard let cell = tableView.dequeueReusableCell(withIdentifier: K.CellIdentifier.boxOfficeCell, for: indexPath) as? BoxOfficeCell else {
             fatalError("Could not found ViewCell")
         }
-
+        
         let boxOfficeList = viewModel.boxOfficeList.boxOfficeModel(indexPath.row)
         let movieInfoList = viewModel.movieInfoList.movieInfoModel(indexPath.row)
-
+        
         cell.selectionStyle = .none
         cell.thumbnailImageView.setImage(from: movieInfoList.thumbNailLinks[0])
         cell.titleLabel.text = boxOfficeList.movieName
@@ -178,16 +176,11 @@ extension BoxOfficeViewController: UITableViewDataSource {
 extension BoxOfficeViewController: UITableViewDelegate {
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        if viewModel.movieInfoList.movieInfoModel(indexPath.row).DOCID != "" {
-            performSegue(withIdentifier: K.SegueIdentifier.movieInfoView, sender: K.SegueIdentifier.movieInfoView)
-        } else {
-            DispatchQueue.main.async {
-                AlertService.shared.alert(viewController: self,
-                                          alertTitle: "해당 영화의 상세 정보가 없습니다.",
-                                          message: nil,
-                                          actionTitle: "확인")
-            }
+        guard viewModel.movieInfoList.movieInfoModel(indexPath.row).DOCID != ""  else {
+            AlertService.shared.alert(viewController: self, alertTitle: "해당 영화의 상세 정보가 없습니다.")
+            return
         }
+        performSegue(withIdentifier: K.SegueIdentifier.movieInfoView, sender: K.SegueIdentifier.movieInfoView)
     }
 }
 

@@ -12,7 +12,7 @@
 		FE430A9127B50BE1004AF8EE /* RatingStarsCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = FE430A8F27B50BE1004AF8EE /* RatingStarsCell.xib */; };
 		FE49A84027B8F35500C178A4 /* CommentListModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE49A83F27B8F35500C178A4 /* CommentListModel.swift */; };
 		FE49A84227B8FE0100C178A4 /* FBCommentModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE49A84127B8FE0100C178A4 /* FBCommentModel.swift */; };
-		FE49A84427B902AA00C178A4 /* FirebaseService.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE49A84327B902AA00C178A4 /* FirebaseService.swift */; };
+		FE49A84427B902AA00C178A4 /* FirebaseStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE49A84327B902AA00C178A4 /* FirebaseStore.swift */; };
 		FE49A84627B934E700C178A4 /* FBCurrentUserCommentModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE49A84527B934E700C178A4 /* FBCurrentUserCommentModel.swift */; };
 		FE49A84827B935EB00C178A4 /* CurrentUserCommentListModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE49A84727B935EB00C178A4 /* CurrentUserCommentListModel.swift */; };
 		FE49A84A27B945D200C178A4 /* FBWishToWatchModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE49A84927B945D200C178A4 /* FBWishToWatchModel.swift */; };
@@ -39,7 +39,7 @@
 		FEA886A127ADE98D00A0320B /* ModalPresentationController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FEA886A027ADE98D00A0320B /* ModalPresentationController.swift */; };
 		FEA886A327ADE9A400A0320B /* OptionTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FEA886A227ADE9A400A0320B /* OptionTableViewController.swift */; };
 		FEA886A527ADEA3400A0320B /* BoxOfficeViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = FEA886A427ADEA3400A0320B /* BoxOfficeViewModel.swift */; };
-		FEA886A727ADEA7A00A0320B /* Service.swift in Sources */ = {isa = PBXBuildFile; fileRef = FEA886A627ADEA7A00A0320B /* Service.swift */; };
+		FEA886A727ADEA7A00A0320B /* MovieInformaition.swift in Sources */ = {isa = PBXBuildFile; fileRef = FEA886A627ADEA7A00A0320B /* MovieInformaition.swift */; };
 		FEA886A927ADEC0000A0320B /* BoxOfficeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FEA886A827ADEC0000A0320B /* BoxOfficeViewController.swift */; };
 		FEA886AB27ADFE2000A0320B /* SearchMovieViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FEA886AA27ADFE2000A0320B /* SearchMovieViewController.swift */; };
 		FEA886AD27ADFEE400A0320B /* SearchMovieCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = FEA886AC27ADFEE400A0320B /* SearchMovieCell.swift */; };
@@ -79,7 +79,7 @@
 		FE430A8F27B50BE1004AF8EE /* RatingStarsCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = RatingStarsCell.xib; sourceTree = "<group>"; };
 		FE49A83F27B8F35500C178A4 /* CommentListModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommentListModel.swift; sourceTree = "<group>"; };
 		FE49A84127B8FE0100C178A4 /* FBCommentModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FBCommentModel.swift; sourceTree = "<group>"; };
-		FE49A84327B902AA00C178A4 /* FirebaseService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirebaseService.swift; sourceTree = "<group>"; };
+		FE49A84327B902AA00C178A4 /* FirebaseStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirebaseStore.swift; sourceTree = "<group>"; };
 		FE49A84527B934E700C178A4 /* FBCurrentUserCommentModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FBCurrentUserCommentModel.swift; sourceTree = "<group>"; };
 		FE49A84727B935EB00C178A4 /* CurrentUserCommentListModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CurrentUserCommentListModel.swift; sourceTree = "<group>"; };
 		FE49A84927B945D200C178A4 /* FBWishToWatchModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FBWishToWatchModel.swift; sourceTree = "<group>"; };
@@ -108,7 +108,7 @@
 		FEA886A027ADE98D00A0320B /* ModalPresentationController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ModalPresentationController.swift; sourceTree = "<group>"; };
 		FEA886A227ADE9A400A0320B /* OptionTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OptionTableViewController.swift; sourceTree = "<group>"; };
 		FEA886A427ADEA3400A0320B /* BoxOfficeViewModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BoxOfficeViewModel.swift; sourceTree = "<group>"; };
-		FEA886A627ADEA7A00A0320B /* Service.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Service.swift; sourceTree = "<group>"; };
+		FEA886A627ADEA7A00A0320B /* MovieInformaition.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MovieInformaition.swift; sourceTree = "<group>"; };
 		FEA886A827ADEC0000A0320B /* BoxOfficeViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BoxOfficeViewController.swift; sourceTree = "<group>"; };
 		FEA886AA27ADFE2000A0320B /* SearchMovieViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SearchMovieViewController.swift; sourceTree = "<group>"; };
 		FEA886AC27ADFEE400A0320B /* SearchMovieCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SearchMovieCell.swift; sourceTree = "<group>"; };
@@ -198,7 +198,7 @@
 				FE7C444927AB58CB00AA33AC /* Entity */,
 				FE7C444A27AB58F500AA33AC /* Repository */,
 				FE7C444B27AB590C00AA33AC /* Model */,
-				FE7C444C27AB591E00AA33AC /* Service */,
+				FE7C444C27AB591E00AA33AC /* Domain */,
 				FE7C445927AB5C3A00AA33AC /* ViewModel */,
 				FE7C444827AB588700AA33AC /* ViewController */,
 				FE7C444D27AB59A100AA33AC /* ViewCell */,
@@ -260,13 +260,13 @@
 			path = Model;
 			sourceTree = "<group>";
 		};
-		FE7C444C27AB591E00AA33AC /* Service */ = {
+		FE7C444C27AB591E00AA33AC /* Domain */ = {
 			isa = PBXGroup;
 			children = (
-				FEA886A627ADEA7A00A0320B /* Service.swift */,
-				FE49A84327B902AA00C178A4 /* FirebaseService.swift */,
+				FEA886A627ADEA7A00A0320B /* MovieInformaition.swift */,
+				FE49A84327B902AA00C178A4 /* FirebaseStore.swift */,
 			);
-			path = Service;
+			path = Domain;
 			sourceTree = "<group>";
 		};
 		FE7C444D27AB59A100AA33AC /* ViewCell */ = {
@@ -482,7 +482,7 @@
 				FE7C445427AB5AEC00AA33AC /* K.swift in Sources */,
 				FEA886C727B004A400A0320B /* StaffsInfoCell.swift in Sources */,
 				FE7C443427AB55BE00AA33AC /* AppDelegate.swift in Sources */,
-				FEA886A727ADEA7A00A0320B /* Service.swift in Sources */,
+				FEA886A727ADEA7A00A0320B /* MovieInformaition.swift in Sources */,
 				FE7C445827AB5BBB00AA33AC /* BoxOfficeCell.swift in Sources */,
 				FEF75EC627B106B40022A1EE /* CommentHeadCell.swift in Sources */,
 				FEA8869027ABBBC600A0320B /* MovieInfoListModel.swift in Sources */,
@@ -502,7 +502,7 @@
 				FE7C445E27AB5EBB00AA33AC /* AlertService.swift in Sources */,
 				FEF75ECC27B118A30022A1EE /* AddCommentViewController.swift in Sources */,
 				FE49A84A27B945D200C178A4 /* FBWishToWatchModel.swift in Sources */,
-				FE49A84427B902AA00C178A4 /* FirebaseService.swift in Sources */,
+				FE49A84427B902AA00C178A4 /* FirebaseStore.swift in Sources */,
 				FEA886B127AE005400A0320B /* MovieInfoViewModel.swift in Sources */,
 				FE7C445227AB5ABB00AA33AC /* Private.swift in Sources */,
 				FE7C446427AB623900AA33AC /* WeeklyBoxOfficeModel.swift in Sources */,

@@ -10,7 +10,7 @@ import Foundation
 class BoxOfficeViewModel {
     var onUpdated: () -> Void = {}
     
-    private let service = Service()
+    private let movieInfo = MovieInformaition()
     
     var boxOfficeList: BoxOfficeListModel!  // 박스 오피스 순위 정보를 가지고 있음
     var movieInfoList: MovieInfoListModel!  // 썸네일등 각 영화의 상세 정보를 가지고 있음
@@ -34,7 +34,7 @@ class BoxOfficeViewModel {
         movieInfoList = nil
         isUpdate = !isUpdate    // tableView Refresh
         
-        service.fetchWeeklyBoxOffice(by: boxOfficeType) { [weak self] boxOfficeList, movieInfoList, error in
+        movieInfo.fetchWeeklyBoxOffice(by: boxOfficeType) { [weak self] boxOfficeList, movieInfoList, error in
             guard error == nil, let self = self else { completion(error); return }
             self.boxOfficeList = boxOfficeList
             self.movieInfoList = movieInfoList
@@ -48,7 +48,7 @@ class BoxOfficeViewModel {
         movieInfoList = nil
         isUpdate = !isUpdate    // tableView Refresh
         
-        service.fetchDailyBoxOffice { [weak self] boxOfficeList, movieInfoList, error in
+        movieInfo.fetchDailyBoxOffice { [weak self] boxOfficeList, movieInfoList, error in
             guard error == nil, let self = self else { completion(error); return }
             self.boxOfficeList = boxOfficeList
             self.movieInfoList = movieInfoList

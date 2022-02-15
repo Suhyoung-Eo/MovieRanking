@@ -10,7 +10,7 @@ import Foundation
 class MovieInfoViewModel {
     var onUpdated: () -> Void = {}
     
-    private let service = Service()
+    private let MovieInfo = MovieInformaition()
 
     var movieInfoModel: MovieInfoModel!
     
@@ -36,7 +36,7 @@ class MovieInfoViewModel {
     func fetchMovieInfo(title movieName: String, completion: @escaping (Error?) -> Void) {
         movieInfoList = nil
         
-        service.fetchMovieInfo(title: movieName) { [weak self] movieInfoList, error in
+        MovieInfo.fetchMovieInfo(title: movieName) { [weak self] movieInfoList, error in
             guard movieInfoList.movieInfoModel(0).DOCID != "",
                   error == nil else { completion(error); return }
             
@@ -48,7 +48,7 @@ class MovieInfoViewModel {
     func fetchMovieInfo(Id movieId: String, Seq movieSeq: String, completion: @escaping(Error?) -> Void) {
         movieInfoModel = nil
         
-        service.fetchMovieInfo(Id: movieId, Seq: movieSeq) { [weak self] movieInfoList, error in
+        MovieInfo.fetchMovieInfo(Id: movieId, Seq: movieSeq) { [weak self] movieInfoList, error in
             guard movieInfoList.movieInfoModel(0).DOCID != "",
                   error == nil else { completion(error); return }
             

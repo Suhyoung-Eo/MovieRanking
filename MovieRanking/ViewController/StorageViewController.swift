@@ -11,7 +11,7 @@ class StorageViewController: UIViewController {
     
     @IBOutlet weak var collectionView: UICollectionView!
     
-    private let FBviewModel = FirebaseViewModel()
+    private let FBViewModel = FirebaseViewModel()
     private let viewModel = MovieInfoViewModel()
     
     var navigationItemTitle: String = ""
@@ -59,29 +59,23 @@ class StorageViewController: UIViewController {
 extension StorageViewController {
     
     private func loadCurrentUserCommentList() {
-        FBviewModel.loadCurrentUserCommentList { [weak self] error in
-            guard error == nil else { self?.loadAlert(); return }
-            DispatchQueue.main.async {
-                self?.collectionView.reloadData()
-            }
-        }
+        FBViewModel.loadCurrentUserCommentList { [weak self] error in self?.showAlert(by: error) }
     }
     
     private func loadWishToWatchList() {
-        FBviewModel.loadWishToWatchList { [weak self] error in
-            guard error == nil else { self?.loadAlert(); return }
-            DispatchQueue.main.async {
-                self?.collectionView.reloadData()
-            }
-        }
+        FBViewModel.loadWishToWatchList { [weak self] error in self?.showAlert(by: error) }
     }
     
-    private func loadAlert() {
+    private func showAlert(by error: Error?) {
+        guard error == nil else {
+            DispatchQueue.main.async {
+                AlertService.shared.alert(viewController: self, alertTitle: "정보를 불러 오지 못 했습니다")
+            }
+            return
+        }
+        
         DispatchQueue.main.async {
-            AlertService.shared.alert(viewController: self,
-                                      alertTitle: "정보를 불러 오지 못 했습니다",
-                                      message: "",
-                                      actionTitle: "확인")
+            self.collectionView.reloadData()
         }
     }
 }
@@ -97,9 +91,9 @@ extension StorageViewController: UICollectionViewDataSource {
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         switch navigationItemTitle {
         case K.Prepare.wishToWatchView:
-            return FBviewModel.wishToWatchListCount
+            return FBViewModel.wishToWatchListCount
         case K.Prepare.estimateView:
-            return FBviewModel.currentUserCommentCount
+            return FBViewModel.currentUserCommentCount
         default:
             return 0
         }
@@ -111,13 +105,13 @@ extension StorageViewController: UICollectionViewDataSource {
         }
         
         if navigationItemTitle == K.Prepare.wishToWatchView {
-            let cellItem = FBviewModel.wishToWatchListModel.wishToWatchListModel(indexPath.row)
+            let cellItem = FBViewModel.wishToWatchListModel.wishToWatchListModel(indexPath.row)
             cell.imageView.setImage(from: cellItem.thumbNailLink)
             cell.movieNameLabel.text = cellItem.movieName
             cell.gradeLabel.text = cellItem.gradeAverage == 0 ? "평점이 없습니다" : "평균 ★ \(String(format: "%.1f", cellItem.gradeAverage))"
             cell.gradeLabel.textColor = .darkGray
         } else {
-            let cellItem = FBviewModel.currentUserCommentListModel.currentUserCommentModel(indexPath.row)
+            let cellItem = FBViewModel.currentUserCommentListModel.currentUserCommentModel(indexPath.row)
             cell.imageView.setImage(from: cellItem.thumbNailLink)
             cell.movieNameLabel.text = cellItem.movieName
             cell.gradeLabel.text = "평가함 ★ \(cellItem.grade)"
@@ -133,27 +127,21 @@ extension StorageViewController: UICollectionViewDelegate {
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         
-        let movieInfo = FBviewModel.setMovieInfo(by: navigationItemTitle, index: indexPath.row)
+        let movieInfo = FBViewModel.setMovieInfo(by: navigationItemTitle, index: indexPath.row)
         let movieId = movieInfo.0
         let movieSeq = movieInfo.1
         
         viewModel.fetchMovieInfo(Id: movieId, Seq: movieSeq) { [weak self] error in
             guard error == nil else {
                 DispatchQueue.main.async {
-                    AlertService.shared.alert(viewController: self,
-                                              alertTitle: "네트워크 장애",
-                                              message: error?.localizedDescription,
-                                              actionTitle: "다시 검색 해보세요")
+                    AlertService.shared.alert(viewController: self, alertTitle: "네트워크 장애", message: error?.localizedDescription, actionTitle: "다시 검색 해보세요")
                 }
                 return
             }
             
             if self?.viewModel.movieInfoModel == nil {
                 DispatchQueue.main.async {
-                    AlertService.shared.alert(viewController: self,
-                                              alertTitle: "검색 된 영화가 없습니다",
-                                              message: "다른 컨탠츠를 검색 해보세요",
-                                              actionTitle: "확인")
+                    AlertService.shared.alert(viewController: self, alertTitle: "해당 영화 정보가 없습니다")
                 }
                 return
             }

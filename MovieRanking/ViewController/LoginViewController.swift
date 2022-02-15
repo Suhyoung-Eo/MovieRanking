@@ -31,10 +31,7 @@ class LoginViewController: UIViewController {
             viewModel.logIn(email: email, password: password) { [weak self] error in
                 guard error == nil else {
                     DispatchQueue.main.async {
-                        AlertService.shared.alert(viewController: self,
-                                                  alertTitle: "로그인에 실패 했습니다",
-                                                  message: error?.localizedDescription,
-                                                  actionTitle: "확인")
+                        AlertService.shared.alert(viewController: self, alertTitle: "로그인에 실패 했습니다", message: error?.localizedDescription)
                     }
                     return
                 }
@@ -46,7 +43,7 @@ class LoginViewController: UIViewController {
     private func alertService() {
         DispatchQueue.main.async { [weak self] in
             let alert = UIAlertController(title: "로그인에 성공 했습니다", message: nil, preferredStyle: .alert)
-            let action = UIAlertAction(title: "확인", style: .default) { [weak self] action in
+            let action = UIAlertAction(title: "확인", style: .default) { action in
                 self?.navigationController?.popViewController(animated: true)
             }
             alert.addAction(action)

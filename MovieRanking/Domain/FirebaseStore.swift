@@ -1,5 +1,5 @@
 //
-//  FirebaseService.swift
+//  FirebaseStore.swift
 //  MovieRanking
 //
 //  Created by Suhyoung Eo on 2022/02/13.
@@ -7,7 +7,7 @@
 
 import Firebase
 
-class FirebaseService {
+class FirebaseStore {
     
     private let db = Firestore.firestore()
     
