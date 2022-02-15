@@ -20,7 +20,7 @@ class SearchMovieViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        tableView.register(UINib(nibName: K.CellIdentifier.searchMovieCell, bundle: nil), forCellReuseIdentifier: K.CellIdentifier.searchMovieCell)
+        tableView.register(UINib(nibName: K.CellId.searchMovieCell, bundle: nil), forCellReuseIdentifier: K.CellId.searchMovieCell)
         tableView.dataSource = self
         tableView.delegate = self
         tableView.separatorStyle = .none
@@ -78,7 +78,7 @@ extension SearchMovieViewController: UITableViewDataSource {
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        guard let cell = tableView.dequeueReusableCell(withIdentifier: K.CellIdentifier.searchMovieCell, for: indexPath) as? SearchMovieCell else {
+        guard let cell = tableView.dequeueReusableCell(withIdentifier: K.CellId.searchMovieCell, for: indexPath) as? SearchMovieCell else {
             fatalError("Could not found ViewCell")
         }
 
@@ -101,7 +101,7 @@ extension SearchMovieViewController: UITableViewDataSource {
 extension SearchMovieViewController: UITableViewDelegate {
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        performSegue(withIdentifier: K.SegueIdentifier.movieInfoView, sender: nil)
+        performSegue(withIdentifier: K.SegueId.movieInfoView, sender: nil)
     }
 }
 

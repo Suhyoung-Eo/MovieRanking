@@ -66,20 +66,20 @@ class AddCommentViewController: UIViewController {
         }
         
         viewModel.addComment(DOCID: movieInfo.DOCID,
-                             movieId: movieInfo.movieName,
+                             movieId: movieInfo.movieId,
                              movieSeq: movieInfo.movieSeq,
                              movieName: movieInfo.movieName,
                              thumbNailLink: movieInfo.thumbNailLinks[0],
                              grade: grade,
-                             comment: comment) { [weak self] error in
+                             comment: comment){ [weak self] error in
             
-            guard error == nil else {
+            if let error = error {
                 DispatchQueue.main.async {
-                    AlertService.shared.alert(viewController: self, alertTitle: "코맨트 등록에 실패 했습니다", message: error?.localizedDescription)
+                    AlertService.shared.alert(viewController: self, alertTitle: "코맨트 등록에 실패 했습니다", message: error.localizedDescription)
                 }
-                return
+            } else {
+                self?.dismiss(animated: true, completion: nil)
             }
-            self?.dismiss(animated: true, completion: nil)
         }
     }
     
@@ -139,6 +139,7 @@ class AddCommentViewController: UIViewController {
         }
         let cancelAction = UIAlertAction(title: "취소", style: .cancel) { [weak self] action in
             self?.loadStarImages(by: self?.viewModel.userComment?.grade ?? 0) {
+                self?.grade = self?.viewModel.userComment?.grade ?? 0
                 self?.setStarImage()
             }
         }

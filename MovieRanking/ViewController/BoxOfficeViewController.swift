@@ -25,7 +25,7 @@ class BoxOfficeViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        tableView.register(UINib(nibName: K.CellIdentifier.boxOfficeCell, bundle: nil), forCellReuseIdentifier: K.CellIdentifier.boxOfficeCell)
+        tableView.register(UINib(nibName: K.CellId.boxOfficeCell, bundle: nil), forCellReuseIdentifier: K.CellId.boxOfficeCell)
         tableView.dataSource = self
         tableView.delegate = self
         tableView.separatorStyle = .none
@@ -57,7 +57,7 @@ class BoxOfficeViewController: UIViewController {
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         
-        if let sender = sender as? String, sender == K.SegueIdentifier.movieInfoView {
+        if let sender = sender as? String, sender == K.SegueId.movieInfoView {
             guard let destinationVC = segue.destination as? MovieInfoViewController else {
                 fatalError("Could not found segue destination")
             }
@@ -149,7 +149,7 @@ extension BoxOfficeViewController: UITableViewDataSource {
     }    
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        guard let cell = tableView.dequeueReusableCell(withIdentifier: K.CellIdentifier.boxOfficeCell, for: indexPath) as? BoxOfficeCell else {
+        guard let cell = tableView.dequeueReusableCell(withIdentifier: K.CellId.boxOfficeCell, for: indexPath) as? BoxOfficeCell else {
             fatalError("Could not found ViewCell")
         }
         
@@ -176,11 +176,11 @@ extension BoxOfficeViewController: UITableViewDataSource {
 extension BoxOfficeViewController: UITableViewDelegate {
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        guard viewModel.movieInfoList.movieInfoModel(indexPath.row).DOCID != ""  else {
+        if viewModel.movieInfoList.movieInfoModel(indexPath.row).DOCID.isEmpty {
             AlertService.shared.alert(viewController: self, alertTitle: "해당 영화의 상세 정보가 없습니다.")
             return
         }
-        performSegue(withIdentifier: K.SegueIdentifier.movieInfoView, sender: K.SegueIdentifier.movieInfoView)
+        performSegue(withIdentifier: K.SegueId.movieInfoView, sender: K.SegueId.movieInfoView)
     }
 }
 

@@ -20,13 +20,13 @@ class MovieInfoViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        tableView.register(UINib(nibName: K.CellIdentifier.movieImageCell, bundle: nil), forCellReuseIdentifier: K.CellIdentifier.movieImageCell)
-        tableView.register(UINib(nibName: K.CellIdentifier.ratingStarsCell, bundle: nil), forCellReuseIdentifier: K.CellIdentifier.ratingStarsCell)
-        tableView.register(UINib(nibName: K.CellIdentifier.userInteractionCell, bundle: nil), forCellReuseIdentifier: K.CellIdentifier.userInteractionCell)
-        tableView.register(UINib(nibName: K.CellIdentifier.detailInfoCell, bundle: nil), forCellReuseIdentifier: K.CellIdentifier.detailInfoCell)
-        tableView.register(UINib(nibName: K.CellIdentifier.staffsInfoCell, bundle: nil), forCellReuseIdentifier: K.CellIdentifier.staffsInfoCell)
-        tableView.register(UINib(nibName: K.CellIdentifier.commentHeadCell, bundle: nil), forCellReuseIdentifier: K.CellIdentifier.commentHeadCell)
-        tableView.register(UINib(nibName: K.CellIdentifier.commentCell, bundle: nil), forCellReuseIdentifier: K.CellIdentifier.commentCell)
+        tableView.register(UINib(nibName: K.CellId.movieImageCell, bundle: nil), forCellReuseIdentifier: K.CellId.movieImageCell)
+        tableView.register(UINib(nibName: K.CellId.ratingStarsCell, bundle: nil), forCellReuseIdentifier: K.CellId.ratingStarsCell)
+        tableView.register(UINib(nibName: K.CellId.userInteractionCell, bundle: nil), forCellReuseIdentifier: K.CellId.userInteractionCell)
+        tableView.register(UINib(nibName: K.CellId.detailInfoCell, bundle: nil), forCellReuseIdentifier: K.CellId.detailInfoCell)
+        tableView.register(UINib(nibName: K.CellId.staffsInfoCell, bundle: nil), forCellReuseIdentifier: K.CellId.staffsInfoCell)
+        tableView.register(UINib(nibName: K.CellId.commentHeadCell, bundle: nil), forCellReuseIdentifier: K.CellId.commentHeadCell)
+        tableView.register(UINib(nibName: K.CellId.commentCell, bundle: nil), forCellReuseIdentifier: K.CellId.commentCell)
         tableView.dataSource = self
         tableView.delegate = self
         
@@ -54,10 +54,8 @@ class MovieInfoViewController: UIViewController {
     }
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        
-        guard let sender = sender as? String else { return }
-        
-        switch sender {
+    
+        switch sender as? String {
         case K.Prepare.postImageView:
             guard let destinationVC = segue.destination as? ImageViewController else {
                 fatalError("Could not found segue destination")
@@ -94,18 +92,18 @@ extension MovieInfoViewController {
     
     @objc private func tappedPosterImage(gesture: UITapGestureRecognizer) {
         if !movieInfo.thumbNailLinks[0].isEmpty {
-            performSegue(withIdentifier: K.SegueIdentifier.imageView, sender: K.Prepare.postImageView)
+            performSegue(withIdentifier: K.SegueId.imageView, sender: K.Prepare.postImageView)
         }
     }
     
     @objc private func tappedstllImage(gesture: UITapGestureRecognizer) {
         if !movieInfo.stllsLinks[0].isEmpty {
-            performSegue(withIdentifier: K.SegueIdentifier.imageView, sender: K.Prepare.stllImageView)
+            performSegue(withIdentifier: K.SegueId.imageView, sender: K.Prepare.stllImageView)
         }
     }
     
     private func loadComment() {
-        viewModel.loadComment(DOCID: movieInfo.DOCID) { [weak self] error in
+        viewModel.loadCommentList(DOCID: movieInfo.DOCID) { [weak self] error in
             guard error == nil else {
                 DispatchQueue.main.async {
                     AlertService.shared.alert(viewController: self, alertTitle: "코멘트를 불러 오지 못 했습니다", message: error?.localizedDescription)
@@ -165,7 +163,7 @@ extension MovieInfoViewController: UITableViewDataSource {
         
         switch indexPath.section {
         case 0:
-            guard let cell = tableView.dequeueReusableCell(withIdentifier: K.CellIdentifier.movieImageCell) as? MovieImageCell else {
+            guard let cell = tableView.dequeueReusableCell(withIdentifier: K.CellId.movieImageCell) as? MovieImageCell else {
                 fatalError("Could not found ViewCell")
             }
             
@@ -190,7 +188,7 @@ extension MovieInfoViewController: UITableViewDataSource {
             
             return cell
         case 1:
-            guard let cell = tableView.dequeueReusableCell(withIdentifier: K.CellIdentifier.ratingStarsCell) as? RatingStarsCell else {
+            guard let cell = tableView.dequeueReusableCell(withIdentifier: K.CellId.ratingStarsCell) as? RatingStarsCell else {
                 fatalError("Could not found ViewCell")
             }
             
@@ -200,7 +198,7 @@ extension MovieInfoViewController: UITableViewDataSource {
             
             return cell
         case 2:
-            guard let cell = tableView.dequeueReusableCell(withIdentifier: K.CellIdentifier.userInteractionCell) as? UserInteractionCell else {
+            guard let cell = tableView.dequeueReusableCell(withIdentifier: K.CellId.userInteractionCell) as? UserInteractionCell else {
                 fatalError("Could not found ViewCell")
             }
             
@@ -212,7 +210,7 @@ extension MovieInfoViewController: UITableViewDataSource {
             
             return cell
         case 3:
-            guard let cell = tableView.dequeueReusableCell(withIdentifier: K.CellIdentifier.detailInfoCell) as? DetailInfoCell else {
+            guard let cell = tableView.dequeueReusableCell(withIdentifier: K.CellId.detailInfoCell) as? DetailInfoCell else {
                 fatalError("Could not found ViewCell")
             }
             
@@ -228,7 +226,7 @@ extension MovieInfoViewController: UITableViewDataSource {
             
             return cell
         case 4:
-            guard let cell = tableView.dequeueReusableCell(withIdentifier: K.CellIdentifier.staffsInfoCell) as? StaffsInfoCell else {
+            guard let cell = tableView.dequeueReusableCell(withIdentifier: K.CellId.staffsInfoCell) as? StaffsInfoCell else {
                 fatalError("Could not found ViewCell")
             }
             
@@ -240,14 +238,14 @@ extension MovieInfoViewController: UITableViewDataSource {
             
             return cell
         case 5:
-            guard let cell = tableView.dequeueReusableCell(withIdentifier: K.CellIdentifier.commentHeadCell) as? CommentHeadCell else {
+            guard let cell = tableView.dequeueReusableCell(withIdentifier: K.CellId.commentHeadCell) as? CommentHeadCell else {
                 fatalError("Could not found ViewCell")
             }
             cell.selectionStyle = .none
             
             return cell
         case 6:
-            guard let cell = tableView.dequeueReusableCell(withIdentifier: K.CellIdentifier.commentCell) as? CommentCell else {
+            guard let cell = tableView.dequeueReusableCell(withIdentifier: K.CellId.commentCell) as? CommentCell else {
                 fatalError("Could not found ViewCell")
             }
             
@@ -276,14 +274,7 @@ extension MovieInfoViewController: UITableViewDataSource {
 extension MovieInfoViewController: UITableViewDelegate {
     
     func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
-        switch section {
-        case 0:
-            return 0
-        case 1:
-            return 0
-        default:
-            return 3
-        }
+        return CGFloat(viewModel.heightForHeader(by: section))
     }
     
     func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
@@ -299,11 +290,11 @@ extension MovieInfoViewController: UITableViewDelegate {
 extension MovieInfoViewController: StaffsInfoCellDelegate, UserInteractionCellDelegate {
     
     func pushedStaffsInfoViewButton(data: Any) {
-        performSegue(withIdentifier: K.SegueIdentifier.staffsInfoTableView, sender: data)
+        performSegue(withIdentifier: K.SegueId.staffsInfoTableView, sender: data)
     }
     
     func pushedAddCommentButton(data: Any) {
-        performSegue(withIdentifier: K.SegueIdentifier.addCommentView, sender: data)
+        performSegue(withIdentifier: K.SegueId.addCommentView, sender: data)
     }
     
     func pushedWishToWatchButton() {

@@ -42,15 +42,13 @@ class AccountViewController: UIViewController {
         if viewModel.userId != nil {
             logOutAlert()
         } else {
-            performSegue(withIdentifier: K.SegueIdentifier.loginView, sender: sender)
+            performSegue(withIdentifier: K.SegueId.loginView, sender: sender)
         }
     }
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         
-        guard let sender = sender as? String else { return }
-        
-        switch sender {
+        switch sender as? String {
         case K.Prepare.wishToWatchView:
             guard let destinationVC = segue.destination as? StorageViewController else {
                 fatalError("Could not found segue destination")
@@ -111,7 +109,7 @@ extension AccountViewController: UITableViewDataSource {
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: K.CellIdentifier.accountCell, for: indexPath)
+        let cell = tableView.dequeueReusableCell(withIdentifier: K.CellId.accountCell, for: indexPath)
         
         cell.selectionStyle = .none
         cell.textLabel?.textAlignment = .center
@@ -146,11 +144,11 @@ extension AccountViewController: UITableViewDelegate {
         
         switch indexPath.section {
         case 0:
-            performSegue(withIdentifier: K.SegueIdentifier.storageView, sender: K.Prepare.wishToWatchView)
+            performSegue(withIdentifier: K.SegueId.storageView, sender: K.Prepare.wishToWatchView)
         case 1:
-            performSegue(withIdentifier: K.SegueIdentifier.storageView, sender: K.Prepare.estimateView)
+            performSegue(withIdentifier: K.SegueId.storageView, sender: K.Prepare.estimateView)
         case 2:
-            // performSegue(withIdentifier: K.SegueIdentifier.movieInfoView, sender: K.Prepare.userCommentView)
+            performSegue(withIdentifier: K.SegueId.commentListView, sender: K.Prepare.userCommentView)
             break
         default:
             break

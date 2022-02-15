@@ -24,8 +24,8 @@ class StorageViewController: UIViewController {
         
         navigationItem.title = navigationItemTitle
         
-        loadCurrentUserCommentList()
-        loadWishToWatchList()
+        FBViewModel.loadEstimateList { [weak self] error in self?.showAlert(by: error) }
+        FBViewModel.loadWishToWatchList { [weak self] error in self?.showAlert(by: error) }
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -57,14 +57,6 @@ class StorageViewController: UIViewController {
 
 extension StorageViewController {
     
-    private func loadCurrentUserCommentList() {
-        FBViewModel.loadEstimateList { [weak self] error in self?.showAlert(by: error) }
-    }
-    
-    private func loadWishToWatchList() {
-        FBViewModel.loadWishToWatchList { [weak self] error in self?.showAlert(by: error) }
-    }
-    
     private func showAlert(by error: Error?) {
         guard error == nil else {
             DispatchQueue.main.async {
@@ -92,7 +84,7 @@ extension StorageViewController: UICollectionViewDataSource {
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: K.CellIdentifier.storageCell, for: indexPath) as? StorageCell else {
+        guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: K.CellId.storageCell, for: indexPath) as? StorageCell else {
             fatalError("StorageCell is not founded")
         }
         
@@ -124,7 +116,7 @@ extension StorageViewController: UICollectionViewDelegate {
         viewModel.fetchMovieInfo(Id: movieInfo.0, Seq: movieInfo.1) { [weak self] error in
             guard error == nil else {
                 DispatchQueue.main.async {
-                    AlertService.shared.alert(viewController: self, alertTitle: "네트워크 장애", message: error?.localizedDescription, actionTitle: "다시 검색 해보세요")
+                    AlertService.shared.alert(viewController: self, alertTitle: "네트워크 장애", message: error?.localizedDescription)
                 }
                 return
             }
@@ -137,7 +129,7 @@ extension StorageViewController: UICollectionViewDelegate {
             }
             
             DispatchQueue.main.async {
-                self?.performSegue(withIdentifier: K.SegueIdentifier.movieInfoView, sender: nil)
+                self?.performSegue(withIdentifier: K.SegueId.movieInfoView, sender: nil)
             }
         }
     }

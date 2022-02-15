@@ -118,7 +118,7 @@ extension ImageViewController: UICollectionViewDataSource {
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: K.CellIdentifier.imageCollectionViewCell, for: indexPath) as? ImageCollectionViewCell else {
+        guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: K.CellId.imageCollectionViewCell, for: indexPath) as? ImageCollectionViewCell else {
             fatalError("Could not found ViewCell")
         }
         cell.imageView.setImage(from: imageLinks[indexPath.row])

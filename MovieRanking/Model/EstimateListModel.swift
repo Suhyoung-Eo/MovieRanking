@@ -36,6 +36,10 @@ struct EstimateModel {
         self.FBEstimateModel = FBEstimateModel
     }
     
+    var DOCID: String {
+        return FBEstimateModel.DOCID
+    }
+    
     var movieId: String {
         return FBEstimateModel.movieId
     }

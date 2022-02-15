@@ -8,6 +8,7 @@
 import Foundation
 
 struct FBEstimateModel {
+    let DOCID: String
     let movieId: String
     let movieSeq: String
     let movieName: String
@@ -20,12 +21,13 @@ struct FBEstimateModel {
 extension FBEstimateModel {
     
     static var empty: FBEstimateModel {
-        return FBEstimateModel(movieId: "",
-                              movieSeq: "",
-                              movieName: "",
-                              thumbNailLink: "",
-                              grade: 0.0,
-                              comment: "",
-                              date: "")
+        return FBEstimateModel(DOCID: "",
+                               movieId: "",
+                               movieSeq: "",
+                               movieName: "",
+                               thumbNailLink: "",
+                               grade: 0.0,
+                               comment: "",
+                               date: "")
     }
 }

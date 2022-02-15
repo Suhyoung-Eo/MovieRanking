@@ -37,8 +37,7 @@ class MovieInfoViewModel {
         movieInfoList = nil
         
         MovieInfo.fetchMovieInfo(title: movieName) { [weak self] movieInfoList, error in
-            guard movieInfoList.movieInfoModel(0).DOCID != "",
-                  error == nil else { completion(error); return }
+            guard error == nil, !movieInfoList.movieInfoModel(0).DOCID.isEmpty else { completion(error); return }
             
             self?.movieInfoList = movieInfoList
             completion(nil)
@@ -49,8 +48,7 @@ class MovieInfoViewModel {
         movieInfoModel = nil
         
         MovieInfo.fetchMovieInfo(Id: movieId, Seq: movieSeq) { [weak self] movieInfoList, error in
-            guard movieInfoList.movieInfoModel(0).DOCID != "",
-                  error == nil else { completion(error); return }
+            guard error == nil, !movieInfoList.movieInfoModel(0).DOCID.isEmpty else { completion(error); return }
             
             self?.movieInfoModel = movieInfoList.movieInfoModel(0)
             completion(nil)
