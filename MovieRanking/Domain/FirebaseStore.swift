@@ -51,9 +51,11 @@ class FirebaseStore {
             
             var comments: [FBCommentModel] = []
             var gradeTotal: Float = 0.0
-            var gradeAverage: Float = 0
+            var gradeCount: Float = 0.0
+            var gradeAverage: Float = 0.0
             
             if let snapshotDocuments = querySnapshot?.documents {
+                
                 for doc in snapshotDocuments {
                     let data = doc.data()
                     
@@ -68,18 +70,19 @@ class FirebaseStore {
                                                             grade: grade,
                                                             comment: comment,
                                                             date: date)
-                        comments.append(FBCommentModel)
+                        
+                        if !comment.isEmpty {
+                            comments.append(FBCommentModel)
+                        }
+                        
+                        gradeTotal += grade
+                        gradeCount += 1
                     }
                 }
                 
                 // 평균 평점
-                if comments.count == 0 {
-                    gradeAverage = 0
-                } else {
-                    for comment in comments {
-                        gradeTotal += comment.grade
-                    }
-                    gradeAverage = gradeTotal / Float(comments.count)
+                if gradeCount != 0 {
+                    gradeAverage = gradeTotal / gradeCount
                 }
                 
                 completion(CommentListModel(comments), gradeAverage, nil)
@@ -129,6 +132,7 @@ class FirebaseStore {
             var FBEstimateModelList: [FBEstimateModel] = []
             
             if let snapshotDocuments = querySnapshot?.documents {
+                
                 for doc in snapshotDocuments {
                     let data = doc.data()
                     
@@ -149,6 +153,7 @@ class FirebaseStore {
                                                       grade: grade,
                                                       comment: comment,
                                                       date: date)
+                        
                         FBEstimateModelList.append(newItem)
                     }
                 }
@@ -171,6 +176,7 @@ class FirebaseStore {
             var wishToWatchList: [FBWishToWatchModel] = []
             
             if let snapshotDocuments = querySnapshot?.documents {
+                
                 for doc in snapshotDocuments {
                     let data = doc.data()
                     
@@ -189,6 +195,7 @@ class FirebaseStore {
                                                          gradeAverage: gradeAverage,
                                                          isWishToWatch: wishToWatch,
                                                          date: date)
+                        
                         wishToWatchList.append(newItem)
                     }
                 }
@@ -219,6 +226,7 @@ class FirebaseStore {
             var FBEstimateModelList: [FBEstimateModel] = []
             
             if let snapshotDocuments = querySnapshot?.documents {
+                
                 for doc in snapshotDocuments {
                     let data = doc.data()
                     
@@ -240,6 +248,7 @@ class FirebaseStore {
                                                       grade: grade,
                                                       comment: comment,
                                                       date: date)
+                        
                         FBEstimateModelList.append(newItem)
                     }
                 }

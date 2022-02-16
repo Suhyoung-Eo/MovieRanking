@@ -20,7 +20,7 @@ class RatingStarsCell: UITableViewCell {
     
     weak var parent: UIViewController!
     
-    var movieInfo = MovieInfoModel(MovieInfo.empty) {
+    var movieInfo: MovieInfoModel! {
         didSet {
             viewModel.loadUserComment(DOCID: movieInfo.DOCID) { [weak self] error in
                 guard error == nil else {
@@ -101,7 +101,7 @@ class RatingStarsCell: UITableViewCell {
     }
     
     private func deleteComment() {
-        if viewModel.userId == nil { return }
+        if viewModel.userId == nil || viewModel.userComment.grade == 0 { return }
         let alert = UIAlertController(title: "삭제 하시겠습니까?", message: nil, preferredStyle: .alert)
         let action = UIAlertAction(title: "확인", style: .default) { [weak self] action in
             self?.viewModel.deleteComment(DOCID: self?.movieInfo.DOCID ?? "",
