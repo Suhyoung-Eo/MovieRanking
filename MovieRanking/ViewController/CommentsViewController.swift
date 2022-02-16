@@ -19,8 +19,6 @@ class CommentsViewController: UIViewController {
 
         tableView.dataSource = self
         
-        // tableView.separatorStyle = .none
-        
         navigationItem.title = "내코멘트"
         FBViewModel.loadUserCommentList { [weak self] error in self?.showAlert(by: error) }
     }
@@ -35,6 +33,10 @@ class CommentsViewController: UIViewController {
         let backItem = UIBarButtonItem()
         backItem.title = ""
         navigationItem.backBarButtonItem = backItem
+    }
+    
+    deinit {
+        print("deinit CommentsViewController")
     }
 }
 
@@ -102,7 +104,7 @@ extension CommentsViewController: UITableViewDataSource {
 extension CommentsViewController: UserCommentCellDelegate {
     
     func pushedThumbNailImageButton(index: Int) {
-        print("################################ \(index)")
+  
         let movieInfo = FBViewModel.userCommentListModel.estimateModel(index)
         
         viewModel.fetchMovieInfo(Id: movieInfo.movieId, Seq: movieInfo.movieSeq) { [weak self] error in

@@ -43,9 +43,7 @@ class LoginViewController: UIViewController {
     private func alertService() {
         DispatchQueue.main.async { [weak self] in
             let alert = UIAlertController(title: "로그인에 성공 했습니다", message: nil, preferredStyle: .alert)
-            let action = UIAlertAction(title: "확인", style: .default) { action in
-                self?.navigationController?.popViewController(animated: true)
-            }
+            let action = UIAlertAction(title: "확인", style: .default) { action in self?.navigationController?.popViewController(animated: true) }
             alert.addAction(action)
             self?.present(alert, animated: true, completion: nil)
         }
@@ -55,4 +53,3 @@ class LoginViewController: UIViewController {
         print("deinit LoginViewController")
     }
 }
-

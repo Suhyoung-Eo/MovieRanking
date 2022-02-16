@@ -30,11 +30,6 @@ class AddCommentViewController: UIViewController {
         commentTextView.delegate = self
         movieNameLabel.text = movieInfo.movieName
         
-    }
-    
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
-        
         // 이전에 코멘트를 남긴 경우 불러옴
         viewModel.loadUserComment(DOCID: movieInfo.DOCID) { [weak self] error in
             

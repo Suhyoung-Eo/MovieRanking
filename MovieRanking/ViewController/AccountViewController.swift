@@ -124,7 +124,7 @@ extension AccountViewController: UITableViewDataSource {
         case 2:
             cell.textLabel?.text = K.Prepare.userCommentView
         default:
-            cell.textLabel?.text = K.Prepare.wishToWatchView
+            break
         }
         
         return cell

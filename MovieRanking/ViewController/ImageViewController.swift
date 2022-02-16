@@ -48,10 +48,7 @@ class ImageViewController: UIViewController {
     @IBAction func pressedRightButton(_ sender: Any) {
         DownloadImage.shared.download(from: imageLinks[currentPage]) { image in
             if let image = image {
-                UIImageWriteToSavedPhotosAlbum(image,
-                                               self,
-                                               #selector(self.saveImage(image:didFinishSavingWithError:contextInfo:)),
-                                               nil)
+                UIImageWriteToSavedPhotosAlbum(image, self, #selector(self.saveImage(image:didFinishSavingWithError:contextInfo:)), nil)
             }
         }
     }
