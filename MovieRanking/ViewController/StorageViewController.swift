@@ -10,9 +10,9 @@ import UIKit
 class StorageViewController: UIViewController {
     
     @IBOutlet weak var collectionView: UICollectionView!
+    @IBOutlet weak var activityIndicator: UIActivityIndicatorView!
     
-    private let FBViewModel = FirebaseViewModel()
-    private let viewModel = MovieInfoViewModel()
+    private let viewModel = AccountViewModel()
     
     var navigationItemTitle: String = ""
     
@@ -22,10 +22,13 @@ class StorageViewController: UIViewController {
         collectionView.dataSource = self
         collectionView.delegate = self
         
+        activityIndicator.isHidden = false
+        activityIndicator.startAnimating()
+        
         navigationItem.title = navigationItemTitle
         
-        FBViewModel.loadEstimateList { [weak self] error in self?.showAlert(by: error) }
-        FBViewModel.loadWishToWatchList { [weak self] error in self?.showAlert(by: error) }
+        viewModel.loadEstimateList { [weak self] error in self?.showAlert(by: error) }
+        viewModel.loadWishToWatchList { [weak self] error in self?.showAlert(by: error) }
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -38,7 +41,7 @@ class StorageViewController: UIViewController {
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         guard let destinationVC = segue.destination as? MovieInfoViewController else {
-            fatalError("Could not found segue destination")
+            fatalError("Could not found MovieInfoViewController")
         }
         
         destinationVC.movieInfo = viewModel.movieInfoModel
@@ -58,15 +61,15 @@ class StorageViewController: UIViewController {
 extension StorageViewController {
     
     private func showAlert(by error: Error?) {
-        guard error == nil else {
+        activityIndicator.stopAnimating()
+        if let error = error {
             DispatchQueue.main.async {
-                AlertService.shared.alert(viewController: self, alertTitle: "정보를 불러 오지 못 했습니다")
+                AlertService.shared.alert(viewController: self, alertTitle: "정보를 불러오지 못했습니다", message: error.localizedDescription)
             }
-            return
-        }
-        
-        DispatchQueue.main.async {
-            self.collectionView.reloadData()
+        } else {
+            DispatchQueue.main.async {
+                self.collectionView.reloadData()
+            }
         }
     }
 }
@@ -80,22 +83,22 @@ extension StorageViewController: UICollectionViewDataSource {
     }
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return FBViewModel.storageNumberOfItems(by: navigationItemTitle)
+        return viewModel.storageNumberOfItems(by: navigationItemTitle)
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: K.CellId.storageCell, for: indexPath) as? StorageCell else {
-            fatalError("StorageCell is not founded")
+            fatalError("Could not found StorageCell")
         }
         
         if navigationItemTitle == K.Prepare.wishToWatchView {
-            let cellItem = FBViewModel.wishToWatchListModel.wishToWatchListModel(indexPath.row)
+            let cellItem = viewModel.wishToWatchListModel.wishToWatchListModel(indexPath.row)
             cell.imageView.setImage(from: cellItem.thumbNailLink)
             cell.movieNameLabel.text = cellItem.movieName
             cell.gradeLabel.text = cellItem.gradeAverage == 0 ? "평점이 없습니다" : "평균 ★ \(String(format: "%.1f", cellItem.gradeAverage))"
             cell.gradeLabel.textColor = .darkGray
         } else {
-            let cellItem = FBViewModel.estimateListModel.estimateModel(indexPath.row)
+            let cellItem = viewModel.estimateListModel.estimateModel(indexPath.row)
             cell.imageView.setImage(from: cellItem.thumbNailLink)
             cell.movieNameLabel.text = cellItem.movieName
             cell.gradeLabel.text = "평가함 ★ \(cellItem.grade)"
@@ -111,25 +114,17 @@ extension StorageViewController: UICollectionViewDelegate {
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         
-        let movieInfo = FBViewModel.setMovieInfo(by: navigationItemTitle, index: indexPath.row)
-        
-        viewModel.fetchMovieInfo(Id: movieInfo.0, Seq: movieInfo.1) { [weak self] error in
-            guard error == nil else {
+        viewModel.loadMovieInfo(by: navigationItemTitle, index: indexPath.row) { [weak self] error in
+            if error != nil || self?.viewModel.movieInfoModel == nil {
                 DispatchQueue.main.async {
-                    AlertService.shared.alert(viewController: self, alertTitle: "네트워크 장애", message: error?.localizedDescription)
+                    AlertService.shared.alert(viewController: self,
+                                              alertTitle: "영화 정보를 불러올 수 없습니다",
+                                              message: error?.localizedDescription)
                 }
-                return
-            }
-            
-            if self?.viewModel.movieInfoModel == nil {
+            } else {
                 DispatchQueue.main.async {
-                    AlertService.shared.alert(viewController: self, alertTitle: "해당 영화 정보가 없습니다")
+                    self?.performSegue(withIdentifier: K.SegueId.movieInfoView, sender: nil)
                 }
-                return
-            }
-            
-            DispatchQueue.main.async {
-                self?.performSegue(withIdentifier: K.SegueId.movieInfoView, sender: nil)
             }
         }
     }

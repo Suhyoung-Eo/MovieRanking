@@ -25,7 +25,7 @@ class RatingStarsCell: UITableViewCell {
             viewModel.loadUserComment(DOCID: movieInfo.DOCID) { [weak self] error in
                 guard error == nil else {
                     DispatchQueue.main.async {
-                        AlertService.shared.alert(viewController: self?.parent, alertTitle: "정보를 불러 오지 못 했습니다")
+                        AlertService.shared.alert(viewController: self?.parent, alertTitle: "정보를 불러오지 못했습니다")
                     }
                     return
                 }
@@ -102,30 +102,28 @@ class RatingStarsCell: UITableViewCell {
     
     private func deleteComment() {
         if viewModel.userId == nil || viewModel.userComment.grade == 0 { return }
-        let alert = UIAlertController(title: "삭제 하시겠습니까?", message: nil, preferredStyle: .alert)
-        let action = UIAlertAction(title: "확인", style: .default) { [weak self] action in
+        
+        let alert = UIAlertController(title: "삭제하시겠습니까?", message: nil, preferredStyle: .alert)
+        alert.addAction(UIAlertAction(title: "확인", style: .default) { [weak self] _ in
             self?.viewModel.deleteComment(DOCID: self?.movieInfo.DOCID ?? "",
                                           userId: self?.viewModel.userComment?.userId ?? "") { _ in }
-        }
-        let cancelAction = UIAlertAction(title: "취소", style: .cancel) { [weak self] action in
+        })
+        alert.addAction(UIAlertAction(title: "취소", style: .cancel) { [weak self] _ in
             self?.loadStarImages(by: self?.viewModel.userComment?.grade ?? 0) {
                 self?.setStarImage()
             }
-        }
-        alert.addAction(action)
-        alert.addAction(cancelAction)
+        })
         parent.present(alert, animated: true)
     }
     
     private func addAlert() {
         if viewModel.userId == nil {
-            let alert = UIAlertController(title: "서비스를 이용하려면 로그인 하세요", message: nil, preferredStyle: .alert)
-            let action = UIAlertAction(title: "확인", style: .default) { [weak self] action in
+            let alert = UIAlertController(title: "서비스를 이용하려면 로그인하세요", message: nil, preferredStyle: .alert)
+            alert.addAction(UIAlertAction(title: "확인", style: .default) { [weak self] _ in
                 self?.loadStarImages(by: 0) {
                     self?.setStarImage()
                 }
-            }
-            alert.addAction(action)
+            })
             parent.present(alert, animated: true)
         }
     }

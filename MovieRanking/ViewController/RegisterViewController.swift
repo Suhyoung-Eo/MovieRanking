@@ -12,7 +12,7 @@ class RegisterViewController: UIViewController {
     @IBOutlet weak var emailTextField: UITextField!
     @IBOutlet weak var passwordTextField: UITextField!
     
-    private let viewModel = FirebaseViewModel()
+    private let viewModel = AccountViewModel()
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -40,9 +40,10 @@ class RegisterViewController: UIViewController {
     }
     
     private func alertService() {
-        let alert = UIAlertController(title: "회원 가입에 성공했습니다", message: "로그인 해 주세요", preferredStyle: .alert)
-        let action = UIAlertAction(title: "확인", style: .default) { [weak self] action in self?.dismiss(animated: true, completion: nil) }
-        alert.addAction(action)
+        let alert = UIAlertController(title: "회원 가입에 성공했습니다", message: "로그인해 주세요", preferredStyle: .alert)
+        alert.addAction(UIAlertAction(title: "확인", style: .default) { [weak self] _ in
+            self?.dismiss(animated: true, completion: nil)
+        })
         present(alert, animated: true, completion: nil)
     }
     

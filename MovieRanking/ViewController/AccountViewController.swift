@@ -13,7 +13,7 @@ class AccountViewController: UIViewController {
     @IBOutlet weak var accountTextLabel: UILabel!
     @IBOutlet weak var accountButton: UIBarButtonItem!
     
-    let viewModel = FirebaseViewModel()
+    let viewModel = AccountViewModel()
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -51,12 +51,12 @@ class AccountViewController: UIViewController {
         switch sender as? String {
         case K.Prepare.wishToWatchView:
             guard let destinationVC = segue.destination as? StorageViewController else {
-                fatalError("Could not found segue destination")
+                fatalError("Could not found StorageViewController")
             }
             destinationVC.navigationItemTitle = K.Prepare.wishToWatchView
         case K.Prepare.estimateView:
             guard let destinationVC = segue.destination as? StorageViewController else {
-                fatalError("Could not found segue destination")
+                fatalError("Could not found StorageViewController")
             }
             destinationVC.navigationItemTitle = K.Prepare.estimateView
         case K.Prepare.userCommentView:
@@ -76,8 +76,8 @@ class AccountViewController: UIViewController {
 extension AccountViewController {
     
     private func logOutAlert() {
-        let alert = UIAlertController(title: "로그아웃 하시겠습니까?", message: nil, preferredStyle: .alert)
-        alert.addAction(UIAlertAction(title: "확인", style: .default) { [weak self] action in self?.logOut() })
+        let alert = UIAlertController(title: "로그아웃하시겠습니까?", message: nil, preferredStyle: .alert)
+        alert.addAction(UIAlertAction(title: "확인", style: .default) { [weak self] _ in self?.logOut() })
         alert.addAction(UIAlertAction(title: "취소", style: .cancel))
         present(alert, animated: true)
     }
@@ -138,7 +138,7 @@ extension AccountViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         
         if viewModel.userId == nil {
-            AlertService.shared.alert(viewController: self, alertTitle: "서비스를 이용하려면 로그인 하세요")
+            AlertService.shared.alert(viewController: self, alertTitle: "서비스를 이용하려면 로그인하세요")
             return
         }
         

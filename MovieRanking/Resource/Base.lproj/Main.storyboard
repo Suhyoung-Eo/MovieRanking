@@ -819,18 +819,25 @@
                                     </collectionViewCell>
                                 </cells>
                             </collectionView>
+                            <activityIndicatorView hidden="YES" opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" hidesWhenStopped="YES" animating="YES" style="large" translatesAutoresizingMaskIntoConstraints="NO" id="RfW-YZ-C54">
+                                <rect key="frame" x="188.5" y="429.5" width="37" height="37"/>
+                                <color key="color" red="0.98039215690000003" green="0.074509803920000006" blue="0.3411764706" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
+                            </activityIndicatorView>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="XJL-Hc-Djw"/>
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                         <constraints>
+                            <constraint firstItem="RfW-YZ-C54" firstAttribute="centerX" secondItem="JaW-w3-DQK" secondAttribute="centerX" id="BMS-CF-m0u"/>
                             <constraint firstItem="XJL-Hc-Djw" firstAttribute="bottom" secondItem="BTb-YP-Vjh" secondAttribute="bottom" id="HJs-mJ-Zdy"/>
                             <constraint firstItem="BTb-YP-Vjh" firstAttribute="top" secondItem="XJL-Hc-Djw" secondAttribute="top" id="czZ-ug-Wwm"/>
                             <constraint firstItem="XJL-Hc-Djw" firstAttribute="trailing" secondItem="BTb-YP-Vjh" secondAttribute="trailing" id="ofe-VB-oen"/>
+                            <constraint firstItem="RfW-YZ-C54" firstAttribute="centerY" secondItem="JaW-w3-DQK" secondAttribute="centerY" id="rvF-Su-9VW"/>
                             <constraint firstItem="BTb-YP-Vjh" firstAttribute="leading" secondItem="XJL-Hc-Djw" secondAttribute="leading" id="yc9-q2-8yu"/>
                         </constraints>
                     </view>
                     <navigationItem key="navigationItem" largeTitleDisplayMode="never" id="gmZ-UL-LTC"/>
                     <connections>
+                        <outlet property="activityIndicator" destination="RfW-YZ-C54" id="arW-Dj-sqn"/>
                         <outlet property="collectionView" destination="BTb-YP-Vjh" id="h9t-j2-Izo"/>
                         <segue destination="JEh-Cz-2hp" kind="show" identifier="goToMovieInfoView" id="qqs-8C-LWQ"/>
                     </connections>
@@ -1016,20 +1023,28 @@
                                     </tableViewCell>
                                 </prototypes>
                             </tableView>
+                            <activityIndicatorView hidden="YES" opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" hidesWhenStopped="YES" animating="YES" style="large" translatesAutoresizingMaskIntoConstraints="NO" id="gKA-Dv-hy5">
+                                <rect key="frame" x="188.5" y="429.5" width="37" height="37"/>
+                                <color key="color" red="0.98039215690000003" green="0.074509803920000006" blue="0.3411764706" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
+                            </activityIndicatorView>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="CXz-4p-W3g"/>
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                         <constraints>
+                            <constraint firstItem="gKA-Dv-hy5" firstAttribute="centerX" secondItem="Z6j-aS-7YZ" secondAttribute="centerX" id="0gS-Eu-vnr"/>
                             <constraint firstItem="CXz-4p-W3g" firstAttribute="bottom" secondItem="syu-Cz-9fI" secondAttribute="bottom" id="7sH-O6-xXe"/>
                             <constraint firstItem="syu-Cz-9fI" firstAttribute="leading" secondItem="CXz-4p-W3g" secondAttribute="leading" id="I6d-gb-MC9"/>
+                            <constraint firstItem="gKA-Dv-hy5" firstAttribute="centerY" secondItem="Z6j-aS-7YZ" secondAttribute="centerY" id="JkQ-VB-olJ"/>
                             <constraint firstItem="CXz-4p-W3g" firstAttribute="trailing" secondItem="syu-Cz-9fI" secondAttribute="trailing" id="oMB-aT-cKM"/>
                             <constraint firstItem="syu-Cz-9fI" firstAttribute="top" secondItem="CXz-4p-W3g" secondAttribute="top" id="z6d-Am-4kh"/>
                         </constraints>
                     </view>
                     <navigationItem key="navigationItem" largeTitleDisplayMode="never" id="yqT-u6-3pu"/>
                     <connections>
+                        <outlet property="activityIndicator" destination="gKA-Dv-hy5" id="wtn-0H-bQV"/>
                         <outlet property="tableView" destination="syu-Cz-9fI" id="5Z2-zD-m99"/>
                         <segue destination="JEh-Cz-2hp" kind="show" identifier="goToMovieInfoView" id="k7z-Kj-JDz"/>
+                        <segue destination="jn7-Gv-kj0" kind="presentation" identifier="goToAddCommentView" id="Ae7-U0-rTO"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="vSs-Co-VAk" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
@@ -1323,7 +1338,8 @@
         </scene>
     </scenes>
     <inferredMetricsTieBreakers>
-        <segue reference="k7z-Kj-JDz"/>
+        <segue reference="Ae7-U0-rTO"/>
+        <segue reference="qqs-8C-LWQ"/>
     </inferredMetricsTieBreakers>
     <resources>
         <image name="background_image" width="875" height="555"/>

@@ -58,22 +58,22 @@ class MovieInfoViewController: UIViewController {
         switch sender as? String {
         case K.Prepare.postImageView:
             guard let destinationVC = segue.destination as? ImageViewController else {
-                fatalError("Could not found segue destination")
+                fatalError("Could not found ImageViewController")
             }
             destinationVC.imageLinks = movieInfo.thumbNailLinks
         case K.Prepare.stllImageView:
             guard let destinationVC = segue.destination as? ImageViewController else {
-                fatalError("Could not found segue destination")
+                fatalError("Could not found ImageViewController")
             }
             destinationVC.imageLinks = movieInfo.stllsLinks
         case K.Prepare.staffView:
             guard let destinationVC = segue.destination as? StaffsInfoTableViewController else {
-                fatalError("Could not found segue destination")
+                fatalError("Could not found StaffsInfoTableViewController")
             }
             destinationVC.staffs = movieInfo.staffs
         case K.Prepare.addCommentView:
             guard let destinationVC = segue.destination as? AddCommentViewController else {
-                fatalError("Could not found segue destination")
+                fatalError("Could not found AddCommentViewController")
             }
             destinationVC.movieInfo = movieInfo
         default:
@@ -106,7 +106,7 @@ extension MovieInfoViewController {
         viewModel.loadCommentList(DOCID: movieInfo.DOCID) { [weak self] error in
             guard error == nil else {
                 DispatchQueue.main.async {
-                    AlertService.shared.alert(viewController: self, alertTitle: "코멘트를 불러 오지 못 했습니다", message: error?.localizedDescription)
+                    AlertService.shared.alert(viewController: self, alertTitle: "코멘트를 불러오지 못했습니다", message: error?.localizedDescription)
                 }
                 return
             }
@@ -135,7 +135,7 @@ extension MovieInfoViewController {
                                    wishToWatch: isWishToWatch) { error in
             if let error = error {
                 DispatchQueue.main.async {
-                    AlertService.shared.alert(viewController: self, alertTitle: "보고싶어요 목록 저장에 실패 했습니다", message: error.localizedDescription)
+                    AlertService.shared.alert(viewController: self, alertTitle: "보고 싶어요 목록 저장에 실패했습니다", message: error.localizedDescription)
                 }
             }
         }
@@ -164,7 +164,7 @@ extension MovieInfoViewController: UITableViewDataSource {
         switch indexPath.section {
         case 0:
             guard let cell = tableView.dequeueReusableCell(withIdentifier: K.CellId.movieImageCell) as? MovieImageCell else {
-                fatalError("Could not found ViewCell")
+                fatalError("Could not found MovieImageCell")
             }
             
             let posterImageTapped = UITapGestureRecognizer(target: self, action: #selector(tappedPosterImage))
@@ -189,7 +189,7 @@ extension MovieInfoViewController: UITableViewDataSource {
             return cell
         case 1:
             guard let cell = tableView.dequeueReusableCell(withIdentifier: K.CellId.ratingStarsCell) as? RatingStarsCell else {
-                fatalError("Could not found ViewCell")
+                fatalError("Could not found RatingStarsCell")
             }
             
             cell.selectionStyle = .none
@@ -199,7 +199,7 @@ extension MovieInfoViewController: UITableViewDataSource {
             return cell
         case 2:
             guard let cell = tableView.dequeueReusableCell(withIdentifier: K.CellId.userInteractionCell) as? UserInteractionCell else {
-                fatalError("Could not found ViewCell")
+                fatalError("Could not found UserInteractionCell")
             }
             
             cell.selectionStyle = .none
@@ -211,7 +211,7 @@ extension MovieInfoViewController: UITableViewDataSource {
             return cell
         case 3:
             guard let cell = tableView.dequeueReusableCell(withIdentifier: K.CellId.detailInfoCell) as? DetailInfoCell else {
-                fatalError("Could not found ViewCell")
+                fatalError("Could not found DetailInfoCell")
             }
             
             cell.selectionStyle = .none
@@ -227,7 +227,7 @@ extension MovieInfoViewController: UITableViewDataSource {
             return cell
         case 4:
             guard let cell = tableView.dequeueReusableCell(withIdentifier: K.CellId.staffsInfoCell) as? StaffsInfoCell else {
-                fatalError("Could not found ViewCell")
+                fatalError("Could not found StaffsInfoCell")
             }
             
             cell.selectionStyle = .none
@@ -239,14 +239,14 @@ extension MovieInfoViewController: UITableViewDataSource {
             return cell
         case 5:
             guard let cell = tableView.dequeueReusableCell(withIdentifier: K.CellId.commentHeadCell) as? CommentHeadCell else {
-                fatalError("Could not found ViewCell")
+                fatalError("Could not found CommentHeadCell")
             }
             cell.selectionStyle = .none
             
             return cell
         case 6:
             guard let cell = tableView.dequeueReusableCell(withIdentifier: K.CellId.commentCell) as? CommentCell else {
-                fatalError("Could not found ViewCell")
+                fatalError("Could not found CommentCell")
             }
             
             cell.selectionStyle = .none
@@ -296,7 +296,7 @@ extension MovieInfoViewController: StaffsInfoCellDelegate, UserInteractionCellDe
     func pushedAddCommentButton(data: Any) {
         performSegue(withIdentifier: K.SegueId.addCommentView, sender: data)
     }
-    
+     
     func pushedWishToWatchButton() {
         isWishToWatch = viewModel.userId == nil ? false : !viewModel.isWishToWatch
         setIsWishToWatch(isWishToWatch)

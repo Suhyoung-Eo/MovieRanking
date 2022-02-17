@@ -7,7 +7,7 @@
 
 import Firebase
 
-class FirebaseStore {
+class FirebaseService {
     
     private let db = Firestore.firestore()
     
@@ -92,7 +92,7 @@ class FirebaseStore {
     
     func loadUserComment(DOCID: String, completion: @escaping (CommentModel?, Error?) -> Void) {
         
-        guard let userId = self.userId else { completion(nil, nil); return }
+        guard let userId = userId else { completion(nil, nil); return }
         
         db.collection(DOCID).document(userId).addSnapshotListener { documentSnapshot, error in
             
@@ -120,7 +120,7 @@ class FirebaseStore {
     
     func loadEstimateList(completion: @escaping (EstimateListModel?, Error?) -> Void) {
         
-        guard let userId = self.userId else { completion(nil, nil); return }
+        guard let userId = userId else { completion(nil, nil); return }
         
         db.collection(userId).order(by: K.FStore.date, descending: true).addSnapshotListener { querySnapshot, error in
             
@@ -164,7 +164,7 @@ class FirebaseStore {
     
     func loadWishToWatchList(completion: @escaping (WishToWatchListModel?, Error?) -> Void) {
         
-        guard let userId = self.userId else { completion(nil, nil); return }
+        guard let userId = userId else { completion(nil, nil); return }
         
         db.collection(userId).order(by: K.FStore.date, descending: true).addSnapshotListener { querySnapshot, error in
             
@@ -205,7 +205,7 @@ class FirebaseStore {
     }
     
     func loadIsWishToWatch(DOCID: String, completion: @escaping (Bool) -> Void) {
-        guard let userId = self.userId else { completion(false); return }
+        guard let userId = userId else { completion(false); return }
         db.collection(userId).document("\(K.FStore.isWishToWatch)\(DOCID)").addSnapshotListener { documentSnapshot, error in
             guard error == nil, let document = documentSnapshot else { completion(false); return }
             completion(document.exists ? true : false)  // true 인 경우에만 데이터가 존재 함
@@ -214,7 +214,7 @@ class FirebaseStore {
     
     func loadUserCommentList(completion: @escaping (EstimateListModel?, Error?) -> Void) {
         
-        guard let userId = self.userId else { completion(nil, nil); return }
+        guard let userId = userId else { completion(nil, nil); return }
         
         db.collection(userId).order(by: K.FStore.date, descending: true).addSnapshotListener { querySnapshot, error in
             
@@ -259,6 +259,9 @@ class FirebaseStore {
     
     //MARK: - Create/ Update data methods
     
+    // add 작업시 addComment()/ addAccountInfo() 한쌍임
+    
+    // collection: DOCID, document: userId
     func addComment(DOCID: String,
                     movieId: String,
                     movieSeq: String,
@@ -276,30 +279,33 @@ class FirebaseStore {
                                                        K.FStore.movieName: movieName,
                                                        K.FStore.grade : grade,
                                                        K.FStore.comment: comment,
-                                                       K.FStore.date: date]) { error in completion(error) }
-        
-        // 서비스 제공을 위한 데이터 저장: collection() <----> document() Field Name 바꿔서 저장
-        addUserInfo(userId: userId,
-                    DOCID: DOCID,
-                    movieId: movieId,
-                    movieSeq: movieSeq,
-                    movieName: movieName,
-                    thumbNailLink: thumbNailLink,
-                    grade: grade,
-                    comment: comment,
-                    date: date) { error in completion(error) }
+                                                       K.FStore.date: date]) { [weak self] error in
+            
+            guard error == nil else { completion(error); return }
+            
+            self?.addAccountInfo(userId: userId,
+                                 DOCID: DOCID,
+                                 movieId: movieId,
+                                 movieSeq: movieSeq,
+                                 movieName: movieName,
+                                 thumbNailLink: thumbNailLink,
+                                 grade: grade,
+                                 comment: comment,
+                                 date: date) { error in completion(error) }
+        }
     }
     
-    private func addUserInfo(userId: String,
-                             DOCID: String,
-                             movieId: String,
-                             movieSeq: String,
-                             movieName: String,
-                             thumbNailLink: String,
-                             grade: Float,
-                             comment: String,
-                             date: String,
-                             completion: @escaping (Error?) -> Void) {
+    // collection: userId, document: DOCID
+    private func addAccountInfo(userId: String,
+                                DOCID: String,
+                                movieId: String,
+                                movieSeq: String,
+                                movieName: String,
+                                thumbNailLink: String,
+                                grade: Float,
+                                comment: String,
+                                date: String,
+                                completion: @escaping (Error?) -> Void) {
         
         db.collection(userId).document(DOCID).setData([K.FStore.DOCID: DOCID,
                                                        K.FStore.movieId: movieId,
@@ -317,12 +323,12 @@ class FirebaseStore {
                           movieName: String,
                           thumbNailLink: String,
                           gradeAverage: Float,
-                          wishToWatch: Bool,
+                          iswishToWatch: Bool,
                           completion: @escaping (Error?) -> Void) {
         
         guard let userId = self.userId else { completion(nil); return }
         
-        guard wishToWatch else {
+        guard iswishToWatch else {
             db.collection(userId).document("\(K.FStore.isWishToWatch)\(DOCID)")
                 .delete() { error in completion(error) }
             return
@@ -336,20 +342,23 @@ class FirebaseStore {
                       K.FStore.movieName: movieName,
                       K.FStore.thumbNailLink: thumbNailLink,
                       K.FStore.gradeAverage: gradeAverage,
-                      K.FStore.isWishToWatch: wishToWatch,
+                      K.FStore.isWishToWatch: iswishToWatch,
                       K.FStore.date: date]) { error in completion(error) }
     }
     
     //MARK: - Delete data methods
     
-    func deleteComment(DOCID: String, userId: String, completion: @escaping (Error?) -> Void) {
-        guard let userId = self.userId else { completion(nil); return }
-        db.collection(DOCID).document(userId).delete() { error in completion(error) }
-        deleteUserComment(userId: userId, DOCID: DOCID)
+    // delete 작업시 deleteComment()/ deletePairComment() 한쌍임
+    func deleteComment(collection: String?, document: String?, completion: @escaping (Error?) -> Void) {
+        guard let document = document, let collection = collection else { completion(nil); return }
+        db.collection(collection).document(document).delete() { [weak self] error in
+            guard error == nil else { completion(error); return }
+            self?.deletePairComment(collection: document, document: collection) { error in completion(error) }
+        }
     }
     
-    private func deleteUserComment(userId: String, DOCID: String) {
-        db.collection(userId).document(DOCID).delete() { _ in }
+    private func deletePairComment(collection: String, document: String, completion: @escaping (Error?) -> Void) {
+        db.collection(collection).document(document).delete() { error in completion(error) }
     }
     
     private func getFormattedDate() -> String {

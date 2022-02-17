@@ -35,7 +35,7 @@ class AddCommentViewController: UIViewController {
             
             guard error == nil else {
                 DispatchQueue.main.async {
-                    AlertService.shared.alert(viewController: self, alertTitle: "코멘트를 불러 오지 못 했습니다")
+                    AlertService.shared.alert(viewController: self, alertTitle: "코멘트를 불러오지 못했습니다")
                 }
                 return
             }
@@ -56,7 +56,7 @@ class AddCommentViewController: UIViewController {
         if viewModel.userId == nil { showAlert(); return }
         
         guard let comment = commentTextView.text, grade != 0 else {
-            AlertService.shared.alert(viewController: self, alertTitle: "코맨트 등록에 실패 했습니다", message: "평점 등록은 필수입니다")
+            AlertService.shared.alert(viewController: self, alertTitle: "코멘트 등록에 실패했습니다", message: "평점 등록은 필수입니다")
             return
         }
         
@@ -70,7 +70,7 @@ class AddCommentViewController: UIViewController {
             
             if let error = error {
                 DispatchQueue.main.async {
-                    AlertService.shared.alert(viewController: self, alertTitle: "코맨트 등록에 실패 했습니다", message: error.localizedDescription)
+                    AlertService.shared.alert(viewController: self, alertTitle: "코멘트 등록에 실패했습니다", message: error.localizedDescription)
                 }
             } else {
                 self?.dismiss(animated: true, completion: nil)
@@ -127,28 +127,26 @@ class AddCommentViewController: UIViewController {
     private func deleteAlert() {
         if viewModel.userId == nil { return }
         
-        let alert = UIAlertController(title: "삭제 하시겠습니까?", message: nil, preferredStyle: .alert)
-        let action = UIAlertAction(title: "확인", style: .default) { [weak self] action in
+        let alert = UIAlertController(title: "삭제하시겠습니까?", message: nil, preferredStyle: .alert)
+        alert.addAction(UIAlertAction(title: "확인", style: .default) { [weak self] _ in
             self?.viewModel.deleteComment(DOCID: self?.movieInfo.DOCID ?? "",
                                           userId: self?.viewModel.userComment?.userId ?? "") { _ in }
-        }
-        let cancelAction = UIAlertAction(title: "취소", style: .cancel) { [weak self] action in
+        })
+        alert.addAction(UIAlertAction(title: "취소", style: .cancel) { [weak self] _ in
             self?.loadStarImages(by: self?.viewModel.userComment?.grade ?? 0) {
                 self?.grade = self?.viewModel.userComment?.grade ?? 0
                 self?.setStarImage()
             }
-        }
-        alert.addAction(action)
-        alert.addAction(cancelAction)
+        })
+        
         present(alert, animated: true)
     }
     
     private func showAlert() {
-        let alert = UIAlertController(title: "서비스를 이용하려면 로그인 하세요", message: nil, preferredStyle: .alert)
-        let action = UIAlertAction(title: "확인", style: .default) { [weak self] action in
+        let alert = UIAlertController(title: "서비스를 이용하려면 로그인하세요", message: nil, preferredStyle: .alert)
+        alert.addAction(UIAlertAction(title: "확인", style: .default) { [weak self] _ in
             self?.dismiss(animated: true, completion: nil)
-        }
-        alert.addAction(action)
+        })
         present(alert, animated: true, completion: nil)
     }
     

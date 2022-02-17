@@ -7,7 +7,7 @@
 
 import Foundation
 
-class MovieInformaition {
+class MovieInformationService {
     // 박스오피스 정보 취득 순서
     // 1. fetchDailyBoxOffice/ fetchWeeklyBoxOffice: 박스오피스 Top 10 영화리스트 정보 취득 - 영화진흥위원회
     // 2. fetchMovieInfo: 1번에서 취득한 movieNm과 openDt 조합으로 필요한 영화 정보 취득 - 한국영화데이터베이스
@@ -98,7 +98,7 @@ class MovieInformaition {
     
     //MARK: - for StorageViewController
     
-    func fetchMovieInfo(Id movieId: String, Seq movieSeq: String, completion: @escaping(MovieInfoListModel, Error?) -> Void) {
+    func fetchMovieInfo(id movieId: String, seq movieSeq: String, completion: @escaping(MovieInfoListModel, Error?) -> Void) {
         guard let url = URL.urlForMovieInfoApi(movieId: movieId, movieSeq: movieSeq) else { return }
         print(url)
         apiService.fetchMovieInfo(with: url) { movieInfo, error in

@@ -8,7 +8,7 @@
 import UIKit
 
 protocol UserCommentCellDelegate: AnyObject {
-    func pushedEditButton()
+    func pushedEditButton(index: Int)
     func pushedThumbNailImageButton(index: Int)
 }
 
@@ -55,6 +55,6 @@ class UserCommentCell: UITableViewCell {
     }
     
     @IBAction func editButton(_ sender: Any) {
-        delegate?.pushedEditButton()
+        delegate?.pushedEditButton(index: index)
     }
 }

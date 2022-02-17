@@ -75,6 +75,7 @@ struct K {
     }
     
     struct Prepare {
+        static let movieInfoView = "movieInfoView"
         static let postImageView = "postImageView"
         static let stllImageView = "stllImageView"
         static let staffView = "staffView"

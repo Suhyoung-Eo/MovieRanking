@@ -57,9 +57,9 @@ class BoxOfficeViewController: UIViewController {
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         
-        if let sender = sender as? String, sender == K.SegueId.movieInfoView {
+        if let sender = sender as? String, sender == K.Prepare.movieInfoView {
             guard let destinationVC = segue.destination as? MovieInfoViewController else {
-                fatalError("Could not found segue destination")
+                fatalError("Could not found MovieInfoViewController")
             }
             
             if let indexPath = tableView.indexPathForSelectedRow {
@@ -68,7 +68,7 @@ class BoxOfficeViewController: UIViewController {
         } else {
             guard let navigationVC = segue.destination as? UINavigationController,
                   let destinationVC = navigationVC.viewControllers.first as? OptionTableViewController else {
-                      fatalError("Could not found segue destination")
+                      fatalError("Could not found OptionTableViewController")
                   }
             
             // custom segue 설정
@@ -127,7 +127,7 @@ extension BoxOfficeViewController {
     
     private func retry(error: Error?) {
         let alert = UIAlertController(title: "네트워크 장애", message: error?.localizedDescription, preferredStyle: .alert)
-        alert.addAction(UIAlertAction(title: "재시도", style: .default) { [weak self] _ in  self?.fetchBoxOffice() })
+        alert.addAction(UIAlertAction(title: "재시도", style: .default) { [weak self] _ in self?.fetchBoxOffice() })
         present(alert, animated: true, completion: nil)
         
         DispatchQueue.main.async { [weak self] in
@@ -150,7 +150,7 @@ extension BoxOfficeViewController: UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         guard let cell = tableView.dequeueReusableCell(withIdentifier: K.CellId.boxOfficeCell, for: indexPath) as? BoxOfficeCell else {
-            fatalError("Could not found ViewCell")
+            fatalError("Could not found BoxOfficeCell")
         }
         
         let boxOfficeList = viewModel.boxOfficeList.boxOfficeModel(indexPath.row)
@@ -177,10 +177,10 @@ extension BoxOfficeViewController: UITableViewDelegate {
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         if viewModel.movieInfoList.movieInfoModel(indexPath.row).DOCID.isEmpty {
-            AlertService.shared.alert(viewController: self, alertTitle: "해당 영화의 상세 정보가 없습니다.")
+            AlertService.shared.alert(viewController: self, alertTitle: "해당 영화의 상세 정보가 없습니다")
             return
         }
-        performSegue(withIdentifier: K.SegueId.movieInfoView, sender: K.SegueId.movieInfoView)
+        performSegue(withIdentifier: K.SegueId.movieInfoView, sender: K.Prepare.movieInfoView)
     }
 }
 

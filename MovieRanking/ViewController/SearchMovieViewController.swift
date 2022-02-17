@@ -29,7 +29,7 @@ class SearchMovieViewController: UIViewController {
         navigationItem.searchController = searchController
         
         searchController.searchBar.delegate = self
-        searchController.searchBar.placeholder = "영화 콘텐츠를 검색해보세요"
+        searchController.searchBar.placeholder = "영화 콘텐츠를 검색해 보세요"
         searchController.searchBar.setValue("취소", forKey: "cancelButtonText")
         
         viewModel.onUpdated = { [weak self] in
@@ -52,7 +52,7 @@ class SearchMovieViewController: UIViewController {
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         guard let destinationVC = segue.destination as? MovieInfoViewController else {
-            fatalError("Could not found segue destination")
+            fatalError("Could not found MovieInfoViewController")
         }
         
         if let indexPath = tableView.indexPathForSelectedRow {
@@ -117,17 +117,17 @@ extension SearchMovieViewController: UISearchBarDelegate {
             activityIndicator.startAnimating()
             
             viewModel.fetchMovieInfo(title: movieName) { [weak self] error in
-                guard error == nil else {
+                if error != nil || self?.viewModel.movieInfoList == nil {
                     DispatchQueue.main.async {
-                        AlertService.shared.alert(viewController: self, alertTitle: "네트워크 장애", message: error?.localizedDescription, actionTitle: "다시 검색 해보세요")
-                        self?.activityIndicator.stopAnimating()
-                    }
-                    return
-                }
-                
-                if self?.viewModel.movieInfoList == nil {
-                    DispatchQueue.main.async {
-                        AlertService.shared.alert(viewController: self, alertTitle: "검색 된 영화가 없습니다", message: "다른 컨탠츠를 검색 해보세요")
+                        if let error = error {
+                            AlertService.shared.alert(viewController: self,
+                                                      alertTitle: "네트워크 장애",
+                                                      message: error.localizedDescription)
+                        } else {
+                            AlertService.shared.alert(viewController: self,
+                                                      alertTitle: "검색 된 영화가 없습니다",
+                                                      message: "다른 콘텐츠를 검색해 보세요")
+                        }
                         self?.activityIndicator.stopAnimating()
                     }
                 }
