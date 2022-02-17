@@ -18,7 +18,7 @@ class AddCommentViewController: UIViewController {
     @IBOutlet weak var fourthStarView: UIImageView!
     @IBOutlet weak var fifthStarView: UIImageView!
     
-    private let viewModel = FirebaseViewModel()
+    private let viewModel = MovieInfoViewModel()
     private var starImages: [UIImage] = []
     private var grade: Float = 0.0
     

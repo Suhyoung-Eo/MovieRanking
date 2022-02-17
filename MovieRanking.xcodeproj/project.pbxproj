@@ -71,7 +71,6 @@
 		FEF75ECA27B109CD0022A1EE /* CommentCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = FEF75EC927B109CD0022A1EE /* CommentCell.swift */; };
 		FEF75ECC27B118A30022A1EE /* AddCommentViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FEF75ECB27B118A30022A1EE /* AddCommentViewController.swift */; };
 		FEF75ECE27B160F10022A1EE /* RatingUISlider.swift in Sources */ = {isa = PBXBuildFile; fileRef = FEF75ECD27B160F10022A1EE /* RatingUISlider.swift */; };
-		FEF75ED027B1656E0022A1EE /* FirebaseViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = FEF75ECF27B1656E0022A1EE /* FirebaseViewModel.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -143,7 +142,6 @@
 		FEF75EC927B109CD0022A1EE /* CommentCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CommentCell.swift; sourceTree = "<group>"; };
 		FEF75ECB27B118A30022A1EE /* AddCommentViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AddCommentViewController.swift; sourceTree = "<group>"; };
 		FEF75ECD27B160F10022A1EE /* RatingUISlider.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RatingUISlider.swift; sourceTree = "<group>"; };
-		FEF75ECF27B1656E0022A1EE /* FirebaseViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirebaseViewModel.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -310,7 +308,6 @@
 				FEA886A427ADEA3400A0320B /* BoxOfficeViewModel.swift */,
 				FEA886B027AE005400A0320B /* MovieInfoViewModel.swift */,
 				FE2925FB27BE2364004550F9 /* AccountViewModel.swift */,
-				FEF75ECF27B1656E0022A1EE /* FirebaseViewModel.swift */,
 			);
 			path = ViewModel;
 			sourceTree = "<group>";
@@ -526,7 +523,6 @@
 				FEA886B527AFBC5E00A0320B /* MovieInfoViewController.swift in Sources */,
 				FEF75EBA27B008770022A1EE /* StaffsInfoTableViewController.swift in Sources */,
 				FEBF229827B26C2600190D8F /* RegisterViewController.swift in Sources */,
-				FEF75ED027B1656E0022A1EE /* FirebaseViewModel.swift in Sources */,
 				FE2925FC27BE2364004550F9 /* AccountViewModel.swift in Sources */,
 				FEF75ECA27B109CD0022A1EE /* CommentCell.swift in Sources */,
 			);

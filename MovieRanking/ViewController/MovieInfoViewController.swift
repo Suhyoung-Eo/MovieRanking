@@ -11,7 +11,7 @@ class MovieInfoViewController: UIViewController {
     
     @IBOutlet weak var tableView: UITableView!
     
-    private let viewModel = FirebaseViewModel()
+    private let viewModel = MovieInfoViewModel()
     private var gradeAverage: Float = 0.0
     private var isWishToWatch: Bool = false
     
