@@ -823,13 +823,21 @@
                                 <rect key="frame" x="188.5" y="429.5" width="37" height="37"/>
                                 <color key="color" red="0.98039215690000003" green="0.074509803920000006" blue="0.3411764706" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
                             </activityIndicatorView>
+                            <imageView hidden="YES" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="no_data_found" translatesAutoresizingMaskIntoConstraints="NO" id="L4a-tW-fns">
+                                <rect key="frame" x="0.0" y="88" width="414" height="725"/>
+                                <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                            </imageView>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="XJL-Hc-Djw"/>
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                         <constraints>
                             <constraint firstItem="RfW-YZ-C54" firstAttribute="centerX" secondItem="JaW-w3-DQK" secondAttribute="centerX" id="BMS-CF-m0u"/>
+                            <constraint firstItem="XJL-Hc-Djw" firstAttribute="bottom" secondItem="L4a-tW-fns" secondAttribute="bottom" id="CSH-j8-N8j"/>
                             <constraint firstItem="XJL-Hc-Djw" firstAttribute="bottom" secondItem="BTb-YP-Vjh" secondAttribute="bottom" id="HJs-mJ-Zdy"/>
+                            <constraint firstItem="L4a-tW-fns" firstAttribute="top" secondItem="XJL-Hc-Djw" secondAttribute="top" id="Ivc-ni-hTF"/>
+                            <constraint firstItem="L4a-tW-fns" firstAttribute="trailing" secondItem="XJL-Hc-Djw" secondAttribute="trailing" id="Od9-jI-Bfg"/>
                             <constraint firstItem="BTb-YP-Vjh" firstAttribute="top" secondItem="XJL-Hc-Djw" secondAttribute="top" id="czZ-ug-Wwm"/>
+                            <constraint firstItem="L4a-tW-fns" firstAttribute="leading" secondItem="XJL-Hc-Djw" secondAttribute="leading" id="jXB-O9-bNO"/>
                             <constraint firstItem="XJL-Hc-Djw" firstAttribute="trailing" secondItem="BTb-YP-Vjh" secondAttribute="trailing" id="ofe-VB-oen"/>
                             <constraint firstItem="RfW-YZ-C54" firstAttribute="centerY" secondItem="JaW-w3-DQK" secondAttribute="centerY" id="rvF-Su-9VW"/>
                             <constraint firstItem="BTb-YP-Vjh" firstAttribute="leading" secondItem="XJL-Hc-Djw" secondAttribute="leading" id="yc9-q2-8yu"/>
@@ -839,6 +847,7 @@
                     <connections>
                         <outlet property="activityIndicator" destination="RfW-YZ-C54" id="arW-Dj-sqn"/>
                         <outlet property="collectionView" destination="BTb-YP-Vjh" id="h9t-j2-Izo"/>
+                        <outlet property="emptyImage" destination="L4a-tW-fns" id="qRJ-Ga-t1i"/>
                         <segue destination="JEh-Cz-2hp" kind="show" identifier="goToMovieInfoView" id="qqs-8C-LWQ"/>
                     </connections>
                 </viewController>
@@ -886,15 +895,35 @@
                                     </tableViewCell>
                                 </prototypes>
                             </tableView>
+                            <view hidden="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="qJz-UM-bBp">
+                                <rect key="frame" x="0.0" y="140" width="414" height="673"/>
+                                <subviews>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="로그인 된 계정이 없습니다" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="a85-vG-H8C">
+                                        <rect key="frame" x="114.5" y="296" width="185" height="21"/>
+                                        <fontDescription key="fontDescription" type="system" pointSize="18"/>
+                                        <color key="textColor" red="0.98039215690000003" green="0.074509803920000006" blue="0.3411764706" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
+                                        <nil key="highlightedColor"/>
+                                    </label>
+                                </subviews>
+                                <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <constraints>
+                                    <constraint firstItem="a85-vG-H8C" firstAttribute="centerX" secondItem="qJz-UM-bBp" secondAttribute="centerX" id="Miu-vD-1v5"/>
+                                    <constraint firstItem="a85-vG-H8C" firstAttribute="centerY" secondItem="qJz-UM-bBp" secondAttribute="centerY" constant="-30" id="wid-fp-yUI"/>
+                                </constraints>
+                            </view>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="hsg-lH-1Dh"/>
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                         <constraints>
+                            <constraint firstItem="qJz-UM-bBp" firstAttribute="leading" secondItem="hsg-lH-1Dh" secondAttribute="leading" id="5Ow-Ih-JLc"/>
+                            <constraint firstItem="hsg-lH-1Dh" firstAttribute="trailing" secondItem="qJz-UM-bBp" secondAttribute="trailing" id="7Zr-df-nxs"/>
                             <constraint firstItem="hsg-lH-1Dh" firstAttribute="trailing" secondItem="Pd7-Xk-hgr" secondAttribute="trailing" id="Bnl-HW-zjp"/>
                             <constraint firstItem="Pd7-Xk-hgr" firstAttribute="leading" secondItem="hsg-lH-1Dh" secondAttribute="leading" id="DeE-jG-V93"/>
                             <constraint firstItem="Pd7-Xk-hgr" firstAttribute="top" secondItem="Vvf-kP-mV4" secondAttribute="bottom" id="Kek-b5-WM7"/>
                             <constraint firstItem="Vvf-kP-mV4" firstAttribute="leading" secondItem="hsg-lH-1Dh" secondAttribute="leading" id="QY7-XE-fyl"/>
+                            <constraint firstItem="hsg-lH-1Dh" firstAttribute="bottom" secondItem="qJz-UM-bBp" secondAttribute="bottom" id="b0H-cu-0G8"/>
                             <constraint firstItem="hsg-lH-1Dh" firstAttribute="bottom" secondItem="Pd7-Xk-hgr" secondAttribute="bottom" id="dRK-9B-BrJ"/>
+                            <constraint firstItem="qJz-UM-bBp" firstAttribute="top" secondItem="hsg-lH-1Dh" secondAttribute="top" id="i8x-1T-vcF"/>
                             <constraint firstItem="hsg-lH-1Dh" firstAttribute="trailing" secondItem="Vvf-kP-mV4" secondAttribute="trailing" id="jrc-0P-cgF"/>
                             <constraint firstItem="Vvf-kP-mV4" firstAttribute="top" secondItem="hsg-lH-1Dh" secondAttribute="top" id="wH6-lK-tVf"/>
                         </constraints>
@@ -909,6 +938,7 @@
                     <connections>
                         <outlet property="accountButton" destination="5g8-eF-JLf" id="Ouc-yi-CaR"/>
                         <outlet property="accountTextLabel" destination="Jfg-4n-vSt" id="iIL-i5-amV"/>
+                        <outlet property="emptyView" destination="qJz-UM-bBp" id="6fy-as-d4e"/>
                         <outlet property="tableView" destination="Pd7-Xk-hgr" id="4Pn-9W-eHD"/>
                         <segue destination="whM-HS-m0M" kind="show" identifier="goToLoginView" id="0Mg-Ng-8i4"/>
                         <segue destination="KNc-et-PGQ" kind="show" identifier="goToStorageView" id="ZzG-iz-hJW"/>
@@ -917,7 +947,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="g0M-TQ-mcm" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-1900" y="1192"/>
+            <point key="canvasLocation" x="-1900.0000000000002" y="1191.2946428571429"/>
         </scene>
         <!--Comments View Controller-->
         <scene sceneID="Mup-Qo-M4V">
@@ -1027,14 +1057,22 @@
                                 <rect key="frame" x="188.5" y="429.5" width="37" height="37"/>
                                 <color key="color" red="0.98039215690000003" green="0.074509803920000006" blue="0.3411764706" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
                             </activityIndicatorView>
+                            <imageView hidden="YES" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="no_data_found" translatesAutoresizingMaskIntoConstraints="NO" id="XX5-KT-aRK">
+                                <rect key="frame" x="0.0" y="88" width="414" height="725"/>
+                                <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                            </imageView>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="CXz-4p-W3g"/>
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                         <constraints>
                             <constraint firstItem="gKA-Dv-hy5" firstAttribute="centerX" secondItem="Z6j-aS-7YZ" secondAttribute="centerX" id="0gS-Eu-vnr"/>
+                            <constraint firstItem="CXz-4p-W3g" firstAttribute="trailing" secondItem="XX5-KT-aRK" secondAttribute="trailing" id="2hL-JT-sLM"/>
                             <constraint firstItem="CXz-4p-W3g" firstAttribute="bottom" secondItem="syu-Cz-9fI" secondAttribute="bottom" id="7sH-O6-xXe"/>
+                            <constraint firstItem="CXz-4p-W3g" firstAttribute="bottom" secondItem="XX5-KT-aRK" secondAttribute="bottom" id="BL6-pb-r41"/>
                             <constraint firstItem="syu-Cz-9fI" firstAttribute="leading" secondItem="CXz-4p-W3g" secondAttribute="leading" id="I6d-gb-MC9"/>
                             <constraint firstItem="gKA-Dv-hy5" firstAttribute="centerY" secondItem="Z6j-aS-7YZ" secondAttribute="centerY" id="JkQ-VB-olJ"/>
+                            <constraint firstItem="XX5-KT-aRK" firstAttribute="leading" secondItem="CXz-4p-W3g" secondAttribute="leading" id="Zft-NF-5b8"/>
+                            <constraint firstItem="XX5-KT-aRK" firstAttribute="top" secondItem="CXz-4p-W3g" secondAttribute="top" id="ZuB-r4-E23"/>
                             <constraint firstItem="CXz-4p-W3g" firstAttribute="trailing" secondItem="syu-Cz-9fI" secondAttribute="trailing" id="oMB-aT-cKM"/>
                             <constraint firstItem="syu-Cz-9fI" firstAttribute="top" secondItem="CXz-4p-W3g" secondAttribute="top" id="z6d-Am-4kh"/>
                         </constraints>
@@ -1042,6 +1080,7 @@
                     <navigationItem key="navigationItem" largeTitleDisplayMode="never" id="yqT-u6-3pu"/>
                     <connections>
                         <outlet property="activityIndicator" destination="gKA-Dv-hy5" id="wtn-0H-bQV"/>
+                        <outlet property="emptyImage" destination="XX5-KT-aRK" id="LKb-x7-GTs"/>
                         <outlet property="tableView" destination="syu-Cz-9fI" id="5Z2-zD-m99"/>
                         <segue destination="JEh-Cz-2hp" kind="show" identifier="goToMovieInfoView" id="k7z-Kj-JDz"/>
                         <segue destination="jn7-Gv-kj0" kind="presentation" identifier="goToAddCommentView" id="Ae7-U0-rTO"/>
@@ -1339,13 +1378,14 @@
     </scenes>
     <inferredMetricsTieBreakers>
         <segue reference="Ae7-U0-rTO"/>
-        <segue reference="qqs-8C-LWQ"/>
+        <segue reference="k7z-Kj-JDz"/>
     </inferredMetricsTieBreakers>
     <resources>
         <image name="background_image" width="875" height="555"/>
         <image name="chevron.left" catalog="system" width="96" height="128"/>
         <image name="house" catalog="system" width="128" height="106"/>
         <image name="magnifyingglass" catalog="system" width="128" height="115"/>
+        <image name="no_data_found" width="1000" height="1000"/>
         <image name="no_image" width="500" height="650"/>
         <image name="person.fill" catalog="system" width="128" height="120"/>
         <image name="square.and.arrow.down" catalog="system" width="121" height="128"/>

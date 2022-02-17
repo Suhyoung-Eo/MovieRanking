@@ -12,6 +12,7 @@ class AccountViewController: UIViewController {
     @IBOutlet weak var tableView: UITableView!
     @IBOutlet weak var accountTextLabel: UILabel!
     @IBOutlet weak var accountButton: UIBarButtonItem!
+    @IBOutlet weak var emptyView: UIView!
     
     let viewModel = AccountViewModel()
     
@@ -29,11 +30,12 @@ class AccountViewController: UIViewController {
     override func viewWillAppear(_ animated: Bool) {
         
         if let userId = viewModel.userId {
+            emptyView.isHidden = true
             accountButton.title = "로그아웃"
             accountTextLabel.text = userId
         } else {
+            emptyView.isHidden = false
             accountButton.title = "로그인"
-            accountTextLabel.text = "로그인 된 계정이 없습니다"
         }
     }
     
@@ -84,14 +86,16 @@ extension AccountViewController {
     
     private func logOut() {
         viewModel.logOut { [weak self] error in
-            guard error == nil else {
+            if let error = error {
                 DispatchQueue.main.async {
-                    AlertService.shared.alert(viewController: self, alertTitle: "로그아웃에 실패했습니다", message: error?.localizedDescription)
+                    AlertService.shared.alert(viewController: self, alertTitle: "로그아웃에 실패했습니다", message: error.localizedDescription)
                 }
-                return
+            } else {
+                DispatchQueue.main.async {
+                    self?.emptyView.isHidden = false
+                    self?.accountButton.title = "로그인"
+                }
             }
-            self?.accountTextLabel.text = "로그인 된 계정이 없습니다"
-            self?.accountButton.title = "로그인"
         }
     }
 }

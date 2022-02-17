@@ -11,6 +11,7 @@ class CommentsViewController: UIViewController {
 
     @IBOutlet weak var tableView: UITableView!
     @IBOutlet weak var activityIndicator: UIActivityIndicatorView!
+    @IBOutlet weak var emptyImage: UIImageView!
     
     private let viewModel = AccountViewModel()
     
@@ -23,6 +24,7 @@ class CommentsViewController: UIViewController {
         activityIndicator.startAnimating()
         
         navigationItem.title = "내코멘트"
+        emptyImage.isHidden = false
         
         viewModel.loadUserCommentList { [weak self] error in
             self?.activityIndicator.stopAnimating()
@@ -32,6 +34,11 @@ class CommentsViewController: UIViewController {
                 }
             } else {
                 DispatchQueue.main.async {
+                    if self?.viewModel.userCommentListCount == 0 {
+                        self?.emptyImage.isHidden = false
+                    } else {
+                        self?.emptyImage.isHidden = true
+                    }
                     self?.tableView.reloadData()
                 }
             }

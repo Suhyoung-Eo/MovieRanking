@@ -11,6 +11,7 @@ class StorageViewController: UIViewController {
     
     @IBOutlet weak var collectionView: UICollectionView!
     @IBOutlet weak var activityIndicator: UIActivityIndicatorView!
+    @IBOutlet weak var emptyImage: UIImageView!
     
     private let viewModel = AccountViewModel()
     
@@ -24,6 +25,7 @@ class StorageViewController: UIViewController {
         
         activityIndicator.isHidden = false
         activityIndicator.startAnimating()
+        emptyImage.isHidden = false
         
         navigationItem.title = navigationItemTitle
         
@@ -67,8 +69,13 @@ extension StorageViewController {
                 AlertService.shared.alert(viewController: self, alertTitle: "정보를 불러오지 못했습니다", message: error.localizedDescription)
             }
         } else {
-            DispatchQueue.main.async {
-                self.collectionView.reloadData()
+            DispatchQueue.main.async { [weak self] in
+                if self?.viewModel.storageNumberOfItems(by: self?.navigationItemTitle ?? "") == 0 {
+                    self?.emptyImage.isHidden = false
+                } else {
+                    self?.emptyImage.isHidden = true
+                }
+                self?.collectionView.reloadData()
             }
         }
     }
