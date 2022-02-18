@@ -40,16 +40,29 @@ class FirebaseService {
     
     //MARK: - Read data methods
     
+    func loadIsWishToWatch(DOCID: String, completion: @escaping (Bool) -> Void) {
+        guard let userId = userId else { completion(false); return }
+        db.collection(userId).document(DOCID).addSnapshotListener { documentSnapshot, error in
+            guard error == nil, let document = documentSnapshot else { completion(false); return }
+            
+            if let data = document.data(), let isWishToWatch = data[K.FStore.wishToWatch] as? Bool {
+                completion(isWishToWatch)
+            } else {
+                completion(false)
+            }
+        }
+    }
+    
     func loadCommentList(DOCID: String, completion: @escaping (CommentListModel, Float, Error?) -> Void) {
         
-        db.collection(DOCID).order(by: K.FStore.date, descending: true).addSnapshotListener { querySnapshot, error in
+        db.collection(DOCID).order(by: K.FStore.date, descending: true).addSnapshotListener { [weak self] querySnapshot, error in
             
             guard error == nil else {
                 completion(CommentListModel([FBCommentModel.empty]), 0.0, error)
                 return
             }
             
-            var comments: [FBCommentModel] = []
+            var FBCommentModelList: [FBCommentModel] = []
             var gradeTotal: Float = 0.0
             var gradeCount: Float = 0.0
             var gradeAverage: Float = 0.0
@@ -72,7 +85,7 @@ class FirebaseService {
                                                             date: date)
                         
                         if !comment.isEmpty {
-                            comments.append(FBCommentModel)
+                            FBCommentModelList.append(FBCommentModel)
                         }
                         
                         gradeTotal += grade
@@ -85,79 +98,33 @@ class FirebaseService {
                     gradeAverage = gradeTotal / gradeCount
                 }
                 
-                completion(CommentListModel(comments), gradeAverage, nil)
+                if let userId = self?.userId {
+                    self?.db.collection(userId).document(DOCID).setData([K.FStore.gradeAverage: gradeAverage], merge: true) { _ in }
+                }
+                
+                completion(CommentListModel(FBCommentModelList), gradeAverage, nil)
             }
         }
     }
     
-    func loadUserComment(DOCID: String, completion: @escaping (CommentModel?, Error?) -> Void) {
+    func loadUserComment(DOCID: String, completion: @escaping (Float, String, Error?) -> Void) {
         
-        guard let userId = userId else { completion(nil, nil); return }
+        guard let userId = userId else { completion(0, "",nil); return }
         
         db.collection(DOCID).document(userId).addSnapshotListener { documentSnapshot, error in
             
             guard error == nil, let document = documentSnapshot, let data = document.data() else {
-                completion(CommentModel(FBCommentModel.empty), error)
+                completion(0, "",error)
                 return
             }
             
-            if let userId = data[K.FStore.userId] as? String,
-               let movieName = data[K.FStore.movieName] as? String,
-               let grade = data[K.FStore.grade] as? Float,
-               let comment = data[K.FStore.comment] as? String,
-               let date = data[K.FStore.date] as? String {
-                
-                let FBCommentModel = FBCommentModel(userId: userId,
-                                                    movieName: movieName,
-                                                    grade: grade,
-                                                    comment: comment,
-                                                    date: date)
-                
-                completion(CommentModel(FBCommentModel), nil)
-            }
-        }
-    }
-    
-    func loadEstimateList(completion: @escaping (EstimateListModel?, Error?) -> Void) {
-        
-        guard let userId = userId else { completion(nil, nil); return }
-        
-        db.collection(userId).order(by: K.FStore.date, descending: true).addSnapshotListener { querySnapshot, error in
-            
-            guard error == nil else {
-                completion(EstimateListModel([FBEstimateModel.empty]), error)
-                return
-            }
-            
-            var FBEstimateModelList: [FBEstimateModel] = []
-            
-            if let snapshotDocuments = querySnapshot?.documents {
-                
-                for doc in snapshotDocuments {
-                    let data = doc.data()
-                    
-                    if let DOCID = data[K.FStore.DOCID] as? String,
-                       let movieId = data[K.FStore.movieId] as? String,
-                       let movieSeq = data[K.FStore.movieSeq] as? String,
-                       let movieName = data[K.FStore.movieName] as? String,
-                       let thumbNailLink = data[K.FStore.thumbNailLink] as? String,
-                       let grade = data[K.FStore.grade] as? Float,
-                       let comment = data[K.FStore.comment] as? String,
-                       let date = data[K.FStore.date] as? String {
-                        
-                        let newItem = FBEstimateModel(DOCID: DOCID,
-                                                      movieId: movieId,
-                                                      movieSeq: movieSeq,
-                                                      movieName: movieName,
-                                                      thumbNailLink: thumbNailLink,
-                                                      grade: grade,
-                                                      comment: comment,
-                                                      date: date)
-                        
-                        FBEstimateModelList.append(newItem)
-                    }
-                }
-                completion(EstimateListModel(FBEstimateModelList), nil)
+            if let comment = data[K.FStore.comment] as? String,
+               let grade = data[K.FStore.grade] as? Float {
+                completion(grade, comment, nil)
+            } else if let grade = data[K.FStore.grade] as? Float {
+                completion(grade, "", nil)
+            } else {
+                completion(0, "", nil)
             }
         }
     }
@@ -166,14 +133,14 @@ class FirebaseService {
         
         guard let userId = userId else { completion(nil, nil); return }
         
-        db.collection(userId).order(by: K.FStore.date, descending: true).addSnapshotListener { querySnapshot, error in
+        db.collection(userId).addSnapshotListener { querySnapshot, error in
             
             guard error == nil else {
                 completion(WishToWatchListModel([FBWishToWatchModel.empty]), error)
                 return
             }
             
-            var wishToWatchList: [FBWishToWatchModel] = []
+            var FBWishToWatchList: [FBWishToWatchModel] = []
             
             if let snapshotDocuments = querySnapshot?.documents {
                 
@@ -185,45 +152,76 @@ class FirebaseService {
                        let movieName = data[K.FStore.movieName] as? String,
                        let thumbNailLink = data[K.FStore.thumbNailLink] as? String,
                        let gradeAverage = data[K.FStore.gradeAverage] as? Float,
-                       let wishToWatch = data[K.FStore.isWishToWatch] as? Bool,
-                       let date = data[K.FStore.date] as? String {
+                       let isWishToWatch = data[K.FStore.wishToWatch] as? Bool,
+                       isWishToWatch {
                         
                         let newItem = FBWishToWatchModel(movieId: movieId,
                                                          movieSeq: movieSeq,
                                                          movieName: movieName,
                                                          thumbNailLink: thumbNailLink,
                                                          gradeAverage: gradeAverage,
-                                                         isWishToWatch: wishToWatch,
-                                                         date: date)
+                                                         isWishToWatch: isWishToWatch)
                         
-                        wishToWatchList.append(newItem)
+                        FBWishToWatchList.append(newItem)
                     }
                 }
-                completion(WishToWatchListModel(wishToWatchList), nil)
+                completion(WishToWatchListModel(FBWishToWatchList), nil)
             }
         }
     }
     
-    func loadIsWishToWatch(DOCID: String, completion: @escaping (Bool) -> Void) {
-        guard let userId = userId else { completion(false); return }
-        db.collection(userId).document("\(K.FStore.isWishToWatch)\(DOCID)").addSnapshotListener { documentSnapshot, error in
-            guard error == nil, let document = documentSnapshot else { completion(false); return }
-            completion(document.exists ? true : false)  // true 인 경우에만 데이터가 존재 함
+    func loadGradeList(completion: @escaping (GradeListModel?, Error?) -> Void) {
+        
+        guard let userId = userId else { completion(nil, nil); return }
+        
+        db.collection(userId).addSnapshotListener { querySnapshot, error in
+            
+            guard error == nil else {
+                completion(GradeListModel([FBGradeModel.empty]), error)
+                return
+            }
+            
+            var FBGradeModelList: [FBGradeModel] = []
+            
+            if let snapshotDocuments = querySnapshot?.documents {
+                
+                for doc in snapshotDocuments {
+                    let data = doc.data()
+                    
+                    if let DOCID = data[K.FStore.DOCID] as? String,
+                       let movieId = data[K.FStore.movieId] as? String,
+                       let movieSeq = data[K.FStore.movieSeq] as? String,
+                       let movieName = data[K.FStore.movieName] as? String,
+                       let thumbNailLink = data[K.FStore.thumbNailLink] as? String,
+                       let grade = data[K.FStore.grade] as? Float {
+                        
+                        let newItem = FBGradeModel(DOCID: DOCID,
+                                                   movieId: movieId,
+                                                   movieSeq: movieSeq,
+                                                   movieName: movieName,
+                                                   thumbNailLink: thumbNailLink,
+                                                   grade: grade)
+                        
+                        FBGradeModelList.append(newItem)
+                    }
+                }
+                completion(GradeListModel(FBGradeModelList), nil)
+            }
         }
     }
     
-    func loadUserCommentList(completion: @escaping (EstimateListModel?, Error?) -> Void) {
+    func loadAccountCommentList(completion: @escaping (AccountCommentListModel?, Error?) -> Void) {
         
         guard let userId = userId else { completion(nil, nil); return }
         
         db.collection(userId).order(by: K.FStore.date, descending: true).addSnapshotListener { querySnapshot, error in
             
             guard error == nil else {
-                completion(EstimateListModel([FBEstimateModel.empty]), error)
+                completion(AccountCommentListModel([FBAccountCommentModel.empty]), error)
                 return
             }
             
-            var FBEstimateModelList: [FBEstimateModel] = []
+            var FBUserCommentList: [FBAccountCommentModel] = []
             
             if let snapshotDocuments = querySnapshot?.documents {
                 
@@ -240,33 +238,26 @@ class FirebaseService {
                        let date = data[K.FStore.date] as? String,
                        !comment.isEmpty {
                         
-                        let newItem = FBEstimateModel(DOCID: DOCID,
-                                                      movieId: movieId,
-                                                      movieSeq: movieSeq,
-                                                      movieName: movieName,
-                                                      thumbNailLink: thumbNailLink,
-                                                      grade: grade,
-                                                      comment: comment,
-                                                      date: date)
+                        let newItem = FBAccountCommentModel(DOCID: DOCID,
+                                                            movieId: movieId,
+                                                            movieSeq: movieSeq,
+                                                            movieName: movieName,
+                                                            thumbNailLink: thumbNailLink,
+                                                            grade: grade,
+                                                            comment: comment,
+                                                            date: date)
                         
-                        FBEstimateModelList.append(newItem)
+                        FBUserCommentList.append(newItem)
                     }
                 }
-                completion(EstimateListModel(FBEstimateModelList), nil)
+                completion(AccountCommentListModel(FBUserCommentList), nil)
             }
         }
     }
     
     //MARK: - Create/ Update data methods
     
-    // add 작업시 addComment()/ addAccountInfo() 한쌍임
-    
-    // collection: DOCID, document: userId
     func addComment(DOCID: String,
-                    movieId: String,
-                    movieSeq: String,
-                    movieName: String,
-                    thumbNailLink: String,
                     grade: Float,
                     comment: String,
                     completion: @escaping (Error?) -> Void) {
@@ -275,90 +266,73 @@ class FirebaseService {
         
         let date = getFormattedDate()
         
-        db.collection(DOCID).document(userId).setData([K.FStore.userId : userId,
-                                                       K.FStore.movieName: movieName,
-                                                       K.FStore.grade : grade,
-                                                       K.FStore.comment: comment,
-                                                       K.FStore.date: date]) { [weak self] error in
-            
-            guard error == nil else { completion(error); return }
-            
-            self?.addAccountInfo(userId: userId,
-                                 DOCID: DOCID,
-                                 movieId: movieId,
-                                 movieSeq: movieSeq,
-                                 movieName: movieName,
-                                 thumbNailLink: thumbNailLink,
-                                 grade: grade,
-                                 comment: comment,
-                                 date: date) { error in completion(error) }
+        if comment.isEmpty {
+            db.collection(DOCID).document(userId).setData([K.FStore.userId : userId,
+                                                           K.FStore.grade : grade]
+                                                          , merge: true) { [weak self] error in
+                
+                guard error == nil else { completion(error); return }
+                self?.db.collection(userId).document(DOCID).setData([K.FStore.grade: grade], merge: true)
+                completion(error)
+            }
+        } else {
+            db.collection(DOCID).document(userId).setData([K.FStore.userId : userId,
+                                                           K.FStore.grade : grade,
+                                                           K.FStore.comment: comment,
+                                                           K.FStore.date: date]
+                                                          , merge: true) { [weak self] error in
+                
+                guard error == nil else { completion(error); return }
+                self?.db.collection(userId).document(DOCID).setData([K.FStore.grade: grade,
+                                                                     K.FStore.comment: comment,
+                                                                     K.FStore.date: date], merge: true)
+                completion(error)
+            }
         }
     }
     
-    // collection: userId, document: DOCID
-    private func addAccountInfo(userId: String,
-                                DOCID: String,
-                                movieId: String,
-                                movieSeq: String,
-                                movieName: String,
-                                thumbNailLink: String,
-                                grade: Float,
-                                comment: String,
-                                date: String,
-                                completion: @escaping (Error?) -> Void) {
-        
-        db.collection(userId).document(DOCID).setData([K.FStore.DOCID: DOCID,
-                                                       K.FStore.movieId: movieId,
-                                                       K.FStore.movieSeq : movieSeq,
-                                                       K.FStore.movieName: movieName,
-                                                       K.FStore.thumbNailLink: thumbNailLink,
-                                                       K.FStore.grade : grade,
-                                                       K.FStore.comment: comment,
-                                                       K.FStore.date: date]) { error in completion(error) }
-    }
-    
-    func setIsWishToWatch(DOCID: String,
-                          movieId: String,
-                          movieSeq: String,
-                          movieName: String,
-                          thumbNailLink: String,
-                          gradeAverage: Float,
-                          iswishToWatch: Bool,
-                          completion: @escaping (Error?) -> Void) {
-        
+    func setDataForAccount(movieInfo: MovieInfoModel, completion: @escaping (Error?) -> Void) {
         guard let userId = self.userId else { completion(nil); return }
+        db.collection(userId).document(movieInfo.DOCID).setData([K.FStore.DOCID: movieInfo.DOCID,
+                                                                 K.FStore.movieId: movieInfo.movieId,
+                                                                 K.FStore.movieSeq : movieInfo.movieSeq,
+                                                                 K.FStore.movieName: movieInfo.movieName,
+                                                                 K.FStore.thumbNailLink: movieInfo.thumbNailLinks[0]]
+                                                                , merge: true) { error in completion(error) }
         
-        guard iswishToWatch else {
-            db.collection(userId).document("\(K.FStore.isWishToWatch)\(DOCID)")
-                .delete() { error in completion(error) }
-            return
-        }
-        
-        let date = getFormattedDate()
-        
-        db.collection(userId).document("\(K.FStore.isWishToWatch)\(DOCID)")
-            .setData([K.FStore.movieId: movieId,
-                      K.FStore.movieSeq : movieSeq,
-                      K.FStore.movieName: movieName,
-                      K.FStore.thumbNailLink: thumbNailLink,
-                      K.FStore.gradeAverage: gradeAverage,
-                      K.FStore.isWishToWatch: iswishToWatch,
-                      K.FStore.date: date]) { error in completion(error) }
+    }
+    
+    func setIsWishToWatch(DOCID: String, isWishToWatch: Bool, completion: @escaping (Error?) -> Void) {
+        guard let userId = self.userId else { completion(nil); return }
+        db.collection(userId).document(DOCID).setData([K.FStore.wishToWatch: isWishToWatch], merge: true) { error in completion(error) }
     }
     
     //MARK: - Delete data methods
     
-    // delete 작업시 deleteComment()/ deletePairComment() 한쌍임
     func deleteComment(collection: String?, document: String?, completion: @escaping (Error?) -> Void) {
         guard let document = document, let collection = collection else { completion(nil); return }
-        db.collection(collection).document(document).delete() { [weak self] error in
+        db.collection(collection).document(document).updateData([K.FStore.comment: FieldValue.delete(),
+                                                                 K.FStore.date: FieldValue.delete()]) { [weak self] error in
+            
             guard error == nil else { completion(error); return }
-            self?.deletePairComment(collection: document, document: collection) { error in completion(error) }
+            
+            self?.db.collection(document).document(collection).updateData([K.FStore.comment: FieldValue.delete(),
+                                                                           K.FStore.date: FieldValue.delete()]) { error in completion(error) }
         }
     }
     
-    private func deletePairComment(collection: String, document: String, completion: @escaping (Error?) -> Void) {
-        db.collection(collection).document(document).delete() { error in completion(error) }
+    func deleteGrade(collection: String?, document: String?, completion: @escaping (Error?) -> Void) {
+        guard let document = document, let collection = collection else { completion(nil); return }
+        db.collection(collection).document(document).updateData([K.FStore.grade: FieldValue.delete(),
+                                                                 K.FStore.comment: FieldValue.delete(),
+                                                                 K.FStore.date: FieldValue.delete()]) { [weak self] error in
+            
+            guard error == nil else { completion(error); return }
+            
+            self?.db.collection(document).document(collection).updateData([K.FStore.grade: FieldValue.delete(),
+                                                                           K.FStore.comment: FieldValue.delete(),
+                                                                           K.FStore.date: FieldValue.delete()]) { error in completion(error) }
+        }
     }
     
     private func getFormattedDate() -> String {

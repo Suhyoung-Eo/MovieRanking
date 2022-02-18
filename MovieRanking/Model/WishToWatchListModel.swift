@@ -23,7 +23,7 @@ extension WishToWatchListModel {
         return wishToWatchList.count
     }
     
-    func wishToWatchListModel(_ index: Int) -> WishToWatchModel {
+    func wishToWatchModel(_ index: Int) -> WishToWatchModel {
         return wishToWatchList[index]
     }
 }
@@ -57,9 +57,5 @@ struct WishToWatchModel {
     
     var wishToWatch: Bool {
         return wishToWatchModel.isWishToWatch
-    }
-    
-    var date: String {
-        return wishToWatchModel.date
     }
 }

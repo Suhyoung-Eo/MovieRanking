@@ -8,7 +8,6 @@
 import Foundation
 
 struct CommentListModel {
-    
     let commentList: [CommentModel]
     
     init (_ FBComments: [FBCommentModel]) {
@@ -31,29 +30,29 @@ extension CommentListModel {
 
 struct CommentModel {
     
-    let FBComment: FBCommentModel
+    let commentModel: FBCommentModel
     
-    init (_ FBComment: FBCommentModel) {
-        self.FBComment = FBComment
+    init (_ commentModel: FBCommentModel) {
+        self.commentModel = commentModel
     }
     
     var userId: String {
-        return FBComment.userId
+        return commentModel.userId
     }
     
     var movieName: String {
-        return FBComment.movieName
+        return commentModel.movieName
     }
     
     var grade: Float {
-        return FBComment.grade
+        return commentModel.grade
     }
     
     var comment: String {
-        return FBComment.comment
+        return commentModel.comment
     }
     
     var date: String {
-        return FBComment.date
+        return commentModel.date
     }
 }

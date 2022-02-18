@@ -29,8 +29,11 @@ class StorageViewController: UIViewController {
         
         navigationItem.title = navigationItemTitle
         
-        viewModel.loadEstimateList { [weak self] error in self?.showAlert(by: error) }
-        viewModel.loadWishToWatchList { [weak self] error in self?.showAlert(by: error) }
+        if navigationItemTitle == K.Prepare.wishToWatchListView {
+            viewModel.loadWishToWatchList { [weak self] error in self?.showAlert(by: error) }
+        } else {
+            viewModel.loadGradeList { [weak self] error in self?.showAlert(by: error) }
+        }
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -98,14 +101,14 @@ extension StorageViewController: UICollectionViewDataSource {
             fatalError("Could not found StorageCell")
         }
         
-        if navigationItemTitle == K.Prepare.wishToWatchView {
-            let cellItem = viewModel.wishToWatchListModel.wishToWatchListModel(indexPath.row)
+        if navigationItemTitle == K.Prepare.wishToWatchListView {
+            let cellItem = viewModel.wishToWatchListModel.wishToWatchModel(indexPath.row)
             cell.imageView.setImage(from: cellItem.thumbNailLink)
             cell.movieNameLabel.text = cellItem.movieName
             cell.gradeLabel.text = cellItem.gradeAverage == 0 ? "평점이 없습니다" : "평균 ★ \(String(format: "%.1f", cellItem.gradeAverage))"
             cell.gradeLabel.textColor = .darkGray
         } else {
-            let cellItem = viewModel.estimateListModel.estimateModel(indexPath.row)
+            let cellItem = viewModel.gradeListModel.gradeModel(indexPath.row)
             cell.imageView.setImage(from: cellItem.thumbNailLink)
             cell.movieNameLabel.text = cellItem.movieName
             cell.gradeLabel.text = "평가함 ★ \(cellItem.grade)"

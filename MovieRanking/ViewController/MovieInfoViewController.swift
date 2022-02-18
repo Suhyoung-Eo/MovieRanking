@@ -30,6 +30,14 @@ class MovieInfoViewController: UIViewController {
         tableView.dataSource = self
         tableView.delegate = self
         
+        viewModel.setDataForAccount(movieInfo: movieInfo) { [weak self] error in
+            if let error = error {
+                DispatchQueue.main.async {
+                    AlertService.shared.alert(viewController: self, alertTitle: "영화 정보를 저장하지 못했습니다", message: error.localizedDescription)
+                }
+            }
+        }
+        
         loadComment()
         loadIsWishToWatch()
         
@@ -54,7 +62,7 @@ class MovieInfoViewController: UIViewController {
     }
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-    
+        
         switch sender as? String {
         case K.Prepare.postImageView:
             guard let destinationVC = segue.destination as? ImageViewController else {
@@ -104,15 +112,14 @@ extension MovieInfoViewController {
     
     private func loadComment() {
         viewModel.loadCommentList(DOCID: movieInfo.DOCID) { [weak self] error in
-            guard error == nil else {
+            if let error = error {
                 DispatchQueue.main.async {
-                    AlertService.shared.alert(viewController: self, alertTitle: "코멘트를 불러오지 못했습니다", message: error?.localizedDescription)
+                    AlertService.shared.alert(viewController: self, alertTitle: "코멘트를 불러오지 못했습니다", message: error.localizedDescription)
                 }
-                return
-            }
-            
-            DispatchQueue.main.async {
-                self?.tableView.reloadData()
+            } else {
+                DispatchQueue.main.async {
+                    self?.tableView.reloadData()
+                }
             }
         }
     }
@@ -126,13 +133,7 @@ extension MovieInfoViewController {
     }
     
     private func setIsWishToWatch(_ isWishToWatch: Bool) {
-        viewModel.setIsWishToWatch(DOCID: movieInfo.DOCID,
-                                   movieId: movieInfo.movieId,
-                                   movieSeq: movieInfo.movieSeq,
-                                   movieName: movieInfo.movieName,
-                                   thumbNailLink: movieInfo.thumbNailLinks[0],
-                                   gradeAverage: viewModel.gradeAverage,
-                                   wishToWatch: isWishToWatch) { error in
+        viewModel.setIsWishToWatch(DOCID: movieInfo.DOCID, isWishToWatch: isWishToWatch) { error in
             if let error = error {
                 DispatchQueue.main.async {
                     AlertService.shared.alert(viewController: self, alertTitle: "보고 싶어요 목록 저장에 실패했습니다", message: error.localizedDescription)
@@ -296,7 +297,7 @@ extension MovieInfoViewController: StaffsInfoCellDelegate, UserInteractionCellDe
     func pushedAddCommentButton(data: Any) {
         performSegue(withIdentifier: K.SegueId.addCommentView, sender: data)
     }
-     
+    
     func pushedWishToWatchButton() {
         isWishToWatch = viewModel.userId == nil ? false : !viewModel.isWishToWatch
         setIsWishToWatch(isWishToWatch)

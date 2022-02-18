@@ -64,16 +64,17 @@ class MovieInfoViewModel {
     //MARK: - FirestoreService
     
     var commentListModel: CommentListModel!
-    var userComment: CommentModel!
     
     var gradeAverage: Float = 0.0
     var isWishToWatch: Bool = false
+    var grade: Float = 0.0
+    var comment: String = ""
     
     var userId: String? {
         return FBService.userId
     }
     
-    private var commentCount: Int {
+    private var commentListCount: Int {
         return (commentListModel == nil || commentListModel.count == 0) ? 1 : commentListModel.count
     }
     
@@ -84,7 +85,7 @@ class MovieInfoViewModel {
     func sectionCount(by section: Int) -> Int {
         switch section {
         case 6:
-            return commentCount
+            return commentListCount
         default:
             return 1
         }
@@ -101,10 +102,12 @@ class MovieInfoViewModel {
     }
     
     func loadUserComment(DOCID: String, completion: @escaping (Error?) -> Void) {
-        userComment = nil
-        FBService.loadUserComment(DOCID: DOCID) { [weak self] userComment, error in
+        grade = 0
+        comment = ""
+        FBService.loadUserComment(DOCID: DOCID) { [weak self] grade, comment, error in
             guard error == nil else { completion(error); return }
-            self?.userComment = userComment
+            self?.grade = grade
+            self?.comment = comment
             completion(nil)
         }
     }
@@ -118,42 +121,25 @@ class MovieInfoViewModel {
     }
     
     func addComment(DOCID: String,
-                    movieId: String,
-                    movieSeq: String,
-                    movieName: String,
-                    thumbNailLink: String,
                     grade: Float,
                     comment: String,
                     completion: @escaping (Error?) -> Void) {
         
         FBService.addComment(DOCID: DOCID,
-                           movieId: movieId,
-                           movieSeq: movieSeq,
-                           movieName: movieName,
-                           thumbNailLink: thumbNailLink,
-                           grade: grade,
-                           comment: comment) { error in  completion(error) }
+                             grade: grade,
+                             comment: comment) { error in  completion(error) }
     }
     
-    func setIsWishToWatch(DOCID: String,
-                          movieId: String,
-                          movieSeq: String,
-                          movieName: String,
-                          thumbNailLink: String,
-                          gradeAverage: Float,
-                          wishToWatch: Bool,
-                          completion: @escaping (Error?) -> Void) {
-        
-        FBService.setIsWishToWatch(DOCID: DOCID,
-                                 movieId: movieId,
-                                 movieSeq: movieSeq,
-                                 movieName: movieName,
-                                 thumbNailLink: thumbNailLink,
-                                 gradeAverage: gradeAverage,
-                                 iswishToWatch: wishToWatch) { error in completion(error) }
+    // 소비자 계정을 위한 초기 데이터 설정
+    func setDataForAccount(movieInfo: MovieInfoModel, completion: @escaping (Error?) -> Void) {
+        FBService.setDataForAccount(movieInfo: movieInfo) { error in completion(error) }
     }
     
-    func deleteComment(DOCID: String, userId: String, completion: @escaping (Error?) -> Void) {
-        FBService.deleteComment(collection: DOCID, document: userId) { error in completion(error) }
+    func setIsWishToWatch(DOCID: String, isWishToWatch: Bool, completion: @escaping (Error?) -> Void) {
+        FBService.setIsWishToWatch(DOCID: DOCID, isWishToWatch: isWishToWatch) { error in completion(error) }
+    }
+    
+    func deleteGrade(DOCID: String, userId: String, completion: @escaping (Error?) -> Void) {
+        FBService.deleteGrade(collection: DOCID, document: userId) { error in completion(error) }
     }
 }

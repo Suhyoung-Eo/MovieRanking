@@ -68,7 +68,7 @@ struct K {
         static let movieName = "movieName"
         static let thumbNailLink = "thumbNailLink"
         static let gradeAverage = "gradeAverage"
-        static let isWishToWatch = "isWishToWatch"
+        static let wishToWatch = "wishToWatch"
         static let grade = "grade"
         static let comment = "comment"
         static let date = "date"
@@ -80,8 +80,8 @@ struct K {
         static let stllImageView = "stllImageView"
         static let staffView = "staffView"
         static let addCommentView = "addCommentView"
-        static let wishToWatchView = "보고싶어요"
-        static let estimateView = "평가한영화"
+        static let wishToWatchListView = "보고싶어요"
+        static let gradeListView = "평가한영화"
         static let userCommentView = "내코멘트"
     }
 }

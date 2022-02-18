@@ -13,9 +13,9 @@ class AccountViewModel {
     private let movieInfoService = MovieInformationService()
     
     var movieInfoModel: MovieInfoModel!
-    var estimateListModel: EstimateListModel!
-    var userCommentListModel: EstimateListModel!
     var wishToWatchListModel: WishToWatchListModel!
+    var gradeListModel: GradeListModel!
+    var accountCommentListModel: AccountCommentListModel!
     
     var userId: String? {
         return FBService.userId
@@ -23,8 +23,8 @@ class AccountViewModel {
     
     //MARK: - For StorageViewController
     
-    var EstimateListCount: Int {
-        return estimateListModel == nil ? 0 : estimateListModel.count
+    var gradeListCount: Int {
+        return gradeListModel == nil ? 0 : gradeListModel.count
     }
     
     var wishToWatchListCount: Int {
@@ -33,10 +33,10 @@ class AccountViewModel {
     
     func storageNumberOfItems(by title: String) -> Int {
         switch title {
-        case K.Prepare.wishToWatchView:
+        case K.Prepare.wishToWatchListView:
             return wishToWatchListCount
-        case K.Prepare.estimateView:
-            return EstimateListCount
+        case K.Prepare.gradeListView:
+            return gradeListCount
         default:
             return 0
         }
@@ -51,11 +51,11 @@ class AccountViewModel {
         }
     }
     
-    func loadEstimateList(completion: @escaping (Error?) -> Void) {
-        estimateListModel = nil
-        FBService.loadEstimateList { [weak self] estimateListModel, error in
+    func loadGradeList(completion: @escaping (Error?) -> Void) {
+        gradeListModel = nil
+        FBService.loadGradeList { [weak self] gradeListModel, error in
             guard error == nil else { completion(error); return }
-            self?.estimateListModel = estimateListModel
+            self?.gradeListModel = gradeListModel
             completion(nil)
         }
     }
@@ -66,16 +66,16 @@ class AccountViewModel {
         var movieSeq: String = ""
         
         switch itemTitle {
-        case K.Prepare.wishToWatchView:
-            let movieInfo = wishToWatchListModel.wishToWatchListModel(index)
+        case K.Prepare.wishToWatchListView:
+            let movieInfo = wishToWatchListModel.wishToWatchModel(index)
             movieId = movieInfo.movieId
             movieSeq = movieInfo.movieSeq
-        case K.Prepare.estimateView:
-            let movieInfo = estimateListModel.estimateModel(index)
+        case K.Prepare.gradeListView:
+            let movieInfo = gradeListModel.gradeModel(index)
             movieId = movieInfo.movieId
             movieSeq = movieInfo.movieSeq
         case K.Prepare.userCommentView:
-            let movieInfo = userCommentListModel.estimateModel(index)
+            let movieInfo = accountCommentListModel.accountCommentModel(index)
             movieId = movieInfo.movieId
             movieSeq = movieInfo.movieSeq
         default:
@@ -92,8 +92,8 @@ class AccountViewModel {
     
     //MARK: - For CommentsViewController
     
-    var userCommentListCount: Int {
-        return userCommentListModel == nil ? 0 : userCommentListModel.count
+    var accountCommentListCount: Int {
+        return accountCommentListModel == nil ? 0 : accountCommentListModel.count
     }
     
     func register(email: String, password: String, completion: @escaping (Error?) -> Void) {
@@ -111,17 +111,17 @@ class AccountViewModel {
         }
     }
     
-    func loadUserCommentList(completion: @escaping (Error?) -> Void) {
-        userCommentListModel = nil
-        FBService.loadUserCommentList { [weak self] userCommentListModel, error in
+    func loadAccountCommentList(completion: @escaping (Error?) -> Void) {
+        accountCommentListModel = nil
+        FBService.loadAccountCommentList { [weak self] accountCommentListModel, error in
             guard error == nil else { completion(error); return }
-            self?.userCommentListModel = userCommentListModel
+            self?.accountCommentListModel = accountCommentListModel
             completion(nil)
         }
     }
-        
+    
     func deleteComment(userId: String?, index: Int, completion: @escaping (Error?) -> Void) {
-        let movieInfo = userCommentListModel.estimateModel(index)
+        let movieInfo = accountCommentListModel.accountCommentModel(index)
         FBService.deleteComment(collection: userId, document: movieInfo.DOCID) { error in completion(error) }
     }
 }

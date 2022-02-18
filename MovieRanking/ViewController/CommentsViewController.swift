@@ -26,7 +26,7 @@ class CommentsViewController: UIViewController {
         navigationItem.title = "내코멘트"
         emptyImage.isHidden = false
         
-        viewModel.loadUserCommentList { [weak self] error in
+        viewModel.loadAccountCommentList { [weak self] error in
             self?.activityIndicator.stopAnimating()
             if let error = error {
                 DispatchQueue.main.async {
@@ -34,7 +34,7 @@ class CommentsViewController: UIViewController {
                 }
             } else {
                 DispatchQueue.main.async {
-                    if self?.viewModel.userCommentListCount == 0 {
+                    if self?.viewModel.accountCommentListCount == 0 {
                         self?.emptyImage.isHidden = false
                     } else {
                         self?.emptyImage.isHidden = true
@@ -117,7 +117,7 @@ extension CommentsViewController {
 extension CommentsViewController: UITableViewDataSource {
     
     func numberOfSections(in tableView: UITableView) -> Int {
-        return viewModel.userCommentListCount
+        return viewModel.accountCommentListCount
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -129,7 +129,7 @@ extension CommentsViewController: UITableViewDataSource {
             fatalError("Could not found UserCommentCell")
         }
         
-        let cellItem = viewModel.userCommentListModel.estimateModel(indexPath.section)
+        let cellItem = viewModel.accountCommentListModel.accountCommentModel(indexPath.section)
         cell.selectionStyle = .none
         cell.delegate = self
         cell.index = indexPath.section

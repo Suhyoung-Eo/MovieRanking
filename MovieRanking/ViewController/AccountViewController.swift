@@ -51,16 +51,16 @@ class AccountViewController: UIViewController {
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         
         switch sender as? String {
-        case K.Prepare.wishToWatchView:
+        case K.Prepare.wishToWatchListView:
             guard let destinationVC = segue.destination as? StorageViewController else {
                 fatalError("Could not found StorageViewController")
             }
-            destinationVC.navigationItemTitle = K.Prepare.wishToWatchView
-        case K.Prepare.estimateView:
+            destinationVC.navigationItemTitle = K.Prepare.wishToWatchListView
+        case K.Prepare.gradeListView:
             guard let destinationVC = segue.destination as? StorageViewController else {
                 fatalError("Could not found StorageViewController")
             }
-            destinationVC.navigationItemTitle = K.Prepare.estimateView
+            destinationVC.navigationItemTitle = K.Prepare.gradeListView
         case K.Prepare.userCommentView:
             break
         default:
@@ -122,9 +122,9 @@ extension AccountViewController: UITableViewDataSource {
         
         switch indexPath.section {
         case 0:
-            cell.textLabel?.text = K.Prepare.wishToWatchView
+            cell.textLabel?.text = K.Prepare.wishToWatchListView
         case 1:
-            cell.textLabel?.text = K.Prepare.estimateView
+            cell.textLabel?.text = K.Prepare.gradeListView
         case 2:
             cell.textLabel?.text = K.Prepare.userCommentView
         default:
@@ -148,9 +148,9 @@ extension AccountViewController: UITableViewDelegate {
         
         switch indexPath.section {
         case 0:
-            performSegue(withIdentifier: K.SegueId.storageView, sender: K.Prepare.wishToWatchView)
+            performSegue(withIdentifier: K.SegueId.storageView, sender: K.Prepare.wishToWatchListView)
         case 1:
-            performSegue(withIdentifier: K.SegueId.storageView, sender: K.Prepare.estimateView)
+            performSegue(withIdentifier: K.SegueId.storageView, sender: K.Prepare.gradeListView)
         case 2:
             performSegue(withIdentifier: K.SegueId.commentListView, sender: K.Prepare.userCommentView)
             break

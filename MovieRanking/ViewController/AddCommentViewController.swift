@@ -40,13 +40,13 @@ class AddCommentViewController: UIViewController {
                 return
             }
             
-            self?.grade = self?.viewModel.userComment?.grade ?? 0
+            self?.grade = self?.viewModel.grade ?? 0
             self?.loadStarImages(by: self?.grade ?? 0) {
                 self?.setStarImage()
             }
             
             DispatchQueue.main.async {
-                self?.commentTextView.text = self?.viewModel.userComment?.comment
+                self?.commentTextView.text = self?.viewModel.comment
             }
         }
     }
@@ -61,10 +61,6 @@ class AddCommentViewController: UIViewController {
         }
         
         viewModel.addComment(DOCID: movieInfo.DOCID,
-                             movieId: movieInfo.movieId,
-                             movieSeq: movieInfo.movieSeq,
-                             movieName: movieInfo.movieName,
-                             thumbNailLink: movieInfo.thumbNailLinks[0],
                              grade: grade,
                              comment: comment){ [weak self] error in
             
@@ -86,7 +82,7 @@ class AddCommentViewController: UIViewController {
             self?.setStarImage()
         }
         
-        if grade == 0, viewModel.userComment.grade != 0 {
+        if grade == 0, viewModel.grade != 0 {
             deleteAlert()
         }
     }
@@ -127,14 +123,14 @@ class AddCommentViewController: UIViewController {
     private func deleteAlert() {
         if viewModel.userId == nil { return }
         
-        let alert = UIAlertController(title: "삭제하시겠습니까?", message: nil, preferredStyle: .alert)
+        let alert = UIAlertController(title: "삭제하시겠습니까?", message: "등록된 코멘트도 함께 삭제됩니다", preferredStyle: .alert)
         alert.addAction(UIAlertAction(title: "확인", style: .default) { [weak self] _ in
-            self?.viewModel.deleteComment(DOCID: self?.movieInfo.DOCID ?? "",
-                                          userId: self?.viewModel.userComment?.userId ?? "") { _ in }
+            self?.viewModel.deleteGrade(DOCID: self?.movieInfo.DOCID ?? "",
+                                          userId: self?.viewModel.userId ?? "") { _ in }
         })
         alert.addAction(UIAlertAction(title: "취소", style: .cancel) { [weak self] _ in
-            self?.loadStarImages(by: self?.viewModel.userComment?.grade ?? 0) {
-                self?.grade = self?.viewModel.userComment?.grade ?? 0
+            self?.loadStarImages(by: self?.viewModel.grade ?? 0) {
+                self?.grade = self?.viewModel.grade ?? 0
                 self?.setStarImage()
             }
         })
