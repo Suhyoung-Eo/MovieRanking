@@ -126,7 +126,9 @@ class AddCommentViewController: UIViewController {
         let alert = UIAlertController(title: "삭제하시겠습니까?", message: "등록된 코멘트도 함께 삭제됩니다", preferredStyle: .alert)
         alert.addAction(UIAlertAction(title: "확인", style: .default) { [weak self] _ in
             self?.viewModel.deleteGrade(DOCID: self?.movieInfo.DOCID ?? "",
-                                          userId: self?.viewModel.userId ?? "") { _ in }
+                                        userId: self?.viewModel.userId ?? "") { [weak self] _ in
+                self?.commentTextView.text = self?.viewModel.comment
+            }
         })
         alert.addAction(UIAlertAction(title: "취소", style: .cancel) { [weak self] _ in
             self?.loadStarImages(by: self?.viewModel.grade ?? 0) {

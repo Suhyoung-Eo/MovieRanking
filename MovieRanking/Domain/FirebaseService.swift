@@ -40,32 +40,84 @@ class FirebaseService {
     
     //MARK: - Read data methods
     
-    func loadIsWishToWatch(DOCID: String, completion: @escaping (Bool) -> Void) {
-        guard let userId = userId else { completion(false); return }
-        db.collection(userId).document(DOCID).addSnapshotListener { documentSnapshot, error in
-            guard error == nil, let document = documentSnapshot else { completion(false); return }
+    func loadGradeAverage(DOCID: String, completion: @escaping (Float, Error?) -> Void) {
+        
+        db.collection(DOCID).getDocuments() { [weak self] querySnapshot, error in
+            guard error == nil else { completion(0.0, error); return }
             
-            if let data = document.data(), let isWishToWatch = data[K.FStore.wishToWatch] as? Bool {
-                completion(isWishToWatch)
-            } else {
-                completion(false)
+            var gradeTotal: Float = 0.0
+            var gradeCount: Float = 0.0
+            var gradeAverage: Float = 0.0
+            
+            if let snapshotDocuments = querySnapshot?.documents {
+                
+                for doc in snapshotDocuments {
+                    let data = doc.data()
+                    
+                    if let grade = data[K.FStore.grade] as? Float {
+                        gradeTotal += grade
+                        gradeCount += 1
+                    }
+                }
+                
+                // 평균 평점
+                if gradeCount != 0 {
+                    gradeAverage = gradeTotal / gradeCount
+                }
+                
+                if let userId = self?.userId {
+                    self?.db.collection(userId).document(DOCID).setData([K.FStore.gradeAverage: gradeAverage], merge: true) { error in
+                        completion(gradeAverage, error)
+                    }
+                } else {
+                    completion(gradeAverage, error)
+                }
             }
         }
     }
     
-    func loadCommentList(DOCID: String, completion: @escaping (CommentListModel, Float, Error?) -> Void) {
-        
-        db.collection(DOCID).order(by: K.FStore.date, descending: true).addSnapshotListener { [weak self] querySnapshot, error in
+    func loadIsWishToWatch(DOCID: String, completion: @escaping (Bool, Error?) -> Void) {
+        guard let userId = userId else { completion(false, nil); return }
+        db.collection(userId).document(DOCID).getDocument() { documentSnapshot, error in
+            guard error == nil, let document = documentSnapshot else { completion(false, error); return }
             
-            guard error == nil else {
-                completion(CommentListModel([FBCommentModel.empty]), 0.0, error)
+            if let data = document.data(), let isWishToWatch = data[K.FStore.wishToWatch] as? Bool {
+                completion(isWishToWatch, nil)
+            } else {
+                completion(false, nil)
+            }
+        }
+    }
+    
+    func loadUserComment(DOCID: String, completion: @escaping (Float, String, Error?) -> Void) {
+        
+        guard let userId = userId else { completion(0, "",nil); return }
+        
+        db.collection(DOCID).document(userId).getDocument() { documentSnapshot, error in
+            
+            guard error == nil, let document = documentSnapshot, let data = document.data() else {
+                completion(0, "",error)
                 return
             }
             
+            if let comment = data[K.FStore.comment] as? String,
+               let grade = data[K.FStore.grade] as? Float {
+                completion(grade, comment, nil)
+            } else if let grade = data[K.FStore.grade] as? Float {
+                completion(grade, "", nil)
+            } else {
+                completion(0, "", nil)
+            }
+        }
+    }
+    
+    func loadCommentList(DOCID: String, completion: @escaping (CommentListModel, Error?) -> Void) {
+        
+        db.collection(DOCID).order(by: K.FStore.date, descending: true).getDocuments() { querySnapshot, error in
+            
+            guard error == nil else { completion(CommentListModel([FBCommentModel.empty]), error); return }
+            
             var FBCommentModelList: [FBCommentModel] = []
-            var gradeTotal: Float = 0.0
-            var gradeCount: Float = 0.0
-            var gradeAverage: Float = 0.0
             
             if let snapshotDocuments = querySnapshot?.documents {
                 
@@ -87,44 +139,9 @@ class FirebaseService {
                         if !comment.isEmpty {
                             FBCommentModelList.append(FBCommentModel)
                         }
-                        
-                        gradeTotal += grade
-                        gradeCount += 1
                     }
                 }
-                
-                // 평균 평점
-                if gradeCount != 0 {
-                    gradeAverage = gradeTotal / gradeCount
-                }
-                
-                if let userId = self?.userId {
-                    self?.db.collection(userId).document(DOCID).setData([K.FStore.gradeAverage: gradeAverage], merge: true) { _ in }
-                }
-                
-                completion(CommentListModel(FBCommentModelList), gradeAverage, nil)
-            }
-        }
-    }
-    
-    func loadUserComment(DOCID: String, completion: @escaping (Float, String, Error?) -> Void) {
-        
-        guard let userId = userId else { completion(0, "",nil); return }
-        
-        db.collection(DOCID).document(userId).addSnapshotListener { documentSnapshot, error in
-            
-            guard error == nil, let document = documentSnapshot, let data = document.data() else {
-                completion(0, "",error)
-                return
-            }
-            
-            if let comment = data[K.FStore.comment] as? String,
-               let grade = data[K.FStore.grade] as? Float {
-                completion(grade, comment, nil)
-            } else if let grade = data[K.FStore.grade] as? Float {
-                completion(grade, "", nil)
-            } else {
-                completion(0, "", nil)
+                completion(CommentListModel(FBCommentModelList), nil)
             }
         }
     }
@@ -257,10 +274,7 @@ class FirebaseService {
     
     //MARK: - Create/ Update data methods
     
-    func addComment(DOCID: String,
-                    grade: Float,
-                    comment: String,
-                    completion: @escaping (Error?) -> Void) {
+    func addComment(DOCID: String, grade: Float, comment: String, completion: @escaping (Error?) -> Void) {
         
         guard let userId = self.userId else { completion(nil); return }
         

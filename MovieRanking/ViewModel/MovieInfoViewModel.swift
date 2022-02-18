@@ -65,7 +65,7 @@ class MovieInfoViewModel {
     
     var commentListModel: CommentListModel!
     
-    var gradeAverage: Float = 0.0
+    private var average: Float = 0.0
     var isWishToWatch: Bool = false
     var grade: Float = 0.0
     var comment: String = ""
@@ -91,19 +91,24 @@ class MovieInfoViewModel {
         }
     }
     
-    func loadCommentList(DOCID: String, completion: @escaping (Error?) -> Void) {
-        commentListModel = nil
-        FBService.loadCommentList(DOCID: DOCID) { [weak self] commentListModel, gradeAverage, error in
+    var gradeAverage: String {
+        return average == 0 ? "첫 평점을 등록해 주세요" : "평균 ★ \(String(format: "%.1f", average))"
+    }
+    
+    func loadAverageAndIsWishToWatch(DOCID: String, completion: @escaping (Error?) -> Void) {
+        FBService.loadGradeAverage(DOCID: DOCID) { [weak self] average, error in
             guard error == nil else { completion(error); return }
-            self?.commentListModel = commentListModel
-            self?.gradeAverage = gradeAverage
-            completion(nil)
+            self?.average = average
+            
+            self?.FBService.loadIsWishToWatch(DOCID: DOCID) { [weak self] isWishToWatch, error in
+                guard error == nil else { completion(error); return }
+                self?.isWishToWatch = isWishToWatch
+                completion(nil)
+            }
         }
     }
     
     func loadUserComment(DOCID: String, completion: @escaping (Error?) -> Void) {
-        grade = 0
-        comment = ""
         FBService.loadUserComment(DOCID: DOCID) { [weak self] grade, comment, error in
             guard error == nil else { completion(error); return }
             self?.grade = grade
@@ -112,34 +117,43 @@ class MovieInfoViewModel {
         }
     }
     
-    func loadIsWishToWatch(DOCID: String, completion: @escaping () -> Void) {
-        isWishToWatch = false
-        FBService.loadIsWishToWatch(DOCID: DOCID) { [weak self] isWishToWatch in
-            self?.isWishToWatch = isWishToWatch
-            completion()
+    func loadCommentList(DOCID: String, completion: @escaping (Error?) -> Void) {
+        commentListModel = nil
+        FBService.loadCommentList(DOCID: DOCID) { [weak self] commentListModel, error in
+            guard error == nil else { completion(error); return }
+            self?.commentListModel = commentListModel
+            completion(nil)
         }
     }
     
-    func addComment(DOCID: String,
-                    grade: Float,
-                    comment: String,
-                    completion: @escaping (Error?) -> Void) {
-        
-        FBService.addComment(DOCID: DOCID,
-                             grade: grade,
-                             comment: comment) { error in  completion(error) }
+    func addComment(DOCID: String, grade: Float, comment: String, completion: @escaping (Error?) -> Void) {
+        FBService.addComment(DOCID: DOCID, grade: grade, comment: comment) { [weak self] error in
+            guard error == nil else { completion(error); return }
+            self?.grade = grade
+            self?.comment = comment
+            completion(nil)
+        }
+    }
+    
+    func setIsWishToWatch(DOCID: String, isWishToWatch: Bool, completion: @escaping (Error?) -> Void) {
+        FBService.setIsWishToWatch(DOCID: DOCID, isWishToWatch: isWishToWatch) { [weak self] error in
+            guard error == nil else { completion(error); return }
+            self?.isWishToWatch = isWishToWatch
+            completion(nil)
+        }
+    }
+    
+    func deleteGrade(DOCID: String, userId: String, completion: @escaping (Error?) -> Void) {
+        FBService.deleteGrade(collection: DOCID, document: userId) { [weak self] error in
+            guard error == nil else { completion(error); return }
+            self?.grade = 0.0
+            self?.comment = ""
+            completion(nil)
+        }
     }
     
     // 소비자 계정을 위한 초기 데이터 설정
     func setDataForAccount(movieInfo: MovieInfoModel, completion: @escaping (Error?) -> Void) {
         FBService.setDataForAccount(movieInfo: movieInfo) { error in completion(error) }
-    }
-    
-    func setIsWishToWatch(DOCID: String, isWishToWatch: Bool, completion: @escaping (Error?) -> Void) {
-        FBService.setIsWishToWatch(DOCID: DOCID, isWishToWatch: isWishToWatch) { error in completion(error) }
-    }
-    
-    func deleteGrade(DOCID: String, userId: String, completion: @escaping (Error?) -> Void) {
-        FBService.deleteGrade(collection: DOCID, document: userId) { error in completion(error) }
     }
 }

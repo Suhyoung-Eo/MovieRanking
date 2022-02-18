@@ -38,9 +38,6 @@ class MovieInfoViewController: UIViewController {
             }
         }
         
-        loadComment()
-        loadIsWishToWatch()
-        
         // ios15에서 setionHeader에 여백이 생기는 이슈
         if #available(iOS 15.0, *) {
             tableView.sectionHeaderTopPadding = 0
@@ -53,6 +50,19 @@ class MovieInfoViewController: UIViewController {
         navigationController?.navigationBar.titleTextAttributes = [NSAttributedString.Key.foregroundColor: UIColor.black.withAlphaComponent(0.7)]
         navigationItem.title = movieInfo.movieName
         
+        viewModel.loadAverageAndIsWishToWatch(DOCID: movieInfo.DOCID) { [weak self] error in
+            if let error = error {
+                DispatchQueue.main.async {
+                    AlertService.shared.alert(viewController: self, alertTitle: "정보를 불러오지 못했습니다", message: error.localizedDescription)
+                }
+            } else {
+                DispatchQueue.main.async {
+                    self?.tableView.reloadData()
+                }
+            }
+        }
+        
+        loadComment()
     }
     
     override func viewWillDisappear(_ animated: Bool) {
@@ -124,19 +134,15 @@ extension MovieInfoViewController {
         }
     }
     
-    private func loadIsWishToWatch() {
-        viewModel.loadIsWishToWatch(DOCID: movieInfo.DOCID) { [weak self] in
-            DispatchQueue.main.async {
-                self?.tableView.reloadData()
-            }
-        }
-    }
-    
     private func setIsWishToWatch(_ isWishToWatch: Bool) {
-        viewModel.setIsWishToWatch(DOCID: movieInfo.DOCID, isWishToWatch: isWishToWatch) { error in
+        viewModel.setIsWishToWatch(DOCID: movieInfo.DOCID, isWishToWatch: isWishToWatch) { [weak self] error in
             if let error = error {
                 DispatchQueue.main.async {
                     AlertService.shared.alert(viewController: self, alertTitle: "보고 싶어요 목록 저장에 실패했습니다", message: error.localizedDescription)
+                }
+            } else {
+                DispatchQueue.main.async {
+                    self?.tableView.reloadData()
                 }
             }
         }
@@ -205,7 +211,7 @@ extension MovieInfoViewController: UITableViewDataSource {
             
             cell.selectionStyle = .none
             cell.delegate = self
-            cell.gradeLabel.text = viewModel.gradeAverage == 0 ? "첫 평점을 등록해 주세요" : "평균 ★ \(String(format: "%.1f", viewModel.gradeAverage))"
+            cell.gradeLabel.text = viewModel.gradeAverage
             cell.wishToWatchButton.setImage(viewModel.isWishToWatch ? UIImage(systemName: "bookmark.fill") : UIImage(systemName: "plus"), for: .normal)
             cell.wishToWatchButton.tintColor = viewModel.isWishToWatch ? UIColor(red: 0.98, green: 0.07, blue: 0.34, alpha: 1.00) : UIColor.darkGray
             
@@ -301,6 +307,5 @@ extension MovieInfoViewController: StaffsInfoCellDelegate, UserInteractionCellDe
     func pushedWishToWatchButton() {
         isWishToWatch = viewModel.userId == nil ? false : !viewModel.isWishToWatch
         setIsWishToWatch(isWishToWatch)
-        tableView.reloadData()
     }
 }
