@@ -40,10 +40,6 @@ struct CommentModel {
         return commentModel.userId
     }
     
-    var movieName: String {
-        return commentModel.movieName
-    }
-    
     var grade: Float {
         return commentModel.grade
     }

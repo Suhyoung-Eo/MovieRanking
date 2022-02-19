@@ -125,13 +125,11 @@ class FirebaseService {
                     let data = doc.data()
                     
                     if let userId = data[K.FStore.userId] as? String,
-                       let movieName = data[K.FStore.movieName] as? String,
                        let grade = data[K.FStore.grade] as? Float,
                        let comment = data[K.FStore.comment] as? String,
                        let date = data[K.FStore.date] as? String {
                         
                         let FBCommentModel = FBCommentModel(userId: userId,
-                                                            movieName: movieName,
                                                             grade: grade,
                                                             comment: comment,
                                                             date: date)

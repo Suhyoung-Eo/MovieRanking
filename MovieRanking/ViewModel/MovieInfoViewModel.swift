@@ -61,14 +61,37 @@ class MovieInfoViewModel {
         }
     }
     
-    //MARK: - FirestoreService
+    //MARK: - FirebaseService
+    
+    var onUpdatedFirebase: () -> Void = {}
     
     var commentListModel: CommentListModel!
-    
-    private var average: Float = 0.0
-    var isWishToWatch: Bool = false
-    var grade: Float = 0.0
+    // var DOCID: String = ""
     var comment: String = ""
+    var grade: Float = 0.0
+    
+    /* MovieInfoViewController */
+    
+    var error: Error? {
+        didSet {
+            guard error != nil else { return }
+            onUpdatedFirebase()
+        }
+    }
+    
+    var isWishToWatch: Bool = false {
+        didSet {
+            guard error == nil else { return }
+            onUpdatedFirebase()
+        }
+    }
+    
+    private var gradeAverage: Float = 0.0 {
+        didSet {
+            guard error == nil else { return }
+            onUpdatedFirebase()
+        }
+    }
     
     var userId: String? {
         return FBService.userId
@@ -91,37 +114,59 @@ class MovieInfoViewModel {
         }
     }
     
-    var gradeAverage: String {
-        return average == 0 ? "첫 평점을 등록해 주세요" : "평균 ★ \(String(format: "%.1f", average))"
+    var gradeAverageText: String {
+        return gradeAverage == 0 ? "첫 평점을 등록해 주세요" : "평균 ★ \(String(format: "%.1f", gradeAverage))"
     }
     
-    func loadAverageAndIsWishToWatch(DOCID: String, completion: @escaping (Error?) -> Void) {
-        FBService.loadGradeAverage(DOCID: DOCID) { [weak self] average, error in
-            guard error == nil else { completion(error); return }
-            self?.average = average
-            
-            self?.FBService.loadIsWishToWatch(DOCID: DOCID) { [weak self] isWishToWatch, error in
-                guard error == nil else { completion(error); return }
-                self?.isWishToWatch = isWishToWatch
-                completion(nil)
+    func loadGradeAverage(DOCID: String) {
+        error = nil
+        FBService.loadGradeAverage(DOCID: DOCID) { [weak self] gradeAverage, error in
+            if let error = error {
+                self?.error = error
+            } else {
+                self?.gradeAverage = gradeAverage
             }
         }
     }
+    
+    func loadIsWishToWatch(DOCID: String) {
+        error = nil
+        FBService.loadIsWishToWatch(DOCID: DOCID) { [weak self] isWishToWatch, error in
+            if let error = error {
+                self?.error = error
+            } else {
+                self?.isWishToWatch = isWishToWatch
+            }
+        }
+    }
+    
+    func loadCommentList(DOCID: String) {
+        error = nil
+        commentListModel = nil
+        FBService.loadCommentList(DOCID: DOCID) { [weak self] commentListModel, error in
+            if let error = error {
+                self?.error = error
+            } else {
+                self?.commentListModel = commentListModel
+            }
+        }
+    }
+    
+    // 소비자 계정을 위한 초기 데이터 설정
+    func setDataForAccount(movieInfo: MovieInfoModel) {
+        error = nil
+        FBService.setDataForAccount(movieInfo: movieInfo) { [weak self] error in
+            self?.error = error
+        }
+    }
+    
+    /* AddCommentViewController */
     
     func loadUserComment(DOCID: String, completion: @escaping (Error?) -> Void) {
         FBService.loadUserComment(DOCID: DOCID) { [weak self] grade, comment, error in
             guard error == nil else { completion(error); return }
             self?.grade = grade
             self?.comment = comment
-            completion(nil)
-        }
-    }
-    
-    func loadCommentList(DOCID: String, completion: @escaping (Error?) -> Void) {
-        commentListModel = nil
-        FBService.loadCommentList(DOCID: DOCID) { [weak self] commentListModel, error in
-            guard error == nil else { completion(error); return }
-            self?.commentListModel = commentListModel
             completion(nil)
         }
     }
@@ -135,11 +180,14 @@ class MovieInfoViewModel {
         }
     }
     
-    func setIsWishToWatch(DOCID: String, isWishToWatch: Bool, completion: @escaping (Error?) -> Void) {
+    func setIsWishToWatch(DOCID: String, isWishToWatch: Bool) {
+        error = nil
         FBService.setIsWishToWatch(DOCID: DOCID, isWishToWatch: isWishToWatch) { [weak self] error in
-            guard error == nil else { completion(error); return }
-            self?.isWishToWatch = isWishToWatch
-            completion(nil)
+            if let error = error {
+                self?.error = error
+            } else {
+                self?.isWishToWatch = isWishToWatch
+            }
         }
     }
     
@@ -150,10 +198,5 @@ class MovieInfoViewModel {
             self?.comment = ""
             completion(nil)
         }
-    }
-    
-    // 소비자 계정을 위한 초기 데이터 설정
-    func setDataForAccount(movieInfo: MovieInfoModel, completion: @escaping (Error?) -> Void) {
-        FBService.setDataForAccount(movieInfo: movieInfo) { error in completion(error) }
     }
 }
