@@ -40,11 +40,13 @@ class RegisterViewController: UIViewController {
     }
     
     private func alertService() {
-        let alert = UIAlertController(title: "회원 가입에 성공했습니다", message: "로그인해 주세요", preferredStyle: .alert)
-        alert.addAction(UIAlertAction(title: "확인", style: .default) { [weak self] _ in
-            self?.dismiss(animated: true, completion: nil)
-        })
-        present(alert, animated: true, completion: nil)
+        DispatchQueue.main.async { [weak self] in
+            let alert = UIAlertController(title: "회원 가입에 성공했습니다", message: "로그인해 주세요", preferredStyle: .alert)
+            alert.addAction(UIAlertAction(title: "확인", style: .default) { _ in
+                self?.dismiss(animated: true, completion: nil)
+            })
+            self?.present(alert, animated: true, completion: nil)
+        }
     }
     
     deinit {

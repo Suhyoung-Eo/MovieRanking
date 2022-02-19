@@ -30,6 +30,10 @@ class BoxOfficeViewModel {
         return boxOfficeList == nil ? 0 : boxOfficeList.count
     }
     
+    func boxOfficeInfo(index: Int) -> (String, BoxOfficeModel) {
+        return (movieInfoList.movieInfoModel(index).thumbNailLinks[0], boxOfficeList.boxOfficeModel(index))
+    }
+    
     func fetchWeeklyBoxOffice(by boxOfficeType: Int, completion: @escaping (Error?) -> Void) {
         boxOfficeList = nil
         movieInfoList = nil

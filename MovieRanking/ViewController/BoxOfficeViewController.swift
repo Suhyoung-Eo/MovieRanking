@@ -126,11 +126,10 @@ extension BoxOfficeViewController {
     }
     
     private func retry(error: Error?) {
-        let alert = UIAlertController(title: "네트워크 장애", message: error?.localizedDescription, preferredStyle: .alert)
-        alert.addAction(UIAlertAction(title: "재시도", style: .default) { [weak self] _ in self?.fetchBoxOffice() })
-        present(alert, animated: true, completion: nil)
-        
         DispatchQueue.main.async { [weak self] in
+            let alert = UIAlertController(title: "네트워크 장애", message: error?.localizedDescription, preferredStyle: .alert)
+            alert.addAction(UIAlertAction(title: "재시도", style: .default) { [weak self] _ in self?.fetchBoxOffice() })
+            self?.present(alert, animated: true, completion: nil)
             self?.activityIndicator.stopAnimating()
         }
     }
@@ -153,16 +152,15 @@ extension BoxOfficeViewController: UITableViewDataSource {
             fatalError("Could not found BoxOfficeCell")
         }
         
-        let boxOfficeList = viewModel.boxOfficeList.boxOfficeModel(indexPath.row)
-        let movieInfoList = viewModel.movieInfoList.movieInfoModel(indexPath.row)
+        let boxOfficeInfo = viewModel.boxOfficeInfo(index: indexPath.row)   // return (String, BoxOfficeModel)
         
         cell.selectionStyle = .none
-        cell.thumbnailImageView.setImage(from: movieInfoList.thumbNailLinks[0])
-        cell.titleLabel.text = boxOfficeList.movieName
-        cell.rankLabel.text = boxOfficeList.movieRank
-        cell.openDateLabel.text = "개봉일: \(boxOfficeList.openDate)"
-        cell.audiAccLabel.text = "누적: \(boxOfficeList.audiAcc)"
-        if boxOfficeList.rankOldAndNew == "NEW" {
+        cell.thumbnailImageView.setImage(from: boxOfficeInfo.0)
+        cell.titleLabel.text = boxOfficeInfo.1.movieName
+        cell.rankLabel.text = boxOfficeInfo.1.movieRank
+        cell.openDateLabel.text = "개봉일: \(boxOfficeInfo.1.openDate)"
+        cell.audiAccLabel.text = "누적: \(boxOfficeInfo.1.audiAcc)"
+        if boxOfficeInfo.1.rankOldAndNew == "NEW" {
             cell.newImageView.image = UIImage(named: "new")
         }
         

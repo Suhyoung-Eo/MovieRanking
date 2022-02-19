@@ -70,7 +70,7 @@ class MovieInfoViewModel {
     var comment: String = ""
     var grade: Float = 0.0
     
-    /* MovieInfoViewController */
+    /* For MovieInfoViewController */
     
     var error: Error? {
         didSet {
@@ -160,7 +160,7 @@ class MovieInfoViewModel {
         }
     }
     
-    /* AddCommentViewController */
+    /* For AddCommentViewController */
     
     func loadUserComment(DOCID: String, completion: @escaping (Error?) -> Void) {
         FBService.loadUserComment(DOCID: DOCID) { [weak self] grade, comment, error in
