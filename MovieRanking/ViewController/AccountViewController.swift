@@ -28,6 +28,10 @@ class AccountViewController: UIViewController {
     }
     
     override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        
+        navigationController?.navigationBar.setBackgroundImage(UIImage(), for:.default)
+        navigationController?.navigationBar.shadowImage = UIImage()
         
         if let userId = viewModel.userId {
             emptyView.isHidden = true
