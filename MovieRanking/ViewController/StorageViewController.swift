@@ -28,16 +28,16 @@ class StorageViewController: UIViewController {
         emptyImage.isHidden = false
         
         navigationItem.title = navigationItemTitle
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        navigationController?.navigationBar.titleTextAttributes = [NSAttributedString.Key.foregroundColor: UIColor.black.withAlphaComponent(0.7)]
         
         if navigationItemTitle == K.Prepare.wishToWatchListView {
             viewModel.loadWishToWatchList { [weak self] error in self?.showAlert(by: error) }
         } else {
             viewModel.loadGradeList { [weak self] error in self?.showAlert(by: error) }
         }
-    }
-    
-    override func viewWillAppear(_ animated: Bool) {
-        navigationController?.navigationBar.titleTextAttributes = [NSAttributedString.Key.foregroundColor: UIColor.black.withAlphaComponent(0.7)]
     }
     
     override func viewWillDisappear(_ animated: Bool) {

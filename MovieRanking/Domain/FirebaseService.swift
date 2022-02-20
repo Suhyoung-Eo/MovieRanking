@@ -42,17 +42,17 @@ class FirebaseService {
     
     func loadGradeAverage(DOCID: String, completion: @escaping (Float, Error?) -> Void) {
         
-        db.collection(DOCID).getDocuments() { [weak self] querySnapshot, error in
+        db.collection(DOCID).getDocuments() { [weak self] documentSnapshot, error in
             guard error == nil else { completion(0.0, error); return }
             
             var gradeTotal: Float = 0.0
             var gradeCount: Float = 0.0
             var gradeAverage: Float = 0.0
             
-            if let snapshotDocuments = querySnapshot?.documents {
+            if let documents = documentSnapshot?.documents {
                 
-                for doc in snapshotDocuments {
-                    let data = doc.data()
+                for document in documents {
+                    let data = document.data()
                     
                     if let grade = data[K.FStore.grade] as? Float {
                         gradeTotal += grade
@@ -119,10 +119,10 @@ class FirebaseService {
             
             var FBCommentModelList: [FBCommentModel] = []
             
-            if let snapshotDocuments = querySnapshot?.documents {
+            if let documents = querySnapshot?.documents {
                 
-                for doc in snapshotDocuments {
-                    let data = doc.data()
+                for document in documents {
+                    let data = document.data()
                     
                     if let userId = data[K.FStore.userId] as? String,
                        let grade = data[K.FStore.grade] as? Float,
@@ -148,7 +148,7 @@ class FirebaseService {
         
         guard let userId = userId else { completion(nil, nil); return }
         
-        db.collection(userId).addSnapshotListener { querySnapshot, error in
+        db.collection(userId).getDocuments() { documentSnapshot, error in
             
             guard error == nil else {
                 completion(WishToWatchListModel([FBWishToWatchModel.empty]), error)
@@ -157,10 +157,10 @@ class FirebaseService {
             
             var FBWishToWatchList: [FBWishToWatchModel] = []
             
-            if let snapshotDocuments = querySnapshot?.documents {
+            if let documents = documentSnapshot?.documents {
                 
-                for doc in snapshotDocuments {
-                    let data = doc.data()
+                for document in documents {
+                    let data = document.data()
                     
                     if let movieId = data[K.FStore.movieId] as? String,
                        let movieSeq = data[K.FStore.movieSeq] as? String,
@@ -189,7 +189,7 @@ class FirebaseService {
         
         guard let userId = userId else { completion(nil, nil); return }
         
-        db.collection(userId).addSnapshotListener { querySnapshot, error in
+        db.collection(userId).getDocuments() { documentSnapshot, error in
             
             guard error == nil else {
                 completion(GradeListModel([FBGradeModel.empty]), error)
@@ -198,10 +198,10 @@ class FirebaseService {
             
             var FBGradeModelList: [FBGradeModel] = []
             
-            if let snapshotDocuments = querySnapshot?.documents {
+            if let documents = documentSnapshot?.documents {
                 
-                for doc in snapshotDocuments {
-                    let data = doc.data()
+                for document in documents {
+                    let data = document.data()
                     
                     if let DOCID = data[K.FStore.DOCID] as? String,
                        let movieId = data[K.FStore.movieId] as? String,
@@ -238,10 +238,10 @@ class FirebaseService {
             
             var FBUserCommentList: [FBAccountCommentModel] = []
             
-            if let snapshotDocuments = querySnapshot?.documents {
+            if let documents = querySnapshot?.documents {
                 
-                for doc in snapshotDocuments {
-                    let data = doc.data()
+                for document in documents {
+                    let data = document.data()
                     
                     if let DOCID = data[K.FStore.DOCID] as? String,
                        let movieId = data[K.FStore.movieId] as? String,
