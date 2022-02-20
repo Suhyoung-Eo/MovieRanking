@@ -176,6 +176,7 @@ class MovieInfoViewModel {
             guard error == nil else { completion(error); return }
             self?.grade = grade
             self?.comment = comment
+            self?.loadGradeAverage(DOCID: DOCID)    // 평점 바낄때마다 평균 평점 갱신
             completion(nil)
         }
     }
@@ -196,6 +197,7 @@ class MovieInfoViewModel {
             guard error == nil else { completion(error); return }
             self?.grade = 0.0
             self?.comment = ""
+            self?.loadGradeAverage(DOCID: DOCID)    // 평점 바낄때마다 평균 평점 갱신
             completion(nil)
         }
     }

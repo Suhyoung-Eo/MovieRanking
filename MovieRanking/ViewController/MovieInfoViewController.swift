@@ -168,6 +168,7 @@ extension MovieInfoViewController: UITableViewDataSource {
             
             cell.selectionStyle = .none
             cell.parent = self
+            cell.viewModel = viewModel
             cell.movieInfo = movieInfo
             
             return cell

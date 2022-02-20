@@ -15,10 +15,10 @@ class RatingStarsCell: UITableViewCell {
     @IBOutlet weak var fourthStarView: UIImageView!
     @IBOutlet weak var fifthStarView: UIImageView!
     
-    private let viewModel = MovieInfoViewModel()
     private var starImages: [UIImage] = []
     
     weak var parent: UIViewController!
+    weak var viewModel: MovieInfoViewModel!
     
     var movieInfo: MovieInfoModel! {
         didSet {
