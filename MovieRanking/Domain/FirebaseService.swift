@@ -333,8 +333,9 @@ class FirebaseService {
         }
     }
     
-    func deleteGrade(collection: String?, document: String?, completion: @escaping (Error?) -> Void) {
+    func deleteGradeAndComment(collection: String?, document: String?, completion: @escaping (Error?) -> Void) {
         guard let document = document, let collection = collection else { completion(nil); return }
+        
         db.collection(collection).document(document).updateData([K.FStore.grade: FieldValue.delete(),
                                                                  K.FStore.comment: FieldValue.delete(),
                                                                  K.FStore.date: FieldValue.delete()]) { [weak self] error in

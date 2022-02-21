@@ -110,6 +110,15 @@ class AccountViewModel {
     }
     
     //MARK: - For CommentsViewController
+    var error: Error?
+    
+    var onUpdatedComment: () -> Void = {}
+    
+    var isUpdateComment: Bool = false {
+        didSet {
+            onUpdatedComment()
+        }
+    }
     
     func loadAccountCommentList(completion: @escaping (Error?) -> Void) {
         accountCommentListModel = nil
@@ -120,6 +129,15 @@ class AccountViewModel {
         }
     }
     
+    func addComment(DOCID: String, grade: Float, comment: String) {
+        error = nil
+        FBService.addComment(DOCID: DOCID, grade: grade, comment: comment) { [weak self] error in
+            guard let self = self else { return }
+            self.error = error
+            self.isUpdateComment = !self.isUpdateComment
+        }
+    }
+        
     func deleteComment(userId: String?, index: Int, completion: @escaping (Error?) -> Void) {
         let movieInfo = accountCommentListModel.accountCommentModel(index)
         FBService.deleteComment(collection: userId, document: movieInfo.DOCID) { error in completion(error) }

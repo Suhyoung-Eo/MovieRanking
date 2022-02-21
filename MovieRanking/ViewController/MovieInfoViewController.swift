@@ -60,6 +60,7 @@ class MovieInfoViewController: UIViewController {
         viewModel.loadGradeAverage(DOCID: movieInfo.DOCID)
         viewModel.loadIsWishToWatch(DOCID: movieInfo.DOCID)
         viewModel.loadCommentList(DOCID: movieInfo.DOCID)
+        viewModel.loadUserComment(DOCID: movieInfo.DOCID)
     }
     
     override func viewWillDisappear(_ animated: Bool) {
@@ -90,6 +91,8 @@ class MovieInfoViewController: UIViewController {
             guard let destinationVC = segue.destination as? AddCommentViewController else {
                 fatalError("Could not found AddCommentViewController")
             }
+            destinationVC.comment = viewModel.comment
+            destinationVC.grade = viewModel.grade
             destinationVC.movieInfo = movieInfo
         default:
             return

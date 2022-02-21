@@ -15,6 +15,9 @@ class CommentsViewController: UIViewController {
     
     private let viewModel = AccountViewModel()
     
+    private var comment: String = ""
+    private var grade: Float = 0.0
+    
     override func viewDidLoad() {
         super.viewDidLoad()
 
@@ -58,6 +61,8 @@ class CommentsViewController: UIViewController {
                 fatalError("Could not found AddCommentViewController")
             }
             destinationVC.movieInfo = viewModel.movieInfoModel
+            destinationVC.comment = comment
+            destinationVC.grade = grade
         default:
             break
         }
@@ -89,6 +94,9 @@ extension CommentsViewController {
                                                   message: error?.localizedDescription)
                     }
                 } else {
+                    let cellItem = self?.viewModel.accountCommentListModel.accountCommentModel(index)
+                    self?.comment = cellItem?.comment ?? ""
+                    self?.grade = cellItem?.grade ?? 0
                     DispatchQueue.main.async {
                         self?.performSegue(withIdentifier: K.SegueId.addCommentView, sender: K.Prepare.addCommentView)
                     }

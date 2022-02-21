@@ -17,21 +17,13 @@ class RatingStarsCell: UITableViewCell {
     
     private var starImages: [UIImage] = []
     
+    var movieInfo: MovieInfoModel!
     weak var parent: UIViewController!
-    weak var viewModel: MovieInfoViewModel!
     
-    var movieInfo: MovieInfoModel! {
+    weak var viewModel: MovieInfoViewModel! {
         didSet {
-            viewModel.loadUserComment(DOCID: movieInfo.DOCID) { [weak self] error in
-                if let error = error {
-                    DispatchQueue.main.async {
-                        AlertService.shared.alert(viewController: self?.parent, alertTitle: "정보를 불러오지 못했습니다", message: error.localizedDescription)
-                    }
-                } else {
-                    self?.loadStarImages(by: self?.viewModel.grade ?? 0.0) {
-                        self?.setStarImage()
-                    }
-                }
+            loadStarImages(by: viewModel.grade) { [weak self] in
+                self?.setStarImage()
             }
         }
     }
@@ -54,9 +46,9 @@ class RatingStarsCell: UITableViewCell {
         }
         
         if grade == 0 {
-            deleteComment()
+            deleteAlert()
         } else {
-            addComment(by: grade)
+            updateGrade(by: grade)
         }
     }
     
@@ -88,27 +80,18 @@ class RatingStarsCell: UITableViewCell {
         }
     }
     
-    private func addComment(by grade: Float) {
+    private func updateGrade(by grade: Float) {
         addAlert()
-        viewModel.addComment(DOCID: movieInfo.DOCID,
-                             grade: grade,
-                             comment: viewModel.comment) { [weak self] error in
-            if let error = error {
-                DispatchQueue.main.async {
-                    AlertService.shared.alert(viewController: self?.parent, alertTitle: "평점을 저장하지 못했습니다", message: error.localizedDescription)
-                }
-            }
-        }
+        viewModel.updateGrade(DOCID: movieInfo.DOCID, grade: grade)
     }
     
-    private func deleteComment() {
+    private func deleteAlert() {
         
         if viewModel.grade == 0 { return }
         
         let alert = UIAlertController(title: "삭제하시겠습니까?", message: "등록된 코멘트도 함께 삭제됩니다", preferredStyle: .alert)
         alert.addAction(UIAlertAction(title: "확인", style: .default) { [weak self] _ in
-            self?.viewModel.deleteGrade(DOCID: self?.movieInfo.DOCID ?? "",
-                                          userId: self?.viewModel.userId ?? "") { _ in }
+            self?.viewModel.deleteGradeAndComment(DOCID: self?.movieInfo.DOCID ?? "")
         })
         alert.addAction(UIAlertAction(title: "취소", style: .cancel) { [weak self] _ in
             self?.loadStarImages(by: self?.viewModel.grade ?? 0) {
