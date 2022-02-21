@@ -15,7 +15,7 @@ class BoxOfficeViewModel {
     
     var boxOfficeList: BoxOfficeListModel!  // 박스 오피스 순위 정보를 가지고 있음
     var movieInfoList: MovieInfoListModel!  // 썸네일등 각 영화의 상세 정보를 가지고 있음
-    var buttontitle: String = ""
+    var buttonTitle: String = ""
     var error: Error?
     
     private var isUpdate: Bool = false {
@@ -36,21 +36,21 @@ class BoxOfficeViewModel {
         return (movieInfoList.movieInfoModel(index).thumbNailLinks[0], boxOfficeList.boxOfficeModel(index))
     }
     
-    func fetBoxOffice(by boxOfficeType: Int) {
+    func fetchBoxOffice(by boxOfficeType: Int) {
         error = nil
         
         switch boxOfficeType {
         case 0: // 주간 (월~일)
-            buttontitle = "     ▼  주간 박스오피스"
+            buttonTitle = "     ▼  주간 박스오피스"
             fetchWeeklyBoxOffice(by: 0)
         case 1: // 주말 (금~일)
-            buttontitle = "     ▼  주말 박스오피스"
+            buttonTitle = "     ▼  주말 박스오피스"
             fetchWeeklyBoxOffice(by: 1)
         case 2: // 일별 (검색일 하루 전)
-            buttontitle = "     ▼  일별 박스오피스"
+            buttonTitle = "     ▼  일별 박스오피스"
             fetchDailyBoxOffice()
         default:
-            buttontitle = "     ▼  주간 박스오피스"
+            buttonTitle = "     ▼  주간 박스오피스"
             fetchWeeklyBoxOffice(by: 0)
         }
     }

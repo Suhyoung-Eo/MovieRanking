@@ -21,6 +21,25 @@ class AccountViewModel {
         return FBService.userId
     }
     
+    var accountCommentListCount: Int {
+        return accountCommentListModel == nil ? 0 : accountCommentListModel.count
+    }
+    
+    func register(email: String, password: String, completion: @escaping (Error?) -> Void) {
+        FBService.register(email: email, password: password) { error in completion(error) }
+    }
+    
+    func logIn(email: String, password: String, completion: @escaping (Error?) -> Void) {
+        FBService.logIn(email: email, password: password) { error in completion(error) }
+    }
+    
+    func logOut(completion: @escaping (Error?) -> Void) {
+        FBService.logOut { error in
+            guard error == nil else { completion(error); return }
+            completion(nil)
+        }
+    }
+    
     //MARK: - For StorageViewController
     
     var gradeListCount: Int {
@@ -91,25 +110,6 @@ class AccountViewModel {
     }
     
     //MARK: - For CommentsViewController
-    
-    var accountCommentListCount: Int {
-        return accountCommentListModel == nil ? 0 : accountCommentListModel.count
-    }
-    
-    func register(email: String, password: String, completion: @escaping (Error?) -> Void) {
-        FBService.register(email: email, password: password) { error in completion(error) }
-    }
-    
-    func logIn(email: String, password: String, completion: @escaping (Error?) -> Void) {
-        FBService.logIn(email: email, password: password) { error in completion(error) }
-    }
-    
-    func logOut(completion: @escaping (Error?) -> Void) {
-        FBService.logOut { error in
-            guard error == nil else { completion(error); return }
-            completion(nil)
-        }
-    }
     
     func loadAccountCommentList(completion: @escaping (Error?) -> Void) {
         accountCommentListModel = nil

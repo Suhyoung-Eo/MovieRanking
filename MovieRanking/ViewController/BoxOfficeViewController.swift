@@ -38,7 +38,7 @@ class BoxOfficeViewController: UIViewController {
                 self?.retry(error: error)
             } else {
                 DispatchQueue.main.async {
-                    self?.button.setTitle(self?.viewModel.buttontitle, for: .normal)
+                    self?.button.setTitle(self?.viewModel.buttonTitle, for: .normal)
                     
                     if self?.viewModel.numberOfRowsInSection == 0 {
                         self?.tableView.separatorStyle = .none  // fetchBoxOffice 동작 하는 동안 화면 클리어
@@ -102,7 +102,7 @@ extension BoxOfficeViewController {
         button.isEnabled = false    // 박스오피스 정보 다운로드 완료전까지 선택 버튼 비활성화
         activityIndicator.isHidden = false
         activityIndicator.startAnimating()
-        viewModel.fetBoxOffice(by: boxOfficeType)
+        viewModel.fetchBoxOffice(by: boxOfficeType)
     }
     
     private func retry(error: Error?) {
