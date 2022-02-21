@@ -64,6 +64,7 @@
 		FED88FF927BF79D2009338A3 /* FBAccountCommentModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = FED88FF827BF79D2009338A3 /* FBAccountCommentModel.swift */; };
 		FED88FFB27BF7A5F009338A3 /* AccountCommentListModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = FED88FFA27BF7A5F009338A3 /* AccountCommentListModel.swift */; };
 		FEE30BB927B39B900045D6AC /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = FEE30BB827B39B8F0045D6AC /* GoogleService-Info.plist */; };
+		FEED97C527C31E5D003010E9 /* LeftAlignedCollectionViewFlowLayout.swift in Sources */ = {isa = PBXBuildFile; fileRef = FEED97C427C31E5D003010E9 /* LeftAlignedCollectionViewFlowLayout.swift */; };
 		FEF75EBA27B008770022A1EE /* StaffsInfoTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FEF75EB927B008770022A1EE /* StaffsInfoTableViewController.swift */; };
 		FEF75EC027B0E49E0022A1EE /* UserInteractionCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = FEF75EBF27B0E49E0022A1EE /* UserInteractionCell.xib */; };
 		FEF75EC227B0E4E20022A1EE /* UserInteractionCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = FEF75EC127B0E4E20022A1EE /* UserInteractionCell.swift */; };
@@ -137,6 +138,7 @@
 		FED88FF827BF79D2009338A3 /* FBAccountCommentModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FBAccountCommentModel.swift; sourceTree = "<group>"; };
 		FED88FFA27BF7A5F009338A3 /* AccountCommentListModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AccountCommentListModel.swift; sourceTree = "<group>"; };
 		FEE30BB827B39B8F0045D6AC /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
+		FEED97C427C31E5D003010E9 /* LeftAlignedCollectionViewFlowLayout.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LeftAlignedCollectionViewFlowLayout.swift; sourceTree = "<group>"; };
 		FEF75EB927B008770022A1EE /* StaffsInfoTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StaffsInfoTableViewController.swift; sourceTree = "<group>"; };
 		FEF75EBF27B0E49E0022A1EE /* UserInteractionCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = UserInteractionCell.xib; sourceTree = "<group>"; };
 		FEF75EC127B0E4E20022A1EE /* UserInteractionCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UserInteractionCell.swift; sourceTree = "<group>"; };
@@ -352,6 +354,7 @@
 			children = (
 				FEA886A027ADE98D00A0320B /* ModalPresentationController.swift */,
 				FEF75ECD27B160F10022A1EE /* RatingUISlider.swift */,
+				FEED97C427C31E5D003010E9 /* LeftAlignedCollectionViewFlowLayout.swift */,
 			);
 			path = CustomView;
 			sourceTree = "<group>";
@@ -507,6 +510,7 @@
 				FEA886A327ADE9A400A0320B /* OptionTableViewController.swift in Sources */,
 				FEA886B927AFBD9B00A0320B /* MovieImageCell.swift in Sources */,
 				FE7C446227AB623400AA33AC /* DailyBoxOfficeModel.swift in Sources */,
+				FEED97C527C31E5D003010E9 /* LeftAlignedCollectionViewFlowLayout.swift in Sources */,
 				FE7C446627AB623F00AA33AC /* MovieInformationModel.swift in Sources */,
 				FEA886A527ADEA3400A0320B /* BoxOfficeViewModel.swift in Sources */,
 				FE49A84627B934E700C178A4 /* FBGradeModel.swift in Sources */,
