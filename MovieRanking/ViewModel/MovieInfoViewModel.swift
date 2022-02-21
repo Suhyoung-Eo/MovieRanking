@@ -65,40 +65,23 @@ class MovieInfoViewModel {
     
     var onUpdatedFirebase: () -> Void = {}
     
+    private var gradeAverage: Float = 0.0
     var commentListModel: CommentListModel!
-    // var DOCID: String = ""
-    var comment: String = ""
+    var isWishToWatch: Bool = false
     var grade: Float = 0.0
+    var comment: String = ""
+    var error: Error?
     
     /* For MovieInfoViewController */
     
-    var error: Error? {
+    private var isUpdate: Bool = false {
         didSet {
-            guard error != nil else { return }
-            onUpdatedFirebase()
-        }
-    }
-    
-    var isWishToWatch: Bool = false {
-        didSet {
-            guard error == nil else { return }
-            onUpdatedFirebase()
-        }
-    }
-    
-    private var gradeAverage: Float = 0.0 {
-        didSet {
-            guard error == nil else { return }
             onUpdatedFirebase()
         }
     }
     
     var userId: String? {
         return FBService.userId
-    }
-    
-    private var commentListCount: Int {
-        return (commentListModel == nil || commentListModel.count == 0) ? 1 : commentListModel.count
     }
     
     var IsCommentExist: Bool {
@@ -108,7 +91,7 @@ class MovieInfoViewModel {
     func sectionCount(by section: Int) -> Int {
         switch section {
         case 6:
-            return commentListCount
+            return (commentListModel == nil || commentListModel.count == 0) ? 1 : commentListModel.count
         default:
             return 1
         }
@@ -121,22 +104,26 @@ class MovieInfoViewModel {
     func loadGradeAverage(DOCID: String) {
         error = nil
         FBService.loadGradeAverage(DOCID: DOCID) { [weak self] gradeAverage, error in
+            guard let self = self else { return }
             if let error = error {
-                self?.error = error
+                self.error = error
             } else {
-                self?.gradeAverage = gradeAverage
+                self.gradeAverage = gradeAverage
             }
+            self.isUpdate = !self.isUpdate
         }
     }
     
     func loadIsWishToWatch(DOCID: String) {
         error = nil
         FBService.loadIsWishToWatch(DOCID: DOCID) { [weak self] isWishToWatch, error in
+            guard let self = self else { return }
             if let error = error {
-                self?.error = error
+                self.error = error
             } else {
-                self?.isWishToWatch = isWishToWatch
+                self.isWishToWatch = isWishToWatch
             }
+            self.isUpdate = !self.isUpdate
         }
     }
     
@@ -144,11 +131,13 @@ class MovieInfoViewModel {
         error = nil
         commentListModel = nil
         FBService.loadCommentList(DOCID: DOCID) { [weak self] commentListModel, error in
+            guard let self = self else { return }
             if let error = error {
-                self?.error = error
+                self.error = error
             } else {
-                self?.commentListModel = commentListModel
+                self.commentListModel = commentListModel
             }
+            self.isUpdate = !self.isUpdate
         }
     }
     
@@ -156,7 +145,23 @@ class MovieInfoViewModel {
     func setDataForAccount(movieInfo: MovieInfoModel) {
         error = nil
         FBService.setDataForAccount(movieInfo: movieInfo) { [weak self] error in
-            self?.error = error
+            if let error = error, let self = self {
+                self.error = error
+                self.isUpdate = !self.isUpdate
+            }
+        }
+    }
+    
+    func setIsWishToWatch(DOCID: String, isWishToWatch: Bool) {
+        error = nil
+        FBService.setIsWishToWatch(DOCID: DOCID, isWishToWatch: isWishToWatch) { [weak self] error in
+            guard let self = self else { return }
+            if let error = error {
+                self.error = error
+            } else {
+                self.isWishToWatch = isWishToWatch
+            }
+            self.isUpdate = !self.isUpdate
         }
     }
     
@@ -178,17 +183,6 @@ class MovieInfoViewModel {
             self?.comment = comment
             self?.loadGradeAverage(DOCID: DOCID)    // 평점 바낄때마다 평균 평점 갱신
             completion(nil)
-        }
-    }
-    
-    func setIsWishToWatch(DOCID: String, isWishToWatch: Bool) {
-        error = nil
-        FBService.setIsWishToWatch(DOCID: DOCID, isWishToWatch: isWishToWatch) { [weak self] error in
-            if let error = error {
-                self?.error = error
-            } else {
-                self?.isWishToWatch = isWishToWatch
-            }
         }
     }
     

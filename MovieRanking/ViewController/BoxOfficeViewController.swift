@@ -34,15 +34,21 @@ class BoxOfficeViewController: UIViewController {
         button.contentHorizontalAlignment = .left
         
         viewModel.onUpdated = { [weak self] in
-            DispatchQueue.main.async {
-                if self?.viewModel.numberOfRowsInSection == 0 {
-                    self?.tableView.separatorStyle = .none
-                } else {
-                    self?.tableView.separatorStyle = .singleLine
-                    self?.activityIndicator.stopAnimating()
-                    self?.button.isEnabled = true
+            if let error = self?.viewModel.error {
+                self?.retry(error: error)
+            } else {
+                DispatchQueue.main.async {
+                    self?.button.setTitle(self?.viewModel.buttontitle, for: .normal)
+                    
+                    if self?.viewModel.numberOfRowsInSection == 0 {
+                        self?.tableView.separatorStyle = .none  // fetchBoxOffice 동작 하는 동안 화면 클리어
+                    } else {
+                        self?.tableView.separatorStyle = .singleLine
+                        self?.activityIndicator.stopAnimating()
+                        self?.button.isEnabled = true
+                    }
+                    self?.tableView.reloadData()
                 }
-                self?.tableView.reloadData()
             }
         }
         
@@ -96,33 +102,7 @@ extension BoxOfficeViewController {
         button.isEnabled = false    // 박스오피스 정보 다운로드 완료전까지 선택 버튼 비활성화
         activityIndicator.isHidden = false
         activityIndicator.startAnimating()
-        
-        switch boxOfficeType {
-        case 0: // 주간 (월~일)
-            button.setTitle("     ▼  주간 박스오피스", for: .normal)
-            viewModel.fetchWeeklyBoxOffice(by: 0) { [weak self] error in
-                guard error != nil else { return }
-                self?.retry(error: error)
-            }
-        case 1: // 주말 (금~일)
-            button.setTitle("     ▼  주말 박스오피스", for: .normal)
-            viewModel.fetchWeeklyBoxOffice(by: 1) { [weak self] error in
-                guard error != nil else { return }
-                self?.retry(error: error)
-            }
-        case 2: // 일별 (검색일 하루 전)
-            button.setTitle("     ▼  일별 박스오피스", for: .normal)
-            viewModel.fetchDailyBoxOffice { [weak self] error in
-                guard error != nil else { return }
-                self?.retry(error: error)
-            }
-        default:
-            button.setTitle("     ▼  주간 박스오피스", for: .normal)
-            viewModel.fetchWeeklyBoxOffice(by: 0) { [weak self] error in
-                guard error != nil else { return }
-                self?.retry(error: error)
-            }
-        }
+        viewModel.fetBoxOffice(by: boxOfficeType)
     }
     
     private func retry(error: Error?) {

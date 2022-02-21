@@ -32,7 +32,9 @@ class MovieInfoViewController: UIViewController {
         
         viewModel.onUpdatedFirebase = { [weak self] in
             if let error = self?.viewModel.error {
-                AlertService.shared.alert(viewController: self, alertTitle: "에러발생", message: error.localizedDescription)
+                DispatchQueue.main.async {
+                    AlertService.shared.alert(viewController: self, alertTitle: "Error", message: error.localizedDescription)
+                }
             } else {
                 DispatchQueue.main.async {
                     self?.tableView.reloadData()

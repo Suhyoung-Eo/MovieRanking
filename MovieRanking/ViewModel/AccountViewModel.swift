@@ -79,7 +79,7 @@ class AccountViewModel {
             movieId = movieInfo.movieId
             movieSeq = movieInfo.movieSeq
         default:
-            completion(nil)
+            break
         }
 
         movieInfoService.fetchMovieInfo(id: movieId, seq: movieSeq) { [weak self] movieInfoList, error in
