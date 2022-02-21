@@ -22,14 +22,14 @@
                         <rect key="frame" x="10" y="10" width="611" height="203"/>
                         <subviews>
                             <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="3IN-At-wsD" userLabel="PosterImageView">
-                                <rect key="frame" x="0.0" y="0.0" width="70" height="97.5"/>
+                                <rect key="frame" x="0.0" y="0.0" width="65" height="97.5"/>
                                 <constraints>
-                                    <constraint firstAttribute="width" constant="70" id="6Oq-c9-QUo"/>
+                                    <constraint firstAttribute="width" constant="65" id="6Oq-c9-QUo"/>
                                     <constraint firstAttribute="height" constant="97.5" id="iFt-hx-zwt"/>
                                 </constraints>
                             </imageView>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="yGg-xD-XV4" userLabel="RankView">
-                                <rect key="frame" x="70" y="0.0" width="31" height="61"/>
+                                <rect key="frame" x="65" y="0.0" width="31" height="61"/>
                                 <subviews>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="xrb-gn-m4a" userLabel="RankLabel">
                                         <rect key="frame" x="3" y="15" width="25" height="36"/>
@@ -49,16 +49,16 @@
                                 </constraints>
                             </view>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="1Dh-tY-66b" userLabel="TextView">
-                                <rect key="frame" x="101" y="0.0" width="510" height="203"/>
+                                <rect key="frame" x="96" y="0.0" width="515" height="203"/>
                                 <subviews>
                                     <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" translatesAutoresizingMaskIntoConstraints="NO" id="aQc-3m-lo6">
-                                        <rect key="frame" x="0.0" y="15" width="510" height="188"/>
+                                        <rect key="frame" x="0.0" y="15" width="515" height="188"/>
                                         <subviews>
                                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="J4g-F8-7x8" userLabel="TitleView">
-                                                <rect key="frame" x="0.0" y="0.0" width="510" height="37"/>
+                                                <rect key="frame" x="0.0" y="0.0" width="515" height="37"/>
                                                 <subviews>
                                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Tvh-9K-Iok" userLabel="TitleLabel">
-                                                        <rect key="frame" x="0.0" y="0.0" width="510" height="37"/>
+                                                        <rect key="frame" x="0.0" y="0.0" width="515" height="37"/>
                                                         <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                                         <nil key="textColor"/>
                                                         <nil key="highlightedColor"/>
@@ -72,10 +72,10 @@
                                                 </constraints>
                                             </view>
                                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="IjB-rG-plZ" userLabel="OpenDateView">
-                                                <rect key="frame" x="0.0" y="37" width="510" height="50"/>
+                                                <rect key="frame" x="0.0" y="37" width="515" height="50"/>
                                                 <subviews>
                                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="QrW-mU-bju" userLabel="OpenDateLabel">
-                                                        <rect key="frame" x="0.0" y="0.0" width="510" height="50"/>
+                                                        <rect key="frame" x="0.0" y="0.0" width="515" height="50"/>
                                                         <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                                         <nil key="textColor"/>
                                                         <nil key="highlightedColor"/>
@@ -89,10 +89,10 @@
                                                 </constraints>
                                             </view>
                                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="0Ew-Cs-6Kn" userLabel="AudiAccView">
-                                                <rect key="frame" x="0.0" y="87" width="510" height="50"/>
+                                                <rect key="frame" x="0.0" y="87" width="515" height="50"/>
                                                 <subviews>
                                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Djt-VN-fXV">
-                                                        <rect key="frame" x="0.0" y="0.0" width="510" height="50"/>
+                                                        <rect key="frame" x="0.0" y="0.0" width="515" height="50"/>
                                                         <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                                         <nil key="textColor"/>
                                                         <nil key="highlightedColor"/>
@@ -107,7 +107,7 @@
                                                 </constraints>
                                             </view>
                                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="N6v-Jh-dc2" userLabel="NewImgaeView">
-                                                <rect key="frame" x="0.0" y="137" width="510" height="51"/>
+                                                <rect key="frame" x="0.0" y="137" width="515" height="51"/>
                                                 <subviews>
                                                     <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="xLr-4y-ESA">
                                                         <rect key="frame" x="0.0" y="2" width="40" height="13"/>

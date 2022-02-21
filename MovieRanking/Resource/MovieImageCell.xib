@@ -27,17 +27,17 @@
                         <rect key="frame" x="10" y="147.5" width="369" height="97.5"/>
                         <subviews>
                             <imageView clipsSubviews="YES" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="U4V-dr-FrC">
-                                <rect key="frame" x="0.0" y="0.0" width="70" height="97.5"/>
+                                <rect key="frame" x="0.0" y="0.0" width="65" height="97.5"/>
                                 <constraints>
-                                    <constraint firstAttribute="width" constant="70" id="5P7-aw-Knp"/>
+                                    <constraint firstAttribute="width" constant="65" id="5P7-aw-Knp"/>
                                     <constraint firstAttribute="height" constant="97.5" id="H9W-bW-L8b"/>
                                 </constraints>
                             </imageView>
                             <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" distribution="fillEqually" alignment="top" spacing="8" translatesAutoresizingMaskIntoConstraints="NO" id="Gza-QU-lVr">
-                                <rect key="frame" x="80" y="44.5" width="289" height="49"/>
+                                <rect key="frame" x="75" y="44.5" width="294" height="49"/>
                                 <subviews>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" minimumFontSize="9" translatesAutoresizingMaskIntoConstraints="NO" id="1ct-xx-LJN" userLabel="MovieNameLabel">
-                                        <rect key="frame" x="0.0" y="0.0" width="289" height="20.5"/>
+                                        <rect key="frame" x="0.0" y="0.0" width="294" height="20.5"/>
                                         <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                         <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                         <nil key="highlightedColor"/>
