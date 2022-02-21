@@ -46,12 +46,9 @@ class ImageViewController: UIViewController {
     }
     
     @IBAction func pressedRightButton(_ sender: Any) {
-        ImageDownloadService.shared.download(from: imageLinks[currentPage]) { image in
+        DownloadImage.shared.download(from: imageLinks[currentPage]) { image in
             if let image = image {
-                UIImageWriteToSavedPhotosAlbum(image,
-                                               self,
-                                               #selector(self.saveImage(image:didFinishSavingWithError:contextInfo:)),
-                                               nil)
+                UIImageWriteToSavedPhotosAlbum(image, self, #selector(self.saveImage(image:didFinishSavingWithError:contextInfo:)), nil)
             }
         }
     }
@@ -67,15 +64,9 @@ extension ImageViewController {
     
     @objc private func saveImage(image: UIImage, didFinishSavingWithError error: Error?, contextInfo: UnsafeRawPointer) {
         if let error = error {
-            AlertService.shared.alert(viewController: self,
-                                      alertTitle: "사진 저장에 실패했습니다",
-                                      message: error.localizedDescription,
-                                      actionTitle: "확인")
+            AlertService.shared.alert(viewController: self, alertTitle: "사진 저장에 실패했습니다", message: error.localizedDescription)
         } else {
-            AlertService.shared.alert(viewController: self,
-                                      alertTitle: "사진이 저장되었습니다",
-                                      message: nil,
-                                      actionTitle: "확인")
+            AlertService.shared.alert(viewController: self, alertTitle: "사진이 저장되었습니다")
         }
     }
     
@@ -84,19 +75,19 @@ extension ImageViewController {
         switch sender.state {
         case .changed:
             viewTranslation = sender.translation(in: view)
-            UIView.animate(withDuration: 0.5,
+            UIView.animate(withDuration: 0.1,
                            delay: 0,
-                           usingSpringWithDamping: 0.7,
+                           usingSpringWithDamping: 1,
                            initialSpringVelocity: 1,
                            options: .curveEaseOut,
                            animations: {
                 self.view.transform = CGAffineTransform(translationX: 0, y: self.viewTranslation.y)
             })
         case .ended:
-            if viewTranslation.y < 150, viewTranslation.y > -150 {
-                UIView.animate(withDuration: 0.5,
+            if viewTranslation.y < 170, viewTranslation.y > -170 {
+                UIView.animate(withDuration: 0.1,
                                delay: 0,
-                               usingSpringWithDamping: 0.7,
+                               usingSpringWithDamping: 1,
                                initialSpringVelocity: 1,
                                options: .curveEaseOut,
                                animations: {
@@ -104,7 +95,7 @@ extension ImageViewController {
                 })
             } else {
                 let transition = CATransition()
-                transition.duration = 0.4
+                transition.duration = 0
                 transition.type = CATransitionType.fade
                 navigationController?.view.layer.add(transition, forKey: kCATransition)
                 navigationController?.popViewController(animated: false)
@@ -124,7 +115,7 @@ extension ImageViewController: UICollectionViewDataSource {
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: K.CellIdentifier.imageCollectionViewCell, for: indexPath) as? ImageCollectionViewCell else {
+        guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: K.CellId.imageCollectionViewCell, for: indexPath) as? ImageCollectionViewCell else {
             fatalError("Could not found ViewCell")
         }
         cell.imageView.setImage(from: imageLinks[indexPath.row])

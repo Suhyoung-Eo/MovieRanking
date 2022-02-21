@@ -30,7 +30,7 @@ class UserInteractionCell: UITableViewCell {
     }
     
     @IBAction func addCommentButton(_ sender: Any) {
-        delegate?.pushedAddCommentButton(data: "addCommentView")
+        delegate?.pushedAddCommentButton(data: K.Prepare.addCommentView)
     }
     
     @IBAction func wishToWatchButton(_ sender: Any) {

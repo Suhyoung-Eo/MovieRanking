@@ -22,23 +22,23 @@
                         <rect key="frame" x="10" y="10" width="367" height="144"/>
                         <subviews>
                             <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="UmX-gN-dED">
-                                <rect key="frame" x="0.0" y="0.0" width="70" height="97.5"/>
+                                <rect key="frame" x="0.0" y="0.0" width="65" height="97.5"/>
                                 <constraints>
-                                    <constraint firstAttribute="width" constant="70" id="DWi-bd-tCl"/>
+                                    <constraint firstAttribute="width" constant="65" id="DWi-bd-tCl"/>
                                     <constraint firstAttribute="height" constant="97.5" id="wSA-1L-YHu"/>
                                 </constraints>
                             </imageView>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="z7V-oi-dlV">
-                                <rect key="frame" x="70" y="0.0" width="297" height="144"/>
+                                <rect key="frame" x="65" y="0.0" width="302" height="144"/>
                                 <subviews>
                                     <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" distribution="fillEqually" translatesAutoresizingMaskIntoConstraints="NO" id="dET-uP-d7F">
-                                        <rect key="frame" x="6" y="6" width="291" height="138"/>
+                                        <rect key="frame" x="6" y="6" width="296" height="138"/>
                                         <subviews>
                                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Ozm-3X-AxL" userLabel="Title View">
-                                                <rect key="frame" x="0.0" y="0.0" width="291" height="34.5"/>
+                                                <rect key="frame" x="0.0" y="0.0" width="296" height="34.5"/>
                                                 <subviews>
                                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="zIL-bI-ypv" userLabel="movieNameLabel">
-                                                        <rect key="frame" x="0.0" y="0.0" width="291" height="34.5"/>
+                                                        <rect key="frame" x="0.0" y="0.0" width="296" height="34.5"/>
                                                         <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                                         <nil key="textColor"/>
                                                         <nil key="highlightedColor"/>
@@ -52,10 +52,10 @@
                                                 </constraints>
                                             </view>
                                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="JCp-Nr-BtT" userLabel="MovieNameEn View">
-                                                <rect key="frame" x="0.0" y="34.5" width="291" height="34.5"/>
+                                                <rect key="frame" x="0.0" y="34.5" width="296" height="34.5"/>
                                                 <subviews>
                                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="3z5-qH-ZIa" userLabel="movieNameENLabel">
-                                                        <rect key="frame" x="0.0" y="0.0" width="291" height="34.5"/>
+                                                        <rect key="frame" x="0.0" y="0.0" width="296" height="34.5"/>
                                                         <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                                         <nil key="textColor"/>
                                                         <nil key="highlightedColor"/>
@@ -69,10 +69,10 @@
                                                 </constraints>
                                             </view>
                                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="8IJ-r9-qrj" userLabel="Director View">
-                                                <rect key="frame" x="0.0" y="69" width="291" height="34.5"/>
+                                                <rect key="frame" x="0.0" y="69" width="296" height="34.5"/>
                                                 <subviews>
                                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="2wH-5F-kTE" userLabel="dicrectorLabel">
-                                                        <rect key="frame" x="0.0" y="0.0" width="291" height="34.5"/>
+                                                        <rect key="frame" x="0.0" y="0.0" width="296" height="34.5"/>
                                                         <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                                         <nil key="textColor"/>
                                                         <nil key="highlightedColor"/>
@@ -87,10 +87,10 @@
                                                 </constraints>
                                             </view>
                                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="jfV-xc-fAX" userLabel="Rating View">
-                                                <rect key="frame" x="0.0" y="103.5" width="291" height="34.5"/>
+                                                <rect key="frame" x="0.0" y="103.5" width="296" height="34.5"/>
                                                 <subviews>
                                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="YZz-7q-nkP" userLabel="userRatingLabel">
-                                                        <rect key="frame" x="0.0" y="0.0" width="291" height="34.5"/>
+                                                        <rect key="frame" x="0.0" y="0.0" width="296" height="34.5"/>
                                                         <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                                         <nil key="textColor"/>
                                                         <nil key="highlightedColor"/>
@@ -132,7 +132,7 @@
                 <outlet property="ratingLabel" destination="YZz-7q-nkP" id="qmz-it-j4S"/>
                 <outlet property="thumbnailImageView" destination="UmX-gN-dED" id="yIt-ua-zcK"/>
             </connections>
-            <point key="canvasLocation" x="-262" y="127"/>
+            <point key="canvasLocation" x="-263.04347826086956" y="126.5625"/>
         </tableViewCell>
     </objects>
     <resources>

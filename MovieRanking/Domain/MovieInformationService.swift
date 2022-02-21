@@ -1,5 +1,5 @@
 //
-//  Service.swift
+//  MovieInformaition.swift
 //  MovieRanking
 //
 //  Created by Suhyoung Eo on 2022/02/03.
@@ -7,7 +7,7 @@
 
 import Foundation
 
-class Service {
+class MovieInformationService {
     // 박스오피스 정보 취득 순서
     // 1. fetchDailyBoxOffice/ fetchWeeklyBoxOffice: 박스오피스 Top 10 영화리스트 정보 취득 - 영화진흥위원회
     // 2. fetchMovieInfo: 1번에서 취득한 movieNm과 openDt 조합으로 필요한 영화 정보 취득 - 한국영화데이터베이스
@@ -61,11 +61,10 @@ class Service {
         var results = [MovieInfo]()
         let boxOfficeList = boxOfficeListModel.boxOfficeList
         let group = DispatchGroup()
-        
         for i in 0..<boxOfficeList.count {
             group.enter()
-            fetchMovieInfo(movieName: boxOfficeList[i].movieNm, releaseDate: boxOfficeList[i].openDt) { movieInfoListModel in
-                results.append(movieInfoListModel.movieInfoList[0])
+            fetchMovieInfo(movieName: boxOfficeList[i].movieName, releaseDate: boxOfficeList[i].openDate) { movieInfoListModel in
+                results.append(movieInfoListModel.movieInfoList[0].movieInfo)
                 group.leave()
             }
             group.wait()
@@ -91,6 +90,17 @@ class Service {
         guard let movieName = movieName.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed),
               let url = URL.urlForMovieInfoApi(movieName: movieName) else { return }
         
+        apiService.fetchMovieInfo(with: url) { movieInfo, error in
+            guard error == nil else { completion(MovieInfoListModel([MovieInfo.empty]), error); return }
+            completion(MovieInfoListModel(movieInfo), nil)
+        }
+    }
+    
+    //MARK: - for StorageViewController
+    
+    func fetchMovieInfo(id movieId: String, seq movieSeq: String, completion: @escaping(MovieInfoListModel, Error?) -> Void) {
+        guard let url = URL.urlForMovieInfoApi(movieId: movieId, movieSeq: movieSeq) else { return }
+        print(url)
         apiService.fetchMovieInfo(with: url) { movieInfo, error in
             guard error == nil else { completion(MovieInfoListModel([MovieInfo.empty]), error); return }
             completion(MovieInfoListModel(movieInfo), nil)

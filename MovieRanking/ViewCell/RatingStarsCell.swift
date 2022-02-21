@@ -15,18 +15,22 @@ class RatingStarsCell: UITableViewCell {
     @IBOutlet weak var fourthStarView: UIImageView!
     @IBOutlet weak var fifthStarView: UIImageView!
     
-    private let viewModel = FirebaseViewModel()
-    private var currentUserInfo: UserInfoModel!
     private var starImages: [UIImage] = []
     
     weak var parent: UIViewController!
+    weak var viewModel: MovieInfoViewModel!
     
-    var movieInfo = MovieInfoModel(MovieInfo.empty) {
+    var movieInfo: MovieInfoModel! {
         didSet {
-            viewModel.loadCurrentUserInfo(DOCID: movieInfo.DOCID) { [weak self] currentUserInfo in
-                self?.currentUserInfo = currentUserInfo
-                self?.loadStarImages(by: currentUserInfo?.grade ?? 0) {
-                    self?.setStarImage()
+            viewModel.loadUserComment(DOCID: movieInfo.DOCID) { [weak self] error in
+                if let error = error {
+                    DispatchQueue.main.async {
+                        AlertService.shared.alert(viewController: self?.parent, alertTitle: "정보를 불러오지 못했습니다", message: error.localizedDescription)
+                    }
+                } else {
+                    self?.loadStarImages(by: self?.viewModel.grade ?? 0.0) {
+                        self?.setStarImage()
+                    }
                 }
             }
         }
@@ -87,45 +91,42 @@ class RatingStarsCell: UITableViewCell {
     private func addComment(by grade: Float) {
         addAlert()
         viewModel.addComment(DOCID: movieInfo.DOCID,
-                             movieId: movieInfo.movieId,
-                             movieSeq: movieInfo.movieSeq,
-                             movieName: movieInfo.movieName,
-                             thumbNailLink: movieInfo.thumbNailLinks[0],
                              grade: grade,
-                             comment: currentUserInfo?.comment ?? "") { _ in }
+                             comment: viewModel.comment) { [weak self] error in
+            if let error = error {
+                DispatchQueue.main.async {
+                    AlertService.shared.alert(viewController: self?.parent, alertTitle: "평점을 저장하지 못했습니다", message: error.localizedDescription)
+                }
+            }
+        }
     }
     
     private func deleteComment() {
-        deleteAlert()
+        
+        if viewModel.grade == 0 { return }
+        
+        let alert = UIAlertController(title: "삭제하시겠습니까?", message: "등록된 코멘트도 함께 삭제됩니다", preferredStyle: .alert)
+        alert.addAction(UIAlertAction(title: "확인", style: .default) { [weak self] _ in
+            self?.viewModel.deleteGrade(DOCID: self?.movieInfo.DOCID ?? "",
+                                          userId: self?.viewModel.userId ?? "") { _ in }
+        })
+        alert.addAction(UIAlertAction(title: "취소", style: .cancel) { [weak self] _ in
+            self?.loadStarImages(by: self?.viewModel.grade ?? 0) {
+                self?.setStarImage()
+            }
+        })
+        parent.present(alert, animated: true)
     }
     
     private func addAlert() {
         if viewModel.userId == nil {
-            let alert = UIAlertController(title: "서비스를 이용하려면 로그인 하세요", message: nil, preferredStyle: .alert)
-            let action = UIAlertAction(title: "확인", style: .default) { [weak self] action in
+            let alert = UIAlertController(title: "서비스를 이용하려면 로그인하세요", message: nil, preferredStyle: .alert)
+            alert.addAction(UIAlertAction(title: "확인", style: .default) { [weak self] _ in
                 self?.loadStarImages(by: 0) {
                     self?.setStarImage()
                 }
-            }
-            alert.addAction(action)
+            })
             parent.present(alert, animated: true)
         }
-    }
-    
-    private func deleteAlert() {
-        if viewModel.userId == nil { return }
-        let alert = UIAlertController(title: "삭제 하시겠습니까?", message: nil, preferredStyle: .alert)
-        let action = UIAlertAction(title: "확인", style: .default) { [weak self] action in
-            self?.viewModel.deleteComment(DOCID: self?.movieInfo.DOCID ?? "",
-                                          userId: self?.currentUserInfo?.userId ?? "") { _ in }
-        }
-        let cancelAction = UIAlertAction(title: "취소", style: .cancel) { [weak self] action in
-            self?.loadStarImages(by: self?.currentUserInfo?.grade ?? 0) {
-                self?.setStarImage()
-            }
-        }
-        alert.addAction(action)
-        alert.addAction(cancelAction)
-        parent.present(alert, animated: true)
     }
 }

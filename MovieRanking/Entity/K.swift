@@ -11,19 +11,16 @@ struct K {
     struct Api {
         
         /* 영화진흥위원회 */
-        // 일별 박스오피스
+        // 일별/주간/주말 박스오피스, 영화 검색
         static let koficDailyBoxOfficeListURL = "http://kobis.or.kr/kobisopenapi/webservice/rest/boxoffice/searchDailyBoxOfficeList.json?key="
-        // 주간/주말 박스오피스
         static let koficWeeklyBoxOfficeListURL = "http://kobis.or.kr/kobisopenapi/webservice/rest/boxoffice/searchWeeklyBoxOfficeList.json?key="
-        
-        // 영화 검색
         static let koficMovieInfoURL = "http://www.kobis.or.kr/kobisopenapi/webservice/rest/movie/searchMovieInfo.json?key="
         
-        // 한국영화데이터베이스
+        /* 한국영화데이터베이스 */
         static let kmdbURL = "http://api.koreafilm.or.kr/openapi-data2/wisenut/search_api/search_json2.jsp?collection=kmdb_new2&ServiceKey="
     }
     
-    struct CellIdentifier {
+    struct CellId {
         static let boxOfficeCell = "BoxOfficeCell"
         static let searchMovieCell = "SearchMovieCell"
         static let movieImageCell = "MovieImageCell"
@@ -34,9 +31,12 @@ struct K {
         static let commentHeadCell = "CommentHeadCell"
         static let commentCell = "CommentCell"
         static let ratingStarsCell = "RatingStarsCell"
+        static let accountCell = "AccountCell"
+        static let storageCell = "StorageCell"
+        static let userCommentCell = "UserCommentCell"
     }
     
-    struct SegueIdentifier {
+    struct SegueId {
         static let movieInfoView = "goToMovieInfoView"
         static let staffsInfoTableView = "goToStaffsInfoView"
         static let addCommentView = "goToAddCommentView"
@@ -44,6 +44,8 @@ struct K {
         static let registerView = "goToRegisterView"
         static let imageView = "goToImageView"
         static let movieListOptionView = "goToMovieListOptionView"
+        static let storageView = "goToStorageView"
+        static let commentListView = "goToCommentListView"
     }
 
     struct Image {
@@ -65,9 +67,21 @@ struct K {
         static let movieSeq = "movieSeq"
         static let movieName = "movieName"
         static let thumbNailLink = "thumbNailLink"
+        static let gradeAverage = "gradeAverage"
         static let wishToWatch = "wishToWatch"
         static let grade = "grade"
         static let comment = "comment"
         static let date = "date"
+    }
+    
+    struct Prepare {
+        static let movieInfoView = "movieInfoView"
+        static let postImageView = "postImageView"
+        static let stllImageView = "stllImageView"
+        static let staffView = "staffView"
+        static let addCommentView = "addCommentView"
+        static let wishToWatchListView = "보고싶어요"
+        static let gradeListView = "평가한영화"
+        static let userCommentView = "내코멘트"
     }
 }

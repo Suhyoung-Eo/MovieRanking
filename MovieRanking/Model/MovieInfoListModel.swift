@@ -8,10 +8,12 @@
 import Foundation
 
 struct MovieInfoListModel {
-    let movieInfoList: [MovieInfo]
+    let movieInfoList: [MovieInfoModel]
     
-    init(_ movieInfoList: [MovieInfo]) {
-        self.movieInfoList = movieInfoList
+    init (_ movieInfo: [MovieInfo]) {
+        self.movieInfoList = movieInfo.compactMap({ movieInfo in
+            return MovieInfoModel.init(movieInfo)
+        })
     }
 }
 
@@ -22,12 +24,12 @@ extension MovieInfoListModel {
     }
     
     func movieInfoModel(_ index: Int) -> MovieInfoModel {
-        return MovieInfoModel(movieInfoList[index])
+        return movieInfoList[index]
     }
 }
 
 struct MovieInfoModel {
-    private let movieInfo: MovieInfo
+    let movieInfo: MovieInfo
     
     init (_ movieInfo: MovieInfo ) {
         self.movieInfo = movieInfo

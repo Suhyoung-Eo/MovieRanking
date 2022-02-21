@@ -18,12 +18,11 @@ class AddCommentViewController: UIViewController {
     @IBOutlet weak var fourthStarView: UIImageView!
     @IBOutlet weak var fifthStarView: UIImageView!
     
-    private let viewModel = FirebaseViewModel()
-    private var currentUserInfo: UserInfoModel!
+    private let viewModel = MovieInfoViewModel()
     private var starImages: [UIImage] = []
     private var grade: Float = 0.0
     
-    var movieInfo = MovieInfoModel(MovieInfo.empty)
+    var movieInfo: MovieInfoModel!
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -31,52 +30,46 @@ class AddCommentViewController: UIViewController {
         commentTextView.delegate = self
         movieNameLabel.text = movieInfo.movieName
         
-    }
-    
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
-        
         // 이전에 코멘트를 남긴 경우 불러옴
-        viewModel.loadCurrentUserInfo(DOCID: movieInfo.DOCID) { [weak self] currentUserInfo in
-            self?.currentUserInfo = currentUserInfo
-            self?.grade = currentUserInfo?.grade ?? 0
-            self?.loadStarImages(by: currentUserInfo?.grade ?? 0) {
+        viewModel.loadUserComment(DOCID: movieInfo.DOCID) { [weak self] error in
+            
+            guard error == nil else {
+                DispatchQueue.main.async {
+                    AlertService.shared.alert(viewController: self, alertTitle: "코멘트를 불러오지 못했습니다")
+                }
+                return
+            }
+            
+            self?.grade = self?.viewModel.grade ?? 0
+            self?.loadStarImages(by: self?.grade ?? 0) {
                 self?.setStarImage()
             }
             
             DispatchQueue.main.async {
-                self?.commentTextView.text = currentUserInfo?.comment
+                self?.commentTextView.text = self?.viewModel.comment
             }
         }
     }
     
     @IBAction func confirmButton(_ sender: Any) {
         
-        if viewModel.userId == nil { alertService(); return }
+        if viewModel.userId == nil { showAlert(); return }
         
         guard let comment = commentTextView.text, grade != 0 else {
-            AlertService.shared.alert(viewController: self,
-                                      alertTitle: "코맨트 등록에 실패 했습니다",
-                                      message: "평점 등록은 필수입니다",
-                                      actionTitle: "확인")
+            AlertService.shared.alert(viewController: self, alertTitle: "코멘트 등록에 실패했습니다", message: "평점 등록은 필수입니다")
             return
         }
         
         viewModel.addComment(DOCID: movieInfo.DOCID,
-                             movieId: movieInfo.movieName,
-                             movieSeq: movieInfo.movieSeq,
-                             movieName: movieInfo.movieName,
-                             thumbNailLink: movieInfo.thumbNailLinks[0],
                              grade: grade,
-                             comment: comment) { [weak self] error in
+                             comment: comment){ [weak self] error in
             
-            if error == nil { self?.dismiss(animated: true, completion: nil); return }
-            
-            DispatchQueue.main.async {
-                AlertService.shared.alert(viewController: self,
-                                          alertTitle: "코맨트 등록에 실패 했습니다",
-                                          message: error?.localizedDescription,
-                                          actionTitle: "확인")
+            if let error = error {
+                DispatchQueue.main.async {
+                    AlertService.shared.alert(viewController: self, alertTitle: "코멘트 등록에 실패했습니다", message: error.localizedDescription)
+                }
+            } else {
+                self?.dismiss(animated: true, completion: nil)
             }
         }
     }
@@ -87,6 +80,10 @@ class AddCommentViewController: UIViewController {
         
         loadStarImages(by: grade) { [weak self] in
             self?.setStarImage()
+        }
+        
+        if grade == 0, viewModel.grade != 0 {
+            deleteAlert()
         }
     }
     
@@ -123,12 +120,31 @@ class AddCommentViewController: UIViewController {
         }
     }
     
-    private func alertService() {
-        let alert = UIAlertController(title: "서비스를 이용하려면 로그인 하세요", message: nil, preferredStyle: .alert)
-        let action = UIAlertAction(title: "확인", style: .default) { [weak self] action in
+    private func deleteAlert() {
+        if viewModel.userId == nil { return }
+        
+        let alert = UIAlertController(title: "삭제하시겠습니까?", message: "등록된 코멘트도 함께 삭제됩니다", preferredStyle: .alert)
+        alert.addAction(UIAlertAction(title: "확인", style: .default) { [weak self] _ in
+            self?.viewModel.deleteGrade(DOCID: self?.movieInfo.DOCID ?? "",
+                                        userId: self?.viewModel.userId ?? "") { [weak self] _ in
+                self?.commentTextView.text = self?.viewModel.comment
+            }
+        })
+        alert.addAction(UIAlertAction(title: "취소", style: .cancel) { [weak self] _ in
+            self?.loadStarImages(by: self?.viewModel.grade ?? 0) {
+                self?.grade = self?.viewModel.grade ?? 0
+                self?.setStarImage()
+            }
+        })
+        
+        present(alert, animated: true)
+    }
+    
+    private func showAlert() {
+        let alert = UIAlertController(title: "서비스를 이용하려면 로그인하세요", message: nil, preferredStyle: .alert)
+        alert.addAction(UIAlertAction(title: "확인", style: .default) { [weak self] _ in
             self?.dismiss(animated: true, completion: nil)
-        }
-        alert.addAction(action)
+        })
         present(alert, animated: true, completion: nil)
     }
     
@@ -142,7 +158,7 @@ class AddCommentViewController: UIViewController {
 extension AddCommentViewController: UITextViewDelegate {
     
     func textViewShouldBeginEditing(_ textView: UITextView) -> Bool {
-        if viewModel.userId == nil { alertService(); return false }
+        if viewModel.userId == nil { showAlert(); return false }
         return true
     }
 }

@@ -25,7 +25,7 @@ class BoxOfficeViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        tableView.register(UINib(nibName: "BoxOfficeCell", bundle: nil), forCellReuseIdentifier: K.CellIdentifier.boxOfficeCell)
+        tableView.register(UINib(nibName: K.CellId.boxOfficeCell, bundle: nil), forCellReuseIdentifier: K.CellId.boxOfficeCell)
         tableView.dataSource = self
         tableView.delegate = self
         tableView.separatorStyle = .none
@@ -34,15 +34,21 @@ class BoxOfficeViewController: UIViewController {
         button.contentHorizontalAlignment = .left
         
         viewModel.onUpdated = { [weak self] in
-            DispatchQueue.main.async {
-                if self?.viewModel.numberOfRowsInSection == 0 {
-                    self?.tableView.separatorStyle = .none
-                } else {
-                    self?.tableView.separatorStyle = .singleLine
-                    self?.activityIndicator.stopAnimating()
-                    self?.button.isEnabled = true
+            if let error = self?.viewModel.error {
+                self?.retry(error: error)
+            } else {
+                DispatchQueue.main.async {
+                    self?.button.setTitle(self?.viewModel.buttontitle, for: .normal)
+                    
+                    if self?.viewModel.numberOfRowsInSection == 0 {
+                        self?.tableView.separatorStyle = .none  // fetchBoxOffice 동작 하는 동안 화면 클리어
+                    } else {
+                        self?.tableView.separatorStyle = .singleLine
+                        self?.activityIndicator.stopAnimating()
+                        self?.button.isEnabled = true
+                    }
+                    self?.tableView.reloadData()
                 }
-                self?.tableView.reloadData()
             }
         }
         
@@ -57,9 +63,9 @@ class BoxOfficeViewController: UIViewController {
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         
-        if let sender = sender as? String, sender == "movieInfoView" {
+        if let sender = sender as? String, sender == K.Prepare.movieInfoView {
             guard let destinationVC = segue.destination as? MovieInfoViewController else {
-                fatalError("Could not found segue destination")
+                fatalError("Could not found MovieInfoViewController")
             }
             
             if let indexPath = tableView.indexPathForSelectedRow {
@@ -68,7 +74,7 @@ class BoxOfficeViewController: UIViewController {
         } else {
             guard let navigationVC = segue.destination as? UINavigationController,
                   let destinationVC = navigationVC.viewControllers.first as? OptionTableViewController else {
-                      fatalError("Could not found segue destination")
+                      fatalError("Could not found OptionTableViewController")
                   }
             
             // custom segue 설정
@@ -96,44 +102,15 @@ extension BoxOfficeViewController {
         button.isEnabled = false    // 박스오피스 정보 다운로드 완료전까지 선택 버튼 비활성화
         activityIndicator.isHidden = false
         activityIndicator.startAnimating()
-        
-        switch boxOfficeType {
-        case 0: // 주간 (월~일)
-            button.setTitle("     ▼  주간 박스오피스", for: .normal)
-            viewModel.fetchWeeklyBoxOffice(by: 0) { [weak self] error in
-                guard error != nil else { return }
-                self?.retry(error: error)
-            }
-        case 1: // 주말 (금~일)
-            button.setTitle("     ▼  주말 박스오피스", for: .normal)
-            viewModel.fetchWeeklyBoxOffice(by: 1) { [weak self] error in
-                guard error != nil else { return }
-                self?.retry(error: error)
-            }
-        case 2: // 일별 (검색일 하루 전)
-            button.setTitle("     ▼  일별 박스오피스", for: .normal)
-            viewModel.fetchDailyBoxOffice { [weak self] error in
-                guard error != nil else { return }
-                self?.retry(error: error)
-            }
-        default:
-            button.setTitle("     ▼  주간 박스오피스", for: .normal)
-            viewModel.fetchWeeklyBoxOffice(by: 0) { [weak self] error in
-                guard error != nil else { return }
-                self?.retry(error: error)
-            }
-        }
+        viewModel.fetBoxOffice(by: boxOfficeType)
     }
     
     private func retry(error: Error?) {
         DispatchQueue.main.async { [weak self] in
-            self?.activityIndicator.stopAnimating()
             let alert = UIAlertController(title: "네트워크 장애", message: error?.localizedDescription, preferredStyle: .alert)
-            let action = UIAlertAction(title: "재시도", style: .default) { action in
-                self?.fetchBoxOffice()
-            }
-            alert.addAction(action)
+            alert.addAction(UIAlertAction(title: "재시도", style: .default) { [weak self] _ in self?.fetchBoxOffice() })
             self?.present(alert, animated: true, completion: nil)
+            self?.activityIndicator.stopAnimating()
         }
     }
 }
@@ -151,20 +128,19 @@ extension BoxOfficeViewController: UITableViewDataSource {
     }    
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        guard let cell = tableView.dequeueReusableCell(withIdentifier: K.CellIdentifier.boxOfficeCell, for: indexPath) as? BoxOfficeCell else {
-            fatalError("Could not found ViewCell")
+        guard let cell = tableView.dequeueReusableCell(withIdentifier: K.CellId.boxOfficeCell, for: indexPath) as? BoxOfficeCell else {
+            fatalError("Could not found BoxOfficeCell")
         }
-
-        let boxOfficeList = viewModel.boxOfficeList.boxOfficeModel(indexPath.row)
-        let movieInfoList = viewModel.movieInfoList.movieInfoModel(indexPath.row)
-
+        
+        let boxOfficeInfo = viewModel.boxOfficeInfo(index: indexPath.row)   // return (String, BoxOfficeModel)
+        
         cell.selectionStyle = .none
-        cell.thumbnailImageView.setImage(from: movieInfoList.thumbNailLinks[0])
-        cell.titleLabel.text = boxOfficeList.movieName
-        cell.rankLabel.text = boxOfficeList.movieRank
-        cell.openDateLabel.text = "개봉일: \(boxOfficeList.openDate)"
-        cell.audiAccLabel.text = "누적: \(boxOfficeList.audiAcc)"
-        if boxOfficeList.rankOldAndNew == "NEW" {
+        cell.thumbnailImageView.setImage(from: boxOfficeInfo.0)
+        cell.titleLabel.text = boxOfficeInfo.1.movieName
+        cell.rankLabel.text = boxOfficeInfo.1.movieRank
+        cell.openDateLabel.text = "개봉일: \(boxOfficeInfo.1.openDate)"
+        cell.audiAccLabel.text = "누적: \(boxOfficeInfo.1.audiAcc)"
+        if boxOfficeInfo.1.rankOldAndNew == "NEW" {
             cell.newImageView.image = UIImage(named: "new")
         }
         
@@ -178,16 +154,11 @@ extension BoxOfficeViewController: UITableViewDataSource {
 extension BoxOfficeViewController: UITableViewDelegate {
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        if viewModel.movieInfoList.movieInfoModel(indexPath.row).DOCID != "" {
-            performSegue(withIdentifier: K.SegueIdentifier.movieInfoView, sender: "movieInfoView")
-        } else {
-            DispatchQueue.main.async {
-                AlertService.shared.alert(viewController: self,
-                                          alertTitle: "해당 영화의 상세 정보가 없습니다.",
-                                          message: nil,
-                                          actionTitle: "확인")
-            }
+        if viewModel.movieInfoList.movieInfoModel(indexPath.row).DOCID.isEmpty {
+            AlertService.shared.alert(viewController: self, alertTitle: "해당 영화의 상세 정보가 없습니다")
+            return
         }
+        performSegue(withIdentifier: K.SegueId.movieInfoView, sender: K.Prepare.movieInfoView)
     }
 }
 
