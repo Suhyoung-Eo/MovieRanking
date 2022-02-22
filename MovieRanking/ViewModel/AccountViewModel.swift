@@ -9,35 +9,49 @@ import Foundation
 
 class AccountViewModel {
     
+    var gotErrorStatus: () -> Void = {}
+    var onUpdatedMovieInfo: () -> Void = {}
+    
     private let FBService = FirebaseService()
     private let movieInfoService = MovieInformationService()
     
-    var movieInfoModel: MovieInfoModel!
     var wishToWatchListModel: WishToWatchListModel!
     var gradeListModel: GradeListModel!
-    var accountCommentListModel: AccountCommentListModel!
+    
+    var error: Error? {
+        didSet {
+            gotErrorStatus()
+        }
+    }
+    
+    var movieInfoModel: MovieInfoModel! {
+        didSet {
+            onUpdatedMovieInfo()
+        }
+    }
     
     var userId: String? {
         return FBService.userId
+    }
+    
+    var isMovieInfoModelEmpty: Bool {
+        return movieInfoModel.DOCID.isEmpty
     }
     
     var accountCommentListCount: Int {
         return accountCommentListModel == nil ? 0 : accountCommentListModel.count
     }
     
-    func register(email: String, password: String, completion: @escaping (Error?) -> Void) {
-        FBService.register(email: email, password: password) { error in completion(error) }
+    func register(email: String, password: String) {
+        FBService.register(email: email, password: password) { [weak self] error in self?.error = error }
     }
     
-    func logIn(email: String, password: String, completion: @escaping (Error?) -> Void) {
-        FBService.logIn(email: email, password: password) { error in completion(error) }
+    func logIn(email: String, password: String) {
+        FBService.logIn(email: email, password: password) { [weak self] error in self?.error = error }
     }
     
-    func logOut(completion: @escaping (Error?) -> Void) {
-        FBService.logOut { error in
-            guard error == nil else { completion(error); return }
-            completion(nil)
-        }
+    func logOut() {
+        FBService.logOut { [weak self] error in self?.error = error }
     }
     
     //MARK: - For StorageViewController
@@ -79,8 +93,41 @@ class AccountViewModel {
         }
     }
     
-    func loadMovieInfo(by itemTitle: String, index: Int, completion: @escaping (Error?) -> Void) {
-        movieInfoModel = nil
+    //MARK: - For CommentsViewController
+    
+    var onUpdatedAccountCommentList: () -> Void = {}
+    
+    var prepareId: String = ""
+    var comment: String = ""
+    var grade: Float = 0.0
+    
+    var accountCommentListModel: AccountCommentListModel! {
+        didSet {
+            onUpdatedAccountCommentList()
+        }
+    }
+    
+    func fetchAccountCommentList() {
+        accountCommentListModel = nil
+        FBService.loadAccountCommentList { [weak self] accountCommentListModel, error in
+            if let error = error {
+                self?.error = error
+            } else {
+                self?.accountCommentListModel = accountCommentListModel
+            }
+        }
+    }
+        
+    func deleteComment(userId: String?, index: Int) {
+        let movieInfo = accountCommentListModel.accountCommentModel(index)
+        FBService.deleteComment(collection: userId, document: movieInfo.DOCID) { [weak self] error in
+            self?.error = error
+        }
+    }
+    
+    //MARK: - 공통함수: StorageViewController / CommentsViewController
+    
+    func fetchMovieInfo(by itemTitle: String, index: Int) {
         var movieId: String = ""
         var movieSeq: String = ""
         
@@ -93,35 +140,28 @@ class AccountViewModel {
             let movieInfo = gradeListModel.gradeModel(index)
             movieId = movieInfo.movieId
             movieSeq = movieInfo.movieSeq
-        case K.Prepare.userCommentView:
+        case K.Prepare.addCommentView:
             let movieInfo = accountCommentListModel.accountCommentModel(index)
             movieId = movieInfo.movieId
             movieSeq = movieInfo.movieSeq
+            comment = movieInfo.comment
+            grade = movieInfo.grade
+            prepareId = K.Prepare.addCommentView
+        case K.Prepare.movieInfoView:
+            let movieInfo = accountCommentListModel.accountCommentModel(index)
+            movieId = movieInfo.movieId
+            movieSeq = movieInfo.movieSeq
+            prepareId = K.Prepare.movieInfoView
         default:
             break
         }
 
         movieInfoService.fetchMovieInfo(id: movieId, seq: movieSeq) { [weak self] movieInfoList, error in
-            guard error == nil, !movieInfoList.movieInfoModel(0).DOCID.isEmpty else { completion(error); return }
-            
-            self?.movieInfoModel = movieInfoList.movieInfoModel(0)
-            completion(nil)
+            if let error = error {
+                self?.error = error
+            } else {
+                self?.movieInfoModel = movieInfoList.movieInfoModel(0)
+            }
         }
-    }
-    
-    //MARK: - For CommentsViewController
-    
-    func loadAccountCommentList(completion: @escaping (Error?) -> Void) {
-        accountCommentListModel = nil
-        FBService.loadAccountCommentList { [weak self] accountCommentListModel, error in
-            guard error == nil else { completion(error); return }
-            self?.accountCommentListModel = accountCommentListModel
-            completion(nil)
-        }
-    }
-        
-    func deleteComment(userId: String?, index: Int, completion: @escaping (Error?) -> Void) {
-        let movieInfo = accountCommentListModel.accountCommentModel(index)
-        FBService.deleteComment(collection: userId, document: movieInfo.DOCID) { error in completion(error) }
     }
 }

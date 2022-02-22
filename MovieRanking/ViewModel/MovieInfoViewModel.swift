@@ -24,7 +24,7 @@ class MovieInfoViewModel {
         }
     }
     
-    var movieInfoModelEmpty: Bool {
+    var isMovieInfoModelEmpty: Bool {
         return movieInfoList.movieInfoModel(0).DOCID.isEmpty
     }
     
@@ -33,7 +33,7 @@ class MovieInfoViewModel {
     }
     
     var numberOfRowsInSection: Int {
-        return (movieInfoList == nil || movieInfoModelEmpty) ? 0 : movieInfoList.count
+        return (movieInfoList == nil || isMovieInfoModelEmpty) ? 0 : movieInfoList.count
     }
     
     func heightForHeader(by section: Int) -> Float {

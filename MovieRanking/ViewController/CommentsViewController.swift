@@ -15,9 +15,6 @@ class CommentsViewController: UIViewController {
     
     private let viewModel = AccountViewModel()
     
-    private var comment: String = ""
-    private var grade: Float = 0.0
-    
     override func viewDidLoad() {
         super.viewDidLoad()
 
@@ -29,23 +26,45 @@ class CommentsViewController: UIViewController {
         navigationItem.title = "내코멘트"
         emptyImage.isHidden = false
         
-        viewModel.loadAccountCommentList { [weak self] error in
-            self?.activityIndicator.stopAnimating()
-            if let error = error {
+        viewModel.gotErrorStatus = { [weak self] in
+            if let error = self?.viewModel.error {
                 DispatchQueue.main.async {
-                    AlertService.shared.alert(viewController: self, alertTitle: "정보를 불러오지 못했습니다", message: error.localizedDescription)
-                }
-            } else {
-                DispatchQueue.main.async {
-                    if self?.viewModel.accountCommentListCount == 0 {
-                        self?.emptyImage.isHidden = false
-                    } else {
-                        self?.emptyImage.isHidden = true
-                    }
-                    self?.tableView.reloadData()
+                    self?.activityIndicator.stopAnimating()
+                    AlertService.shared.alert(viewController: self, alertTitle: "Error", message: error.localizedDescription)
                 }
             }
         }
+        
+        viewModel.onUpdatedMovieInfo = { [weak self] in
+            DispatchQueue.main.async {
+                self?.activityIndicator.stopAnimating()
+                if self?.viewModel.isMovieInfoModelEmpty ?? true {
+                    AlertService.shared.alert(viewController: self, alertTitle: "영화 정보를 불러올 수 없습니다")
+                } else if self?.viewModel.prepareId == K.Prepare.movieInfoView {
+                    self?.performSegue(withIdentifier: K.SegueId.movieInfoView, sender: K.Prepare.movieInfoView)
+                } else if self?.viewModel.prepareId == K.Prepare.addCommentView {
+                    self?.performSegue(withIdentifier: K.SegueId.addCommentView, sender: K.Prepare.addCommentView)
+                }
+            }
+        }
+        
+        viewModel.onUpdatedAccountCommentList = { [weak self] in
+            DispatchQueue.main.async {
+                self?.activityIndicator.stopAnimating()
+                if self?.viewModel.accountCommentListCount == 0 {
+                    self?.emptyImage.isHidden = false
+                } else {
+                    self?.emptyImage.isHidden = true
+                }
+                self?.tableView.reloadData()
+            }
+        }
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        
+        viewModel.fetchAccountCommentList()
     }
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
@@ -61,8 +80,8 @@ class CommentsViewController: UIViewController {
                 fatalError("Could not found AddCommentViewController")
             }
             destinationVC.movieInfo = viewModel.movieInfoModel
-            destinationVC.comment = comment
-            destinationVC.grade = grade
+            destinationVC.comment = viewModel.comment
+            destinationVC.grade = viewModel.grade
         default:
             break
         }
@@ -83,41 +102,24 @@ extension CommentsViewController {
 
     private func showEditAlert(_ index: Int) {
         let alert = UIAlertController(title: nil, message: nil, preferredStyle: .actionSheet)
-        
         alert.addAction(UIAlertAction(title: "코멘트 수정", style: .default) { [weak self] _ in
-            self?.viewModel.loadMovieInfo(by: K.Prepare.userCommentView, index: index) { error in
-                
-                if error != nil || self?.viewModel.movieInfoModel == nil {
-                    DispatchQueue.main.async {
-                        AlertService.shared.alert(viewController: self,
-                                                  alertTitle: "영화 정보를 불러올 수 없습니다",
-                                                  message: error?.localizedDescription)
-                    }
-                } else {
-                    let cellItem = self?.viewModel.accountCommentListModel.accountCommentModel(index)
-                    self?.comment = cellItem?.comment ?? ""
-                    self?.grade = cellItem?.grade ?? 0
-                    DispatchQueue.main.async {
-                        self?.performSegue(withIdentifier: K.SegueId.addCommentView, sender: K.Prepare.addCommentView)
-                    }
-                }
-            }
+            self?.viewModel.fetchMovieInfo(by: K.Prepare.addCommentView, index: index)
         })
         alert.addAction(UIAlertAction(title: "코멘트 삭제", style: .destructive) { [weak self] _ in
-            self?.viewModel.deleteComment(userId: self?.viewModel.userId, index: index) { error in
-                guard let error = error else { return }
-                
-                DispatchQueue.main.async {
-                    AlertService.shared.alert(viewController: self,
-                                              alertTitle: "코멘트 삭제 실패",
-                                              message: error.localizedDescription)
-                }
-            }
+            self?.showDeleteAlert(index: index)
         })
         alert.addAction(UIAlertAction(title: "취소", style: .cancel))
         present(alert, animated: true)
     }
     
+    private func showDeleteAlert(index: Int) {
+        let alert = UIAlertController(title: "코멘트 삭제", message: "코멘트를 삭제하시겠어요?", preferredStyle: .alert)
+        alert.addAction(UIAlertAction(title: "삭제하기", style: .destructive) { [weak self] _ in
+            self?.viewModel.deleteComment(userId: self?.viewModel.userId, index: index)
+        })
+        alert.addAction(UIAlertAction(title: "취소", style: .cancel))
+        present(alert, animated: true)
+    }
 }
 
 //MARK: - TableView dataSource methods
@@ -143,7 +145,7 @@ extension CommentsViewController: UITableViewDataSource {
         cell.index = indexPath.section
         cell.thumbNailLink = cellItem.thumbNailLink
         cell.movieNameLabel.text = cellItem.movieName
-        cell.gradeLabel.text = "평가 점수 ★ \(cellItem.grade)"
+        cell.gradeLabel.text = cellItem.grade == 0 ? "평가가 없습니다" : "평가 점수 ★ \(cellItem.grade)"
         cell.commentLabel.text = cellItem.comment
         
         return cell
@@ -155,21 +157,7 @@ extension CommentsViewController: UITableViewDataSource {
 extension CommentsViewController: UserCommentCellDelegate {
     
     func pushedThumbNailImageButton(index: Int) {
-        
-        viewModel.loadMovieInfo(by: K.Prepare.userCommentView, index: index) { [weak self] error in
-            
-            if error != nil || self?.viewModel.movieInfoModel == nil {
-                DispatchQueue.main.async {
-                    AlertService.shared.alert(viewController: self,
-                                              alertTitle: "영화 정보를 불러올 수 없습니다",
-                                              message: error?.localizedDescription)
-                }
-            } else {
-                DispatchQueue.main.async {
-                    self?.performSegue(withIdentifier: K.SegueId.movieInfoView, sender: K.Prepare.movieInfoView)
-                }
-            }
-        }
+        viewModel.fetchMovieInfo(by: K.Prepare.movieInfoView, index: index)
     }
     
     func pushedEditButton(index: Int) {

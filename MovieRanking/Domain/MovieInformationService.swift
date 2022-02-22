@@ -100,7 +100,6 @@ class MovieInformationService {
     
     func fetchMovieInfo(id movieId: String, seq movieSeq: String, completion: @escaping(MovieInfoListModel, Error?) -> Void) {
         guard let url = URL.urlForMovieInfoApi(movieId: movieId, movieSeq: movieSeq) else { return }
-        print(url)
         apiService.fetchMovieInfo(with: url) { movieInfo, error in
             guard error == nil else { completion(MovieInfoListModel([MovieInfo.empty]), error); return }
             completion(MovieInfoListModel(movieInfo), nil)

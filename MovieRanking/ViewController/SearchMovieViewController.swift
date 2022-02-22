@@ -44,7 +44,7 @@ class SearchMovieViewController: UIViewController {
             DispatchQueue.main.async {
                 if self?.viewModel.movieInfoList == nil {
                     self?.tableView.separatorStyle = .none
-                } else if self?.viewModel.movieInfoModelEmpty ?? false {
+                } else if self?.viewModel.isMovieInfoModelEmpty ?? true {
                     AlertService.shared.alert(viewController: self, alertTitle: "검색 된 영화가 없습니다", message: "다른 콘텐츠를 검색해 보세요")
                     self?.activityIndicator.stopAnimating()
                 } else {

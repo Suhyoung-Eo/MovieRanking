@@ -28,6 +28,24 @@ class StorageViewController: UIViewController {
         emptyImage.isHidden = false
         
         navigationItem.title = navigationItemTitle
+        
+        viewModel.gotErrorStatus = { [weak self] in
+            if let error = self?.viewModel.error {
+                DispatchQueue.main.async {
+                    AlertService.shared.alert(viewController: self, alertTitle: "Error", message: error.localizedDescription)
+                }
+            }
+        }
+        
+        viewModel.onUpdatedMovieInfo = { [weak self] in
+            DispatchQueue.main.async {
+                if self?.viewModel.isMovieInfoModelEmpty ?? true {
+                    AlertService.shared.alert(viewController: self, alertTitle: "영화 정보를 불러올 수 없습니다")
+                } else {
+                    self?.performSegue(withIdentifier: K.SegueId.movieInfoView, sender: nil)
+                }
+            }
+        }
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -123,19 +141,6 @@ extension StorageViewController: UICollectionViewDataSource {
 extension StorageViewController: UICollectionViewDelegate {
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        
-        viewModel.loadMovieInfo(by: navigationItemTitle, index: indexPath.row) { [weak self] error in
-            if error != nil || self?.viewModel.movieInfoModel == nil {
-                DispatchQueue.main.async {
-                    AlertService.shared.alert(viewController: self,
-                                              alertTitle: "영화 정보를 불러올 수 없습니다",
-                                              message: error?.localizedDescription)
-                }
-            } else {
-                DispatchQueue.main.async {
-                    self?.performSegue(withIdentifier: K.SegueId.movieInfoView, sender: nil)
-                }
-            }
-        }
+        viewModel.fetchMovieInfo(by: navigationItemTitle, index: indexPath.row)
     }
 }

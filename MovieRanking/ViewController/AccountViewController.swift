@@ -24,7 +24,17 @@ class AccountViewController: UIViewController {
         tableView.rowHeight = 110
         
         navigationItem.title = "내계정"
-
+        
+        viewModel.gotErrorStatus = { [weak self] in
+            if let error = self?.viewModel.error {
+                AlertService.shared.alert(viewController: self, alertTitle: "로그아웃에 실패했습니다", message: error.localizedDescription)
+            } else {
+                DispatchQueue.main.async {
+                    self?.emptyView.isHidden = false
+                    self?.accountButton.title = "로그인"
+                }
+            }
+        }
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -89,18 +99,7 @@ extension AccountViewController {
     }
     
     private func logOut() {
-        viewModel.logOut { [weak self] error in
-            if let error = error {
-                DispatchQueue.main.async {
-                    AlertService.shared.alert(viewController: self, alertTitle: "로그아웃에 실패했습니다", message: error.localizedDescription)
-                }
-            } else {
-                DispatchQueue.main.async {
-                    self?.emptyView.isHidden = false
-                    self?.accountButton.title = "로그인"
-                }
-            }
-        }
+        viewModel.logOut()
     }
 }
 
