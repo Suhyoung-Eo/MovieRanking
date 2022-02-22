@@ -110,15 +110,6 @@ class AccountViewModel {
     }
     
     //MARK: - For CommentsViewController
-    var error: Error?
-    
-    var onUpdatedComment: () -> Void = {}
-    
-    var isUpdateComment: Bool = false {
-        didSet {
-            onUpdatedComment()
-        }
-    }
     
     func loadAccountCommentList(completion: @escaping (Error?) -> Void) {
         accountCommentListModel = nil
@@ -126,15 +117,6 @@ class AccountViewModel {
             guard error == nil else { completion(error); return }
             self?.accountCommentListModel = accountCommentListModel
             completion(nil)
-        }
-    }
-    
-    func addComment(DOCID: String, grade: Float, comment: String) {
-        error = nil
-        FBService.addComment(DOCID: DOCID, grade: grade, comment: comment) { [weak self] error in
-            guard let self = self else { return }
-            self.error = error
-            self.isUpdateComment = !self.isUpdateComment
         }
     }
         
