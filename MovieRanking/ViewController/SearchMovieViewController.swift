@@ -33,9 +33,20 @@ class SearchMovieViewController: UIViewController {
         searchController.searchBar.setValue("취소", forKey: "cancelButtonText")
         
         viewModel.onUpdated = { [weak self] in
+            if let error = self?.viewModel.error {
+                DispatchQueue.main.async {
+                    AlertService.shared.alert(viewController: self, alertTitle: "Error", message: error.localizedDescription)
+                    self?.activityIndicator.stopAnimating()
+                }
+                return
+            }
+            
             DispatchQueue.main.async {
-                if self?.viewModel.numberOfRowsInSection == 0 {
+                if self?.viewModel.movieInfoList == nil {
                     self?.tableView.separatorStyle = .none
+                } else if self?.viewModel.movieInfoModelEmpty ?? false {
+                    AlertService.shared.alert(viewController: self, alertTitle: "검색 된 영화가 없습니다", message: "다른 콘텐츠를 검색해 보세요")
+                    self?.activityIndicator.stopAnimating()
                 } else {
                     self?.tableView.separatorStyle = .singleLine
                     self?.activityIndicator.stopAnimating()
@@ -101,7 +112,9 @@ extension SearchMovieViewController: UITableViewDataSource {
 extension SearchMovieViewController: UITableViewDelegate {
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        performSegue(withIdentifier: K.SegueId.movieInfoView, sender: nil)
+        if !viewModel.movieInfoList.movieInfoModel(0).DOCID.isEmpty {
+            performSegue(withIdentifier: K.SegueId.movieInfoView, sender: nil)
+        }
     }
 }
 
@@ -115,23 +128,7 @@ extension SearchMovieViewController: UISearchBarDelegate {
         if let movieName = searchBar.text {
             activityIndicator.isHidden = false
             activityIndicator.startAnimating()
-            
-            viewModel.fetchMovieInfo(title: movieName) { [weak self] error in
-                if error != nil || self?.viewModel.movieInfoList == nil {
-                    DispatchQueue.main.async {
-                        if let error = error {
-                            AlertService.shared.alert(viewController: self,
-                                                      alertTitle: "네트워크 장애",
-                                                      message: error.localizedDescription)
-                        } else {
-                            AlertService.shared.alert(viewController: self,
-                                                      alertTitle: "검색 된 영화가 없습니다",
-                                                      message: "다른 콘텐츠를 검색해 보세요")
-                        }
-                        self?.activityIndicator.stopAnimating()
-                    }
-                }
-            }
+            viewModel.fetchMovieInfo(title: movieName)
         }
     }
     
