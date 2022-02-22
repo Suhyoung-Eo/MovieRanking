@@ -37,13 +37,15 @@ class CommentsViewController: UIViewController {
         
         viewModel.onUpdatedMovieInfo = { [weak self] in
             DispatchQueue.main.async {
-                self?.activityIndicator.stopAnimating()
-                if self?.viewModel.isMovieInfoModelEmpty ?? true {
+                guard let self = self else { return }
+                self.activityIndicator.stopAnimating()
+                
+                if self.viewModel.isMovieInfoModelEmpty {
                     AlertService.shared.alert(viewController: self, alertTitle: "영화 정보를 불러올 수 없습니다")
-                } else if self?.viewModel.prepareId == K.Prepare.movieInfoView {
-                    self?.performSegue(withIdentifier: K.SegueId.movieInfoView, sender: K.Prepare.movieInfoView)
-                } else if self?.viewModel.prepareId == K.Prepare.addCommentView {
-                    self?.performSegue(withIdentifier: K.SegueId.addCommentView, sender: K.Prepare.addCommentView)
+                } else if self.viewModel.prepareId == K.Prepare.movieInfoView {
+                    self.performSegue(withIdentifier: K.SegueId.movieInfoView, sender: K.Prepare.movieInfoView)
+                } else if self.viewModel.prepareId == K.Prepare.addCommentView {
+                    self.performSegue(withIdentifier: K.SegueId.addCommentView, sender: K.Prepare.addCommentView)
                 }
             }
         }
@@ -51,6 +53,7 @@ class CommentsViewController: UIViewController {
         viewModel.onUpdatedAccountCommentList = { [weak self] in
             DispatchQueue.main.async {
                 self?.activityIndicator.stopAnimating()
+                
                 if self?.viewModel.accountCommentListCount == 0 {
                     self?.emptyImage.isHidden = false
                 } else {
@@ -64,7 +67,8 @@ class CommentsViewController: UIViewController {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         
-        viewModel.fetchAccountCommentList()
+        emptyImage.isHidden = true
+        viewModel.loadAccountCommentList()
     }
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {

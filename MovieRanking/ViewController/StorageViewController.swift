@@ -32,17 +32,25 @@ class StorageViewController: UIViewController {
         viewModel.gotErrorStatus = { [weak self] in
             if let error = self?.viewModel.error {
                 DispatchQueue.main.async {
+                    self?.activityIndicator.stopAnimating()
                     AlertService.shared.alert(viewController: self, alertTitle: "Error", message: error.localizedDescription)
                 }
             }
         }
         
+        if navigationItemTitle == K.Prepare.wishToWatchListView {
+            viewModel.onUpdatedwishToWatchList = { [weak self] in self?.reloadData()}
+        } else {
+            viewModel.onUpdatedgradeList = { [weak self] in self?.reloadData()}
+        }
+        
         viewModel.onUpdatedMovieInfo = { [weak self] in
             DispatchQueue.main.async {
-                if self?.viewModel.isMovieInfoModelEmpty ?? true {
+                guard let self = self else { return }
+                if self.viewModel.isMovieInfoModelEmpty {
                     AlertService.shared.alert(viewController: self, alertTitle: "영화 정보를 불러올 수 없습니다")
                 } else {
-                    self?.performSegue(withIdentifier: K.SegueId.movieInfoView, sender: nil)
+                    self.performSegue(withIdentifier: K.SegueId.movieInfoView, sender: nil)
                 }
             }
         }
@@ -52,9 +60,11 @@ class StorageViewController: UIViewController {
         navigationController?.navigationBar.titleTextAttributes = [NSAttributedString.Key.foregroundColor: UIColor.black.withAlphaComponent(0.7)]
         
         if navigationItemTitle == K.Prepare.wishToWatchListView {
-            viewModel.loadWishToWatchList { [weak self] error in self?.showAlert(by: error) }
+            emptyImage.isHidden = true
+            viewModel.loadWishToWatchList()
         } else {
-            viewModel.loadGradeList { [weak self] error in self?.showAlert(by: error) }
+            emptyImage.isHidden = true
+            viewModel.loadGradeList()
         }
     }
     
@@ -83,21 +93,17 @@ class StorageViewController: UIViewController {
 
 extension StorageViewController {
     
-    private func showAlert(by error: Error?) {
-        activityIndicator.stopAnimating()
-        if let error = error {
-            DispatchQueue.main.async {
-                AlertService.shared.alert(viewController: self, alertTitle: "정보를 불러오지 못했습니다", message: error.localizedDescription)
+    private func reloadData() {
+        DispatchQueue.main.async { [weak self] in
+            guard let self = self else { return }
+            self.activityIndicator.stopAnimating()
+            
+            if self.viewModel.isExistItems(by: self.navigationItemTitle) {
+                self.emptyImage.isHidden = true
+            } else {
+                self.emptyImage.isHidden = false
             }
-        } else {
-            DispatchQueue.main.async { [weak self] in
-                if self?.viewModel.storageNumberOfItems(by: self?.navigationItemTitle ?? "") == 0 {
-                    self?.emptyImage.isHidden = false
-                } else {
-                    self?.emptyImage.isHidden = true
-                }
-                self?.collectionView.reloadData()
-            }
+            self.collectionView.reloadData()
         }
     }
 }

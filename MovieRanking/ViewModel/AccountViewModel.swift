@@ -15,18 +15,9 @@ class AccountViewModel {
     private let FBService = FirebaseService()
     private let movieInfoService = MovieInformationService()
     
-    var wishToWatchListModel: WishToWatchListModel!
-    var gradeListModel: GradeListModel!
-    
     var error: Error? {
         didSet {
             gotErrorStatus()
-        }
-    }
-    
-    var movieInfoModel: MovieInfoModel! {
-        didSet {
-            onUpdatedMovieInfo()
         }
     }
     
@@ -56,6 +47,27 @@ class AccountViewModel {
     
     //MARK: - For StorageViewController
     
+    var onUpdatedwishToWatchList: () -> Void = {}
+    var onUpdatedgradeList: () -> Void = {}
+    
+    var wishToWatchListModel: WishToWatchListModel! {
+        didSet {
+            onUpdatedwishToWatchList()
+        }
+    }
+    
+    var gradeListModel: GradeListModel! {
+        didSet {
+            onUpdatedgradeList()
+        }
+    }
+    
+    var movieInfoModel: MovieInfoModel! {
+        didSet {
+            onUpdatedMovieInfo()
+        }
+    }
+    
     var gradeListCount: Int {
         return gradeListModel == nil ? 0 : gradeListModel.count
     }
@@ -63,6 +75,17 @@ class AccountViewModel {
     var wishToWatchListCount: Int {
         return wishToWatchListModel == nil ? 0 : wishToWatchListModel.count
     }
+    
+    func isExistItems(by title: String) -> Bool {
+         switch title {
+         case K.Prepare.wishToWatchListView:
+             return wishToWatchListCount == 0 ? false : true
+         case K.Prepare.gradeListView:
+             return gradeListCount == 0 ? false : true
+         default:
+             return false
+         }
+     }
     
     func storageNumberOfItems(by title: String) -> Int {
         switch title {
@@ -75,21 +98,23 @@ class AccountViewModel {
         }
     }
     
-    func loadWishToWatchList(completion: @escaping (Error?) -> Void) {
-        wishToWatchListModel = nil
+    func loadWishToWatchList() {
         FBService.loadWishToWatchList { [weak self] wishToWatchListModel, error in
-            guard error == nil else { completion(error); return }
-            self?.wishToWatchListModel = wishToWatchListModel
-            completion(nil)
+            if let error = error {
+                self?.error = error
+            } else {
+                self?.wishToWatchListModel = wishToWatchListModel
+            }
         }
     }
     
-    func loadGradeList(completion: @escaping (Error?) -> Void) {
-        gradeListModel = nil
+    func loadGradeList() {
         FBService.loadGradeList { [weak self] gradeListModel, error in
-            guard error == nil else { completion(error); return }
-            self?.gradeListModel = gradeListModel
-            completion(nil)
+            if let error = error {
+                self?.error = error
+            } else {
+                self?.gradeListModel = gradeListModel
+            }
         }
     }
     
@@ -107,7 +132,7 @@ class AccountViewModel {
         }
     }
     
-    func fetchAccountCommentList() {
+    func loadAccountCommentList() {
         accountCommentListModel = nil
         FBService.loadAccountCommentList { [weak self] accountCommentListModel, error in
             if let error = error {
