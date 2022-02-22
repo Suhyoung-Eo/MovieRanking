@@ -22,14 +22,16 @@ class AddCommentViewController: UIViewController {
         
         commentTextView.delegate = self
         
-        viewModel.onUpdatedComment = { [weak self] in
+        viewModel.gotErrorStatus = { [weak self] in
             if let error = self?.viewModel.error {
                 DispatchQueue.main.async {
                     AlertService.shared.alert(viewController: self, alertTitle: "코멘트 등록에 실패했습니다", message: error.localizedDescription)
                 }
-            } else {
-                self?.dismiss(animated: true, completion: nil)
             }
+        }
+        
+        viewModel.onUpdatedComment = { [weak self] in
+            self?.dismiss(animated: true, completion: nil)
         }
     }
     

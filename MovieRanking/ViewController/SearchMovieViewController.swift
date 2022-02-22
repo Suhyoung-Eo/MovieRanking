@@ -32,26 +32,30 @@ class SearchMovieViewController: UIViewController {
         searchController.searchBar.placeholder = "영화 콘텐츠를 검색해 보세요"
         searchController.searchBar.setValue("취소", forKey: "cancelButtonText")
         
-        viewModel.onUpdated = { [weak self] in
+        viewModel.gotErrorStatus = { [weak self] in
             if let error = self?.viewModel.error {
                 DispatchQueue.main.async {
                     AlertService.shared.alert(viewController: self, alertTitle: "Error", message: error.localizedDescription)
                     self?.activityIndicator.stopAnimating()
                 }
-                return
             }
-            
+        }
+        
+        viewModel.onUpdatedMovieInfoList = { [weak self] in
             DispatchQueue.main.async {
-                if self?.viewModel.movieInfoList == nil {
-                    self?.tableView.separatorStyle = .none
-                } else if self?.viewModel.isMovieInfoModelEmpty ?? true {
+                guard let self = self else { return }
+                
+                if self.viewModel.movieInfoList == nil {
+                    self.tableView.separatorStyle = .none   // 화면 갱신
+                } else if self.viewModel.isMovieInfoModelEmpty {
                     AlertService.shared.alert(viewController: self, alertTitle: "검색 된 영화가 없습니다", message: "다른 콘텐츠를 검색해 보세요")
-                    self?.activityIndicator.stopAnimating()
+                    self.activityIndicator.stopAnimating()
                 } else {
-                    self?.tableView.separatorStyle = .singleLine
-                    self?.activityIndicator.stopAnimating()
+                    self.tableView.separatorStyle = .singleLine
+                    self.activityIndicator.stopAnimating()
                 }
-                self?.tableView.reloadData()
+                
+                self.tableView.reloadData()
             }
         }
     }

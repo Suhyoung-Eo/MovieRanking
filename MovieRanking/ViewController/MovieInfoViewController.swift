@@ -30,17 +30,18 @@ class MovieInfoViewController: UIViewController {
         tableView.dataSource = self
         tableView.delegate = self
         
-        viewModel.onUpdatedFirebase = { [weak self] in
+        viewModel.gotErrorStatus = { [weak self] in
             if let error = self?.viewModel.error {
                 DispatchQueue.main.async {
                     AlertService.shared.alert(viewController: self, alertTitle: "Error", message: error.localizedDescription)
                 }
-            } else {
-                DispatchQueue.main.async {
-                    self?.tableView.reloadData()
-                }
             }
         }
+        
+        viewModel.onUpdatedGradeAverage = { self.reloadData() }
+        viewModel.onUpdateIsWishToWatch = { self.reloadData() }
+        viewModel.onUpdateCommentList = { self.reloadData() }
+        viewModel.onUpadteUserComment = { self.reloadData() }
         
         // 소비자 계정을 위한 초기 데이터 설정
         viewModel.setDataForAccount(movieInfo: movieInfo)
@@ -91,8 +92,8 @@ class MovieInfoViewController: UIViewController {
             guard let destinationVC = segue.destination as? AddCommentViewController else {
                 fatalError("Could not found AddCommentViewController")
             }
-            destinationVC.comment = viewModel.comment
-            destinationVC.grade = viewModel.grade
+            destinationVC.grade = viewModel.gradeAndComment.0
+            destinationVC.comment = viewModel.gradeAndComment.1
             destinationVC.movieInfo = movieInfo
         default:
             return
@@ -117,6 +118,12 @@ extension MovieInfoViewController {
     @objc private func tappedstllImage(gesture: UITapGestureRecognizer) {
         if !movieInfo.stllsLinks[0].isEmpty {
             performSegue(withIdentifier: K.SegueId.imageView, sender: K.Prepare.stllImageView)
+        }
+    }
+    
+    private func reloadData() {
+        DispatchQueue.main.async { [weak self] in
+            self?.tableView.reloadData()
         }
     }
 }
