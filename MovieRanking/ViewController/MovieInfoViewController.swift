@@ -92,7 +92,6 @@ class MovieInfoViewController: UIViewController {
             guard let destinationVC = segue.destination as? AddCommentViewController else {
                 fatalError("Could not found AddCommentViewController")
             }
-            destinationVC.grade = viewModel.gradeAndComment.0
             destinationVC.comment = viewModel.gradeAndComment.1
             destinationVC.movieInfo = movieInfo
         default:
@@ -182,6 +181,7 @@ extension MovieInfoViewController: UITableViewDataSource {
             cell.parent = self
             cell.viewModel = viewModel
             cell.movieInfo = movieInfo
+            cell.grade = viewModel.gradeAndComment.0
             
             return cell
         case 2:

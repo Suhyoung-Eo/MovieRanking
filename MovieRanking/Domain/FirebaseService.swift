@@ -125,7 +125,7 @@ class FirebaseService {
                     let data = document.data()
                     
                     if let userId = data[K.FStore.userId] as? String,
-                       let grade = data[K.FStore.grade] as? Float,
+                       let grade = (data[K.FStore.grade] as? Float == nil ? 0 : data[K.FStore.grade] as? Float),
                        let comment = data[K.FStore.comment] as? String,
                        let date = data[K.FStore.date] as? String {
                         
@@ -208,7 +208,8 @@ class FirebaseService {
                        let movieSeq = data[K.FStore.movieSeq] as? String,
                        let movieName = data[K.FStore.movieName] as? String,
                        let thumbNailLink = data[K.FStore.thumbNailLink] as? String,
-                       let grade = data[K.FStore.grade] as? Float {
+                       let grade = data[K.FStore.grade] as? Float,
+                       grade != 0 {
                         
                         let newItem = FBGradeModel(DOCID: DOCID,
                                                    movieId: movieId,
@@ -248,7 +249,7 @@ class FirebaseService {
                        let movieSeq = data[K.FStore.movieSeq] as? String,
                        let movieName = data[K.FStore.movieName] as? String,
                        let thumbNailLink = data[K.FStore.thumbNailLink] as? String,
-                       let grade = data[K.FStore.grade] as? Float,
+                       let grade = (data[K.FStore.grade] as? Float == nil ? 0 : data[K.FStore.grade] as? Float),
                        let comment = data[K.FStore.comment] as? String,
                        let date = data[K.FStore.date] as? String,
                        !comment.isEmpty {
@@ -272,34 +273,32 @@ class FirebaseService {
     
     //MARK: - Create/ Update data methods
     
-    func addComment(DOCID: String, grade: Float, comment: String, completion: @escaping (Error?) -> Void) {
+    func addComment(DOCID: String, comment: String, completion: @escaping (Error?) -> Void) {
         
         guard let userId = self.userId else { completion(nil); return }
-        
         let date = getFormattedDate()
         
-        if comment.isEmpty {
-            db.collection(DOCID).document(userId).setData([K.FStore.userId : userId,
-                                                           K.FStore.grade : grade]
-                                                          , merge: true) { [weak self] error in
-                
-                guard error == nil else { completion(error); return }
-                self?.db.collection(userId).document(DOCID).setData([K.FStore.grade: grade], merge: true)
-                completion(error)
-            }
-        } else {
-            db.collection(DOCID).document(userId).setData([K.FStore.userId : userId,
-                                                           K.FStore.grade : grade,
-                                                           K.FStore.comment: comment,
-                                                           K.FStore.date: date]
-                                                          , merge: true) { [weak self] error in
-                
-                guard error == nil else { completion(error); return }
-                self?.db.collection(userId).document(DOCID).setData([K.FStore.grade: grade,
-                                                                     K.FStore.comment: comment,
-                                                                     K.FStore.date: date], merge: true)
-                completion(error)
-            }
+        db.collection(DOCID).document(userId).setData([K.FStore.userId : userId,
+                                                       K.FStore.comment: comment,
+                                                       K.FStore.date: date]
+                                                      , merge: true) { [weak self] error in
+            
+            guard error == nil else { completion(error); return }
+            self?.db.collection(userId).document(DOCID).setData([K.FStore.comment: comment, K.FStore.date: date], merge: true)
+            completion(error)
+        }
+    }
+    
+    func updateGrade(DOCID: String, grade: Float, completion: @escaping (Error?) -> Void) {
+        guard let userId = self.userId else { completion(nil); return }
+        
+        db.collection(DOCID).document(userId).setData([K.FStore.userId : userId,
+                                                       K.FStore.grade : grade]
+                                                      , merge: true) { [weak self] error in
+            
+            guard error == nil else { completion(error); return }
+            self?.db.collection(userId).document(DOCID).setData([K.FStore.grade: grade], merge: true)
+            completion(error)
         }
     }
     
@@ -333,18 +332,14 @@ class FirebaseService {
         }
     }
     
-    func deleteGradeAndComment(collection: String?, document: String?, completion: @escaping (Error?) -> Void) {
+    func deleteGrade(collection: String?, document: String?, completion: @escaping (Error?) -> Void) {
         guard let document = document, let collection = collection else { completion(nil); return }
         
-        db.collection(collection).document(document).updateData([K.FStore.grade: FieldValue.delete(),
-                                                                 K.FStore.comment: FieldValue.delete(),
-                                                                 K.FStore.date: FieldValue.delete()]) { [weak self] error in
+        db.collection(collection).document(document).updateData([K.FStore.grade: FieldValue.delete()]) { [weak self] error in
             
             guard error == nil else { completion(error); return }
             
-            self?.db.collection(document).document(collection).updateData([K.FStore.grade: FieldValue.delete(),
-                                                                           K.FStore.comment: FieldValue.delete(),
-                                                                           K.FStore.date: FieldValue.delete()]) { error in completion(error) }
+            self?.db.collection(document).document(collection).updateData([K.FStore.grade: FieldValue.delete()]) { error in completion(error) }
         }
     }
     

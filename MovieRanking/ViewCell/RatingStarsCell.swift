@@ -17,12 +17,13 @@ class RatingStarsCell: UITableViewCell {
     
     private var starImages: [UIImage] = []
     
-    var movieInfo: MovieInfoModel!
     weak var parent: UIViewController!
+    weak var viewModel: MovieInfoViewModel!
+    var movieInfo: MovieInfoModel!
     
-    weak var viewModel: MovieInfoViewModel! {
+    var grade: Float = 0.0 {
         didSet {
-            loadStarImages(by: viewModel.gradeAndComment.0) { [weak self] in
+            loadStarImages(by: grade) { [weak self] in
                 self?.setStarImage()
             }
         }
@@ -45,11 +46,7 @@ class RatingStarsCell: UITableViewCell {
             self?.setStarImage()
         }
         
-        if grade == 0 {
-            deleteAlert()
-        } else {
-            updateGrade(by: grade)
-        }
+        updateGrade(by: grade)
     }
     
     private func loadStarImages(by grade: Float , completion: @escaping () -> Void) {
@@ -83,22 +80,6 @@ class RatingStarsCell: UITableViewCell {
     private func updateGrade(by grade: Float) {
         addAlert()
         viewModel.updateGrade(DOCID: movieInfo.DOCID, grade: grade)
-    }
-    
-    private func deleteAlert() {
-        
-        if viewModel.gradeAndComment.0 == 0 { return }
-        
-        let alert = UIAlertController(title: "삭제하시겠습니까?", message: "등록된 코멘트도 함께 삭제됩니다", preferredStyle: .alert)
-        alert.addAction(UIAlertAction(title: "확인", style: .default) { [weak self] _ in
-            self?.viewModel.deleteGradeAndComment(DOCID: self?.movieInfo.DOCID ?? "")
-        })
-        alert.addAction(UIAlertAction(title: "취소", style: .cancel) { [weak self] _ in
-            self?.loadStarImages(by: self?.viewModel.gradeAndComment.0 ?? 0) {
-                self?.setStarImage()
-            }
-        })
-        parent.present(alert, animated: true)
     }
     
     private func addAlert() {

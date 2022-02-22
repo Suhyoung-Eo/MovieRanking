@@ -185,7 +185,7 @@ class MovieInfoViewModel {
     }
     
     func updateGrade(DOCID: String, grade: Float) {
-        FBService.addComment(DOCID: DOCID, grade: grade, comment: gradeAndComment.1) { [weak self] error in
+        FBService.updateGrade(DOCID: DOCID, grade: grade) { [weak self] error in
             if let error = error {
                 self?.error = error
             } else {
@@ -195,12 +195,12 @@ class MovieInfoViewModel {
         }
     }
     
-    func deleteGradeAndComment(DOCID: String) {
-        FBService.deleteGradeAndComment(collection: DOCID, document: userId) { [weak self] error in
+    func deleteGrade(DOCID: String) {
+        FBService.deleteGrade(collection: DOCID, document: userId) { [weak self] error in
             if let error = error {
                 self?.error = error
             } else {
-                self?.gradeAndComment = (0.0, "")
+                self?.gradeAndComment = (0.0, self?.gradeAndComment.1 ?? "")
                 self?.loadGradeAverage(DOCID: DOCID)    // 평점 바낄때마다 평균 평점 갱신
             }
         }
@@ -216,8 +216,8 @@ class MovieInfoViewModel {
         }
     }
     
-    func addComment(DOCID: String, grade: Float, comment: String) {
-        FBService.addComment(DOCID: DOCID, grade: grade, comment: comment) { [weak self] error in
+    func addComment(DOCID: String, comment: String) {
+        FBService.addComment(DOCID: DOCID, comment: comment) { [weak self] error in
             if let error = error {
                 self?.error = error
             } else {

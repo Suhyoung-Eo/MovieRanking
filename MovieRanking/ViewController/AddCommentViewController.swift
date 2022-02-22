@@ -15,7 +15,6 @@ class AddCommentViewController: UIViewController {
     private let viewModel = MovieInfoViewModel()
     var movieInfo: MovieInfoModel!
     var comment: String = ""
-    var grade: Float = 0.0
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -46,7 +45,7 @@ class AddCommentViewController: UIViewController {
         if viewModel.userId == nil { showAlert(); return }
         
         if let comment = commentTextView.text, !comment.isEmpty {
-            viewModel.addComment(DOCID: movieInfo.DOCID, grade: grade, comment: comment)
+            viewModel.addComment(DOCID: movieInfo.DOCID, comment: comment)
         } else {
             AlertService.shared.alert(viewController: self, alertTitle: "작성한 코멘트가 없습니다")
             commentTextView.text = comment

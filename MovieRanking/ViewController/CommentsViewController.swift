@@ -85,7 +85,6 @@ class CommentsViewController: UIViewController {
             }
             destinationVC.movieInfo = viewModel.movieInfoModel
             destinationVC.comment = viewModel.comment
-            destinationVC.grade = viewModel.grade
         default:
             break
         }

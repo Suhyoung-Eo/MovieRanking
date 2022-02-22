@@ -124,7 +124,6 @@ class AccountViewModel {
     
     var prepareId: String = ""
     var comment: String = ""
-    var grade: Float = 0.0
     
     var accountCommentListModel: AccountCommentListModel! {
         didSet {
@@ -133,7 +132,6 @@ class AccountViewModel {
     }
     
     func loadAccountCommentList() {
-        accountCommentListModel = nil
         FBService.loadAccountCommentList { [weak self] accountCommentListModel, error in
             if let error = error {
                 self?.error = error
@@ -170,7 +168,6 @@ class AccountViewModel {
             movieId = movieInfo.movieId
             movieSeq = movieInfo.movieSeq
             comment = movieInfo.comment
-            grade = movieInfo.grade
             prepareId = K.Prepare.addCommentView
         case K.Prepare.movieInfoView:
             let movieInfo = accountCommentListModel.accountCommentModel(index)
