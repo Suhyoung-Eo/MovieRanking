@@ -29,31 +29,9 @@ class StorageViewController: UIViewController {
         
         navigationItem.title = navigationItemTitle
         
-        viewModel.gotErrorStatus = { [weak self] in
-            if let error = self?.viewModel.error {
-                DispatchQueue.main.async {
-                    self?.activityIndicator.stopAnimating()
-                    AlertService.shared.alert(viewController: self, alertTitle: "Error", message: error.localizedDescription)
-                }
-            }
-        }
-        
-        if navigationItemTitle == K.Prepare.wishToWatchListView {
-            viewModel.onUpdatedwishToWatchList = { [weak self] in self?.reloadData()}
-        } else {
-            viewModel.onUpdatedgradeList = { [weak self] in self?.reloadData()}
-        }
-        
-        viewModel.onUpdatedMovieInfo = { [weak self] in
-            DispatchQueue.main.async {
-                guard let self = self else { return }
-                if self.viewModel.isMovieInfoModelEmpty {
-                    AlertService.shared.alert(viewController: self, alertTitle: "영화 정보를 불러올 수 없습니다")
-                } else {
-                    self.performSegue(withIdentifier: K.SegueId.movieInfoView, sender: nil)
-                }
-            }
-        }
+        gotErrorStatus()
+        onUpdatedList()
+        onUpdatedMovieInfo()
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -92,6 +70,38 @@ class StorageViewController: UIViewController {
 //MARK: - extension StorageViewController
 
 extension StorageViewController {
+    
+    private func gotErrorStatus() {
+        viewModel.gotErrorStatus = { [weak self] in
+            if let error = self?.viewModel.error {
+                DispatchQueue.main.async {
+                    self?.activityIndicator.stopAnimating()
+                    AlertService.shared.alert(viewController: self, alertTitle: "Error", message: error.localizedDescription)
+                }
+            }
+        }
+    }
+    
+    private func onUpdatedList() {
+        if navigationItemTitle == K.Prepare.wishToWatchListView {
+            viewModel.onUpdatedwishToWatchList = { [weak self] in self?.reloadData()}
+        } else {
+            viewModel.onUpdatedgradeList = { [weak self] in self?.reloadData()}
+        }
+    }
+    
+    private func onUpdatedMovieInfo() {
+        viewModel.onUpdatedMovieInfo = { [weak self] in
+            DispatchQueue.main.async {
+                guard let self = self else { return }
+                if self.viewModel.isMovieInfoModelEmpty {
+                    AlertService.shared.alert(viewController: self, alertTitle: "영화 정보를 불러올 수 없습니다")
+                } else {
+                    self.performSegue(withIdentifier: K.SegueId.movieInfoView, sender: nil)
+                }
+            }
+        }
+    }
     
     private func reloadData() {
         DispatchQueue.main.async { [weak self] in

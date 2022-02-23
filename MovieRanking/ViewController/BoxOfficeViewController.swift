@@ -33,25 +33,7 @@ class BoxOfficeViewController: UIViewController {
         navigationItem.title = "박스오피스 순위"
         button.contentHorizontalAlignment = .left
         
-        viewModel.onUpdated = { [weak self] in
-            if let error = self?.viewModel.error {
-                self?.retry(error: error)
-            } else {
-                DispatchQueue.main.async {
-                    self?.button.setTitle(self?.viewModel.buttonTitle, for: .normal)
-                    
-                    if self?.viewModel.numberOfRowsInSection == 0 {
-                        self?.tableView.separatorStyle = .none  // fetchBoxOffice 동작 하는 동안 화면 클리어
-                    } else {
-                        self?.tableView.separatorStyle = .singleLine
-                        self?.activityIndicator.stopAnimating()
-                        self?.button.isEnabled = true
-                    }
-                    self?.tableView.reloadData()
-                }
-            }
-        }
-        
+        onUpdated()
         fetchBoxOffice()
     }
     
@@ -97,6 +79,27 @@ class BoxOfficeViewController: UIViewController {
 //MARK: - extension BoxOfficeViewController
 
 extension BoxOfficeViewController {
+    
+    private func onUpdated() {
+        viewModel.onUpdated = { [weak self] in
+            if let error = self?.viewModel.error {
+                self?.retry(error: error)
+            } else {
+                DispatchQueue.main.async {
+                    self?.button.setTitle(self?.viewModel.buttonTitle, for: .normal)
+                    
+                    if self?.viewModel.numberOfRowsInSection == 0 {
+                        self?.tableView.separatorStyle = .none  // fetchBoxOffice 동작 하는 동안 화면 클리어
+                    } else {
+                        self?.tableView.separatorStyle = .singleLine
+                        self?.activityIndicator.stopAnimating()
+                        self?.button.isEnabled = true
+                    }
+                    self?.tableView.reloadData()
+                }
+            }
+        }
+    }
     
     private func fetchBoxOffice() {
         button.isEnabled = false    // 박스오피스 정보 다운로드 완료전까지 선택 버튼 비활성화
