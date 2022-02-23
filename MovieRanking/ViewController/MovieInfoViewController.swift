@@ -43,9 +43,6 @@ class MovieInfoViewController: UIViewController {
         viewModel.onUpdateCommentList = { self.reloadData() }
         viewModel.onUpadteUserComment = { self.reloadData() }
         
-        // 소비자 계정을 위한 초기 데이터 설정
-        viewModel.setDataForAccount(movieInfo: movieInfo)
-        
         // ios15에서 setionHeader에 여백이 생기는 이슈
         if #available(iOS 15.0, *) {
             tableView.sectionHeaderTopPadding = 0
@@ -58,6 +55,7 @@ class MovieInfoViewController: UIViewController {
         navigationController?.navigationBar.titleTextAttributes = [NSAttributedString.Key.foregroundColor: UIColor.black.withAlphaComponent(0.7)]
         navigationItem.title = movieInfo.movieName
         
+        viewModel.setDataForAccount(movieInfo: movieInfo)
         viewModel.loadGradeAverage(DOCID: movieInfo.DOCID)
         viewModel.loadIsWishToWatch(DOCID: movieInfo.DOCID)
         viewModel.loadCommentList(DOCID: movieInfo.DOCID)
