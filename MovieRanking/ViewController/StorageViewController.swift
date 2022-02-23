@@ -32,18 +32,13 @@ class StorageViewController: UIViewController {
         gotErrorStatus()
         onUpdatedList()
         onUpdatedMovieInfo()
+        loadList()
+        
     }
     
     override func viewWillAppear(_ animated: Bool) {
         navigationController?.navigationBar.titleTextAttributes = [NSAttributedString.Key.foregroundColor: UIColor.black.withAlphaComponent(0.7)]
         
-        if navigationItemTitle == K.Prepare.wishToWatchListView {
-            emptyImage.isHidden = true
-            viewModel.loadWishToWatchList()
-        } else {
-            emptyImage.isHidden = true
-            viewModel.loadGradeList()
-        }
     }
     
     override func viewWillDisappear(_ animated: Bool) {
@@ -70,6 +65,16 @@ class StorageViewController: UIViewController {
 //MARK: - extension StorageViewController
 
 extension StorageViewController {
+    
+    private func loadList() {
+        if navigationItemTitle == K.Prepare.wishToWatchListView {
+            emptyImage.isHidden = true
+            viewModel.loadWishToWatchList()
+        } else {
+            emptyImage.isHidden = true
+            viewModel.loadGradeList()
+        }
+    }
     
     private func gotErrorStatus() {
         viewModel.gotErrorStatus = { [weak self] in
@@ -102,7 +107,7 @@ extension StorageViewController {
             }
         }
     }
-    
+        
     private func reloadData() {
         DispatchQueue.main.async { [weak self] in
             guard let self = self else { return }

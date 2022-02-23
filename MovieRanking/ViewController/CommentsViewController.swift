@@ -26,48 +26,10 @@ class CommentsViewController: UIViewController {
         navigationItem.title = "내코멘트"
         emptyImage.isHidden = false
         
-        viewModel.gotErrorStatus = { [weak self] in
-            if let error = self?.viewModel.error {
-                DispatchQueue.main.async {
-                    self?.activityIndicator.stopAnimating()
-                    AlertService.shared.alert(viewController: self, alertTitle: "Error", message: error.localizedDescription)
-                }
-            }
-        }
+        gotErrorStatus()
+        onUpdatedAccountCommentList()
+        onUpdatedMovieInfo()
         
-        viewModel.onUpdatedMovieInfo = { [weak self] in
-            DispatchQueue.main.async {
-                guard let self = self else { return }
-                self.activityIndicator.stopAnimating()
-                
-                if self.viewModel.isMovieInfoModelEmpty {
-                    AlertService.shared.alert(viewController: self, alertTitle: "영화 정보를 불러올 수 없습니다")
-                } else if self.viewModel.prepareId == K.Prepare.movieInfoView {
-                    self.performSegue(withIdentifier: K.SegueId.movieInfoView, sender: K.Prepare.movieInfoView)
-                } else if self.viewModel.prepareId == K.Prepare.addCommentView {
-                    self.performSegue(withIdentifier: K.SegueId.addCommentView, sender: K.Prepare.addCommentView)
-                }
-            }
-        }
-        
-        viewModel.onUpdatedAccountCommentList = { [weak self] in
-            DispatchQueue.main.async {
-                self?.activityIndicator.stopAnimating()
-                
-                if self?.viewModel.accountCommentListCount == 0 {
-                    self?.emptyImage.isHidden = false
-                } else {
-                    self?.emptyImage.isHidden = true
-                }
-                self?.tableView.reloadData()
-            }
-        }
-    }
-    
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
-        
-        emptyImage.isHidden = true
         viewModel.loadAccountCommentList()
     }
     
@@ -102,7 +64,50 @@ class CommentsViewController: UIViewController {
 //MARK: - extension CommentsViewController
 
 extension CommentsViewController {
-
+    
+    private func gotErrorStatus() {
+        viewModel.gotErrorStatus = { [weak self] in
+            if let error = self?.viewModel.error {
+                DispatchQueue.main.async {
+                    self?.activityIndicator.stopAnimating()
+                    AlertService.shared.alert(viewController: self, alertTitle: "Error", message: error.localizedDescription)
+                }
+            }
+        }
+    }
+    
+    private func onUpdatedAccountCommentList() {
+        viewModel.onUpdatedAccountCommentList = { [weak self] in
+            DispatchQueue.main.async {
+                self?.activityIndicator.stopAnimating()
+                
+                if self?.viewModel.accountCommentListCount == 0 {
+                    self?.emptyImage.isHidden = false
+                } else {
+                    self?.emptyImage.isHidden = true
+                }
+                self?.tableView.reloadData()
+            }
+        }
+    }
+    
+    private func onUpdatedMovieInfo() {
+        viewModel.onUpdatedMovieInfo = { [weak self] in
+            DispatchQueue.main.async {
+                guard let self = self else { return }
+                self.activityIndicator.stopAnimating()
+                
+                if self.viewModel.isMovieInfoModelEmpty {
+                    AlertService.shared.alert(viewController: self, alertTitle: "영화 정보를 불러올 수 없습니다")
+                } else if self.viewModel.prepareId == K.Prepare.movieInfoView {
+                    self.performSegue(withIdentifier: K.SegueId.movieInfoView, sender: K.Prepare.movieInfoView)
+                } else if self.viewModel.prepareId == K.Prepare.addCommentView {
+                    self.performSegue(withIdentifier: K.SegueId.addCommentView, sender: K.Prepare.addCommentView)
+                }
+            }
+        }
+    }
+    
     private func showEditAlert(_ index: Int) {
         let alert = UIAlertController(title: nil, message: nil, preferredStyle: .actionSheet)
         alert.addAction(UIAlertAction(title: "코멘트 수정", style: .default) { [weak self] _ in
