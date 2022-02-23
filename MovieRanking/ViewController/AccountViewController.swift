@@ -69,9 +69,7 @@ class AccountViewController: UIViewController {
             AlertService.shared.alert(viewController: self, alertTitle: "서비스를 이용하려면 로그인하세요")
             return
         }
-        
         performSegue(withIdentifier: K.SegueId.storageView, sender: K.Prepare.wishToWatchListView)
-        print("goToWishListButton")
     }
     
     @IBAction func goToGradeListButton(_ sender: Any) {
@@ -79,9 +77,7 @@ class AccountViewController: UIViewController {
             AlertService.shared.alert(viewController: self, alertTitle: "서비스를 이용하려면 로그인하세요")
             return
         }
-        
         performSegue(withIdentifier: K.SegueId.storageView, sender: K.Prepare.gradeListView)
-        print("goToGradeListButton")
     }
     
     @IBAction func goToCommentListButton(_ sender: Any) {
@@ -89,9 +85,7 @@ class AccountViewController: UIViewController {
             AlertService.shared.alert(viewController: self, alertTitle: "서비스를 이용하려면 로그인하세요")
             return
         }
-        
         performSegue(withIdentifier: K.SegueId.commentListView, sender: K.Prepare.userCommentView)
-        print("goToCommentListButton")
     }
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
