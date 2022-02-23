@@ -17,6 +17,13 @@ class LoginViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        viewModel.gotErrorStatus = { [weak self] in
+            if let error = self?.viewModel.error {
+                AlertService.shared.alert(viewController: self, alertTitle: "로그인에 실패했습니다", message: error.localizedDescription)
+            } else {
+                self?.alertService()
+            }
+        }
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -26,26 +33,15 @@ class LoginViewController: UIViewController {
     }
     
     @IBAction func loginButton(_ sender: Any) {
-        
         if let email = emailTextField.text, let password = passwordTextField.text {
-            viewModel.logIn(email: email, password: password) { [weak self] error in
-                guard error == nil else {
-                    DispatchQueue.main.async {
-                        AlertService.shared.alert(viewController: self, alertTitle: "로그인에 실패했습니다", message: error?.localizedDescription)
-                    }
-                    return
-                }
-                self?.alertService()
-            }
+            viewModel.logIn(email: email, password: password)
         }
     }
     
     private func alertService() {
         DispatchQueue.main.async { [weak self] in
             let alert = UIAlertController(title: "로그인에 성공했습니다", message: nil, preferredStyle: .alert)
-            alert.addAction(UIAlertAction(title: "확인", style: .default) { _ in
-                self?.navigationController?.popViewController(animated: true)
-            })
+            alert.addAction(UIAlertAction(title: "확인", style: .default) { _ in self?.navigationController?.popViewController(animated: true)})
             self?.present(alert, animated: true, completion: nil)
         }
     }

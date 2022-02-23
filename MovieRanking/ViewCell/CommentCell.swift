@@ -63,6 +63,8 @@ class CommentCell: UITableViewCell {
     
     private func loadEmotionImage(grade: Float) -> UIImage? {
         switch grade {
+        case 0:
+            return UIImage(named: K.Image.noIdeaFace)
         case 0.5, 1.0:
             return UIImage(named: K.Image.tooBadFace)!
         case 1.5, 2.0:

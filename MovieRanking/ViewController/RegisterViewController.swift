@@ -16,22 +16,19 @@ class RegisterViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-
-
-    }
-
-    @IBAction func registerButton(_ sender: Any) {
         
-        if let email = emailTextField.text, let password = passwordTextField.text {
-            viewModel.register(email: email, password: password) { [weak self] error in
-                guard error == nil else {
-                    DispatchQueue.main.async {
-                        AlertService.shared.alert(viewController: self, alertTitle: "회원 가입에 실패했습니다", message: error?.localizedDescription)
-                    }
-                    return
-                }
+        viewModel.gotErrorStatus = { [weak self] in
+            if let error = self?.viewModel.error {
+                AlertService.shared.alert(viewController: self, alertTitle: "회원 가입에 실패했습니다", message: error.localizedDescription)
+            } else {
                 self?.alertService()
             }
+        }
+    }
+    
+    @IBAction func registerButton(_ sender: Any) {
+        if let email = emailTextField.text, let password = passwordTextField.text {
+            viewModel.register(email: email, password: password)
         }
     }
     
@@ -42,9 +39,7 @@ class RegisterViewController: UIViewController {
     private func alertService() {
         DispatchQueue.main.async { [weak self] in
             let alert = UIAlertController(title: "회원 가입에 성공했습니다", message: "로그인해 주세요", preferredStyle: .alert)
-            alert.addAction(UIAlertAction(title: "확인", style: .default) { _ in
-                self?.dismiss(animated: true, completion: nil)
-            })
+            alert.addAction(UIAlertAction(title: "확인", style: .default) { _ in self?.dismiss(animated: true, completion: nil) })
             self?.present(alert, animated: true, completion: nil)
         }
     }

@@ -9,19 +9,28 @@ import Foundation
 
 class MovieInfoViewModel {
     
-    var onUpdated: () -> Void = {}
+    var gotErrorStatus: () -> Void = {}
+    var onUpdatedMovieInfoList: () -> Void = {}
     
     private let service = MovieInformationService()
     private let FBService = FirebaseService()
     
-    //MARK: - MovieInformationService
+    var error: Error? {
+        didSet {
+            gotErrorStatus()
+        }
+    }
     
-    var movieInfoModel: MovieInfoModel!
+    //MARK: - MovieInformationService
     
     var movieInfoList: MovieInfoListModel! {
         didSet {
-            onUpdated()
+            onUpdatedMovieInfoList()
         }
+    }
+    
+    var isMovieInfoModelEmpty: Bool {
+        return movieInfoList.movieInfoModel(0).DOCID.isEmpty
     }
     
     var numberOfSections: Int {
@@ -29,7 +38,7 @@ class MovieInfoViewModel {
     }
     
     var numberOfRowsInSection: Int {
-        return movieInfoList == nil ? 0 : movieInfoList.count
+        return (movieInfoList == nil || isMovieInfoModelEmpty) ? 0 : movieInfoList.count
     }
     
     func heightForHeader(by section: Int) -> Float {
@@ -46,37 +55,52 @@ class MovieInfoViewModel {
     }
     
     func clearMovieInfoList() {
+        error = nil
         movieInfoList = nil
     }
     
     // 영화별 정보 상세 - 한국영화데이터베이스
-    func fetchMovieInfo(title movieName: String, completion: @escaping (Error?) -> Void) {
+    func fetchMovieInfo(title movieName: String) {
         movieInfoList = nil
-        
         service.fetchMovieInfo(title: movieName) { [weak self] movieInfoList, error in
-            guard error == nil, !movieInfoList.movieInfoModel(0).DOCID.isEmpty else { completion(error); return }
-            
-            self?.movieInfoList = movieInfoList
-            completion(nil)
+            if let error = error {
+                self?.error = error
+            } else {
+                self?.movieInfoList = movieInfoList
+            }
         }
     }
     
     //MARK: - FirebaseService
     
-    var onUpdatedFirebase: () -> Void = {}
-    
-    private var gradeAverage: Float = 0.0
-    var commentListModel: CommentListModel!
-    var isWishToWatch: Bool = false
-    var grade: Float = 0.0
-    var comment: String = ""
-    var error: Error?
+    var onUpdatedGradeAverage: () -> Void = {}
+    var onUpdateIsWishToWatch: () -> Void = {}
+    var onUpdateCommentList: () -> Void = {}
+    var onUpadteUserComment: () -> Void = {}
     
     /* For MovieInfoViewController */
     
-    private var isUpdate: Bool = false {
+    var gradeAverage: Float = 0.0 {
         didSet {
-            onUpdatedFirebase()
+            onUpdatedGradeAverage()
+        }
+    }
+    
+    var isWishToWatch: Bool = false {
+        didSet {
+            onUpdateIsWishToWatch()
+        }
+    }
+    
+    var commentListModel: CommentListModel! {
+        didSet {
+            onUpdateCommentList()
+        }
+    }
+    
+    var gradeAndComment: (Float, String) = (0.0, "") {
+        didSet {
+            onUpadteUserComment()
         }
     }
     
@@ -88,6 +112,10 @@ class MovieInfoViewModel {
         return (commentListModel == nil || commentListModel.count == 0) ? false : true
     }
     
+    var gradeAverageText: String {
+        return gradeAverage == 0 ? "첫 평점을 등록해 주세요" : "평균 ★ \(String(format: "%.1f", gradeAverage))"
+    }
+    
     func sectionCount(by section: Int) -> Int {
         switch section {
         case 6:
@@ -97,102 +125,104 @@ class MovieInfoViewModel {
         }
     }
     
-    var gradeAverageText: String {
-        return gradeAverage == 0 ? "첫 평점을 등록해 주세요" : "평균 ★ \(String(format: "%.1f", gradeAverage))"
-    }
-    
     func loadGradeAverage(DOCID: String) {
-        error = nil
         FBService.loadGradeAverage(DOCID: DOCID) { [weak self] gradeAverage, error in
-            guard let self = self else { return }
             if let error = error {
-                self.error = error
+                self?.error = error
             } else {
-                self.gradeAverage = gradeAverage
+                self?.gradeAverage = gradeAverage
             }
-            self.isUpdate = !self.isUpdate
         }
     }
     
     func loadIsWishToWatch(DOCID: String) {
-        error = nil
         FBService.loadIsWishToWatch(DOCID: DOCID) { [weak self] isWishToWatch, error in
-            guard let self = self else { return }
             if let error = error {
-                self.error = error
+                self?.error = error
             } else {
-                self.isWishToWatch = isWishToWatch
+                self?.isWishToWatch = isWishToWatch
             }
-            self.isUpdate = !self.isUpdate
         }
     }
     
     func loadCommentList(DOCID: String) {
-        error = nil
-        commentListModel = nil
         FBService.loadCommentList(DOCID: DOCID) { [weak self] commentListModel, error in
-            guard let self = self else { return }
             if let error = error {
-                self.error = error
+                self?.error = error
             } else {
-                self.commentListModel = commentListModel
+                self?.commentListModel = commentListModel
             }
-            self.isUpdate = !self.isUpdate
+        }
+    }
+    
+    func loadUserComment(DOCID: String) {
+        FBService.loadUserComment(DOCID: DOCID) { [weak self] grade, comment, error in
+            if let error = error {
+                self?.error = error
+            } else {
+                self?.gradeAndComment = (grade, comment)
+            }
         }
     }
     
     // 소비자 계정을 위한 초기 데이터 설정
     func setDataForAccount(movieInfo: MovieInfoModel) {
-        error = nil
         FBService.setDataForAccount(movieInfo: movieInfo) { [weak self] error in
-            if let error = error, let self = self {
-                self.error = error
-                self.isUpdate = !self.isUpdate
+            if let error = error{
+                self?.error = error
             }
         }
     }
     
     func setIsWishToWatch(DOCID: String, isWishToWatch: Bool) {
-        error = nil
         FBService.setIsWishToWatch(DOCID: DOCID, isWishToWatch: isWishToWatch) { [weak self] error in
-            guard let self = self else { return }
             if let error = error {
-                self.error = error
+                self?.error = error
             } else {
-                self.isWishToWatch = isWishToWatch
+                self?.isWishToWatch = isWishToWatch
             }
-            self.isUpdate = !self.isUpdate
+        }
+    }
+    
+    func updateGrade(DOCID: String, grade: Float) {
+        FBService.updateGrade(DOCID: DOCID, grade: grade) { [weak self] error in
+            if let error = error {
+                self?.error = error
+            } else {
+                self?.gradeAndComment = (grade, self?.gradeAndComment.1 ?? "")
+                self?.loadGradeAverage(DOCID: DOCID)    // 평점 바낄때마다 평균 평점 갱신
+            }
+        }
+    }
+    
+    func deleteGrade(DOCID: String) {
+        FBService.deleteGrade(collection: DOCID, document: userId) { [weak self] error in
+            if let error = error {
+                self?.error = error
+            } else {
+                self?.gradeAndComment = (0.0, self?.gradeAndComment.1 ?? "")
+                self?.loadGradeAverage(DOCID: DOCID)    // 평점 바낄때마다 평균 평점 갱신
+            }
         }
     }
     
     /* For AddCommentViewController */
     
-    func loadUserComment(DOCID: String, completion: @escaping (Error?) -> Void) {
-        FBService.loadUserComment(DOCID: DOCID) { [weak self] grade, comment, error in
-            guard error == nil else { completion(error); return }
-            self?.grade = grade
-            self?.comment = comment
-            completion(nil)
+    var onUpdatedComment: () -> Void = {}
+    
+    var comment: String = "" {
+        didSet {
+            onUpdatedComment()
         }
     }
     
-    func addComment(DOCID: String, grade: Float, comment: String, completion: @escaping (Error?) -> Void) {
-        FBService.addComment(DOCID: DOCID, grade: grade, comment: comment) { [weak self] error in
-            guard error == nil else { completion(error); return }
-            self?.grade = grade
-            self?.comment = comment
-            self?.loadGradeAverage(DOCID: DOCID)    // 평점 바낄때마다 평균 평점 갱신
-            completion(nil)
-        }
-    }
-    
-    func deleteGrade(DOCID: String, userId: String, completion: @escaping (Error?) -> Void) {
-        FBService.deleteGrade(collection: DOCID, document: userId) { [weak self] error in
-            guard error == nil else { completion(error); return }
-            self?.grade = 0.0
-            self?.comment = ""
-            self?.loadGradeAverage(DOCID: DOCID)    // 평점 바낄때마다 평균 평점 갱신
-            completion(nil)
+    func addComment(DOCID: String, comment: String) {
+        FBService.addComment(DOCID: DOCID, comment: comment) { [weak self] error in
+            if let error = error {
+                self?.error = error
+            } else {
+                self?.comment = comment
+            }
         }
     }
 }

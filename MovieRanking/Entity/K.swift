@@ -58,6 +58,7 @@ struct K {
         static let normalFace = "normal_face"
         static let badFace = "bad_face"
         static let tooBadFace = "too_bad_face"
+        static let noIdeaFace = "no_idea_face"
     }
     
     struct FStore {
