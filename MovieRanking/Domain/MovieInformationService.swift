@@ -76,7 +76,7 @@ class MovieInformationService {
     private func fetchMovieInfo(movieName: String, releaseDate: String,  completion: @escaping(MovieInfoListModel) -> Void) {
         let releaseDts = releaseDate.replacingOccurrences(of: "-", with: "")
         guard let movieName = movieName.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed),
-              let url = URL.urlForMovieInfoApi(movieName: movieName, releaseDts: releaseDts) else { return }
+              let url = URL.urlForMovieInfoApi(movieName: movieName, releaseDts: releaseDts) else { completion(MovieInfoListModel([MovieInfo.empty])); return }
         
         apiService.fetchMovieInfo(with: url) { movieInfo, error in
             guard error == nil else { completion(MovieInfoListModel([MovieInfo.empty])); return }
@@ -88,7 +88,7 @@ class MovieInformationService {
     
     func fetchMovieInfo(title movieName: String, completion: @escaping(MovieInfoListModel, Error?) -> Void) {
         guard let movieName = movieName.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed),
-              let url = URL.urlForMovieInfoApi(movieName: movieName) else { return }
+              let url = URL.urlForMovieInfoApi(movieName: movieName) else { completion(MovieInfoListModel([MovieInfo.empty]), nil); return }
         
         apiService.fetchMovieInfo(with: url) { movieInfo, error in
             guard error == nil else { completion(MovieInfoListModel([MovieInfo.empty]), error); return }
@@ -99,7 +99,7 @@ class MovieInformationService {
     //MARK: - for StorageViewController
     
     func fetchMovieInfo(id movieId: String, seq movieSeq: String, completion: @escaping(MovieInfoListModel, Error?) -> Void) {
-        guard let url = URL.urlForMovieInfoApi(movieId: movieId, movieSeq: movieSeq) else { return }
+        guard let url = URL.urlForMovieInfoApi(movieId: movieId, movieSeq: movieSeq) else { completion(MovieInfoListModel([MovieInfo.empty]), nil); return }
         apiService.fetchMovieInfo(with: url) { movieInfo, error in
             guard error == nil else { completion(MovieInfoListModel([MovieInfo.empty]), error); return }
             completion(MovieInfoListModel(movieInfo), nil)

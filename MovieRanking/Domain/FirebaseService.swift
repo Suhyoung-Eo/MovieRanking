@@ -65,12 +65,10 @@ class FirebaseService {
                     gradeAverage = gradeTotal / gradeCount
                 }
                 
+                completion(gradeAverage, error)
+                
                 if let userId = self?.userId {
-                    self?.db.collection(userId).document(DOCID).setData([K.FStore.gradeAverage: gradeAverage], merge: true) { error in
-                        completion(gradeAverage, error)
-                    }
-                } else {
-                    completion(gradeAverage, error)
+                    self?.db.collection(userId).document(DOCID).setData([K.FStore.gradeAverage: gradeAverage], merge: true)
                 }
             }
         }

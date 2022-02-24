@@ -65,7 +65,11 @@ extension URL {
     }
     
     static func urlForMovieInfoApi(movieName: String, releaseDts: String) -> URL? {
-        return URL(string: "\(K.Api.kmdbURL)\(Private.kmbdKey)&title=\(movieName)&releaseDts=\(releaseDts)")
+        if releaseDts.isEmpty || releaseDts == " " {
+            return URL(string: "\(K.Api.kmdbURL)\(Private.kmbdKey)&title=\(movieName)")
+        } else {
+            return URL(string: "\(K.Api.kmdbURL)\(Private.kmbdKey)&title=\(movieName)&releaseDts=\(releaseDts)")
+        }
     }
     
     static func urlForMovieInfoApi(movieId: String, movieSeq: String) -> URL? {
