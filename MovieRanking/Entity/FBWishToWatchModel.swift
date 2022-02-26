@@ -12,7 +12,6 @@ struct FBWishToWatchModel {
     let movieSeq: String
     let movieName: String
     let thumbNailLink: String
-    let gradeAverage: Float
     let isWishToWatch: Bool
     
     enum CodingKeys: String, CodingKey {
@@ -20,7 +19,6 @@ struct FBWishToWatchModel {
         case movieSeq
         case movieName
         case thumbNailLink
-        case gradeAverage
         case isWishToWatch = "wishToWatch"
     }
 }
@@ -32,7 +30,6 @@ extension FBWishToWatchModel {
                                   movieSeq: "",
                                   movieName: "",
                                   thumbNailLink: "",
-                                  gradeAverage: 0.0,
                                   isWishToWatch: false)
     }
 }

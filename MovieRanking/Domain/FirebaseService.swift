@@ -54,7 +54,7 @@ class FirebaseService {
                 for document in documents {
                     let data = document.data()
                     
-                    if let grade = data[K.FStore.grade] as? Float {
+                    if let grade = data[K.FStore.grade] as? Float, grade != 0 {
                         gradeTotal += grade
                         gradeCount += 1
                     }
@@ -67,9 +67,20 @@ class FirebaseService {
                 
                 completion(gradeAverage, error)
                 
-                if let userId = self?.userId {
-                    self?.db.collection(userId).document(DOCID).setData([K.FStore.gradeAverage: gradeAverage], merge: true)
-                }
+                // 고객 서비스를 위해 따로 저장 
+                self?.updateGradeAverage(id: DOCID, average: gradeAverage)
+            }
+        }
+    }
+    
+    func loadGradeAverageforAccount(DOCID: String, completion: @escaping (Float) -> Void) {
+        db.collection(DOCID).document("\(DOCID)\(K.FStore.gradeAverage)").getDocument() { documentSnapshot, error in
+            guard error == nil, let document = documentSnapshot else { completion(0); return }
+            
+            if let data = document.data(), let gradeAverage = data[K.FStore.gradeAverage] as? Float {
+                completion(gradeAverage)
+            } else {
+                completion(0)
             }
         }
     }
@@ -164,7 +175,6 @@ class FirebaseService {
                        let movieSeq = data[K.FStore.movieSeq] as? String,
                        let movieName = data[K.FStore.movieName] as? String,
                        let thumbNailLink = data[K.FStore.thumbNailLink] as? String,
-                       let gradeAverage = data[K.FStore.gradeAverage] as? Float,
                        let isWishToWatch = data[K.FStore.wishToWatch] as? Bool,
                        isWishToWatch {
                         
@@ -172,7 +182,6 @@ class FirebaseService {
                                                          movieSeq: movieSeq,
                                                          movieName: movieName,
                                                          thumbNailLink: thumbNailLink,
-                                                         gradeAverage: gradeAverage,
                                                          isWishToWatch: isWishToWatch)
                         
                         FBWishToWatchList.append(newItem)
@@ -282,9 +291,13 @@ class FirebaseService {
                                                       , merge: true) { [weak self] error in
             
             guard error == nil else { completion(error); return }
-            self?.db.collection(userId).document(DOCID).setData([K.FStore.comment: comment, K.FStore.date: date], merge: true)
             completion(error)
+            self?.addCommentForAccount(userId, DOCID, comment, date)
         }
+    }
+    
+    private func addCommentForAccount(_ userId: String, _ DOCID: String, _ comment: String, _ date: String) {
+        db.collection(userId).document(DOCID).setData([K.FStore.comment: comment, K.FStore.date: date], merge: true)
     }
     
     func updateGrade(DOCID: String, grade: Float, completion: @escaping (Error?) -> Void) {
@@ -295,9 +308,13 @@ class FirebaseService {
                                                       , merge: true) { [weak self] error in
             
             guard error == nil else { completion(error); return }
-            self?.db.collection(userId).document(DOCID).setData([K.FStore.grade: grade], merge: true)
             completion(error)
+            self?.updateGradeForAccount(userId, DOCID, grade)
         }
+    }
+    
+    private func updateGradeForAccount(_ userId: String, _ DOCID: String, _ grade: Float) {
+        db.collection(userId).document(DOCID).setData([K.FStore.grade: grade], merge: true)
     }
     
     func setDataForAccount(movieInfo: MovieInfoModel, completion: @escaping (Error?) -> Void) {
@@ -309,6 +326,10 @@ class FirebaseService {
                                                                  K.FStore.thumbNailLink: movieInfo.thumbNailLinks[0]]
                                                                 , merge: true) { error in completion(error) }
         
+    }
+    
+    private func updateGradeAverage(id DOCID: String, average gradeAverage: Float) {
+        db.collection(DOCID).document("\(DOCID)\(K.FStore.gradeAverage)").setData([K.FStore.gradeAverage: gradeAverage], merge: true)
     }
     
     func setIsWishToWatch(DOCID: String, isWishToWatch: Bool, completion: @escaping (Error?) -> Void) {

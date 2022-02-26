@@ -52,6 +52,15 @@ class AccountViewModel {
     
     var wishToWatchListModel: WishToWatchListModel! {
         didSet {
+            DispatchQueue.global(qos: .userInitiated).async { [weak self] in
+                guard let self = self else { return }
+                self.gradeAverageList = self.loadGradeAverage(by: self.wishToWatchListModel)
+            }
+        }
+    }
+    
+    var gradeAverageList: [String] = [] {
+        didSet {
             onUpdatedwishToWatchList()
         }
     }
@@ -77,15 +86,15 @@ class AccountViewModel {
     }
     
     func isExistItems(by title: String) -> Bool {
-         switch title {
-         case K.Prepare.wishToWatchListView:
-             return wishToWatchListCount == 0 ? false : true
-         case K.Prepare.gradeListView:
-             return gradeListCount == 0 ? false : true
-         default:
-             return false
-         }
-     }
+        switch title {
+        case K.Prepare.wishToWatchListView:
+            return wishToWatchListCount == 0 ? false : true
+        case K.Prepare.gradeListView:
+            return gradeListCount == 0 ? false : true
+        default:
+            return false
+        }
+    }
     
     func storageNumberOfItems(by title: String) -> Int {
         switch title {
@@ -106,6 +115,22 @@ class AccountViewModel {
                 self?.wishToWatchListModel = wishToWatchListModel
             }
         }
+    }
+    
+    func loadGradeAverage(by wishToWatchListModel: WishToWatchListModel) -> [String] {
+        var averageList = [String]()
+        let models = wishToWatchListModel.wishToWatchList
+        let group = DispatchGroup()
+        for model in models {
+            group.enter()
+            let DOCID: String = "\(model.movieId)\(model.movieSeq)"
+            FBService.loadGradeAverageforAccount(DOCID: DOCID) { gradeAverage in
+                averageList.append(gradeAverage == 0 ? "평점이 없습니다" : "평균 ★ \(String(format: "%.1f", gradeAverage))")
+                group.leave()
+            }
+            group.wait()
+        }
+        return averageList
     }
     
     func loadGradeList() {
@@ -140,7 +165,7 @@ class AccountViewModel {
             }
         }
     }
-        
+    
     func deleteComment(userId: String?, index: Int) {
         let movieInfo = accountCommentListModel.accountCommentModel(index)
         FBService.deleteComment(collection: userId, document: movieInfo.DOCID) { [weak self] error in
@@ -177,7 +202,7 @@ class AccountViewModel {
         default:
             break
         }
-
+        
         movieInfoService.fetchMovieInfo(id: movieId, seq: movieSeq) { [weak self] movieInfoList, error in
             if let error = error {
                 self?.error = error
