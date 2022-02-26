@@ -32,7 +32,7 @@ class StorageViewController: UIViewController {
         gotErrorStatus()
         onUpdatedList()
         onUpdatedMovieInfo()
-        loadList()
+        fetchList()
         
     }
     
@@ -66,7 +66,7 @@ class StorageViewController: UIViewController {
 
 extension StorageViewController {
     
-    private func loadList() {
+    private func fetchList() {
         if navigationItemTitle == K.Prepare.wishToWatchListView {
             emptyImage.isHidden = true
             viewModel.loadWishToWatchList()
@@ -89,9 +89,9 @@ extension StorageViewController {
     
     private func onUpdatedList() {
         if navigationItemTitle == K.Prepare.wishToWatchListView {
-            viewModel.onUpdatedwishToWatchList = { [weak self] in self?.reloadData()}
+            viewModel.onUpdatedwishToWatchList = { [weak self] in self?.reloadData() }
         } else {
-            viewModel.onUpdatedgradeList = { [weak self] in self?.reloadData()}
+            viewModel.onUpdatedgradeList = { [weak self] in self?.reloadData() }
         }
     }
     
@@ -144,7 +144,7 @@ extension StorageViewController: UICollectionViewDataSource {
             let cellItem = viewModel.wishToWatchListModel.wishToWatchModel(indexPath.row)
             cell.imageView.setImage(from: cellItem.thumbNailLink)
             cell.movieNameLabel.text = cellItem.movieName
-            cell.gradeLabel.text = cellItem.gradeAverage == 0 ? "평점이 없습니다" : "평균 ★ \(String(format: "%.1f", cellItem.gradeAverage))"
+            cell.gradeLabel.text = viewModel.gradeAverageList[indexPath.row]
             cell.gradeLabel.textColor = .darkGray
         } else {
             let cellItem = viewModel.gradeListModel.gradeModel(indexPath.row)
