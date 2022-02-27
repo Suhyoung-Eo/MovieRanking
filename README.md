@@ -7,7 +7,7 @@
 - 한국영화데이터베이스(KMDb): 영화 검색/ 섬네일 주소/ 영화 줄거리/ 장르/ 출연/ 제작 등 상세 정보
 
 ### 사용라이브러리
-Firebase
+- Firebase
 
 ### 아키텍처 구조: MVVM 디자인 패턴 - [상세설명](https://github.com/Suhyoung-Eo/RxSwift_MVVM)
 - 3개의 메인뷰와 여러 개의 서브뷰로 구성되어 있으나, 3개의 ViewModel이 메인뷰를 포함한 각 서브뷰들의 비즈니스 로직을 담당하고 있음
