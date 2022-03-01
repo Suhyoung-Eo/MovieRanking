@@ -12,11 +12,8 @@
 		FE430A9027B50BE1004AF8EE /* RatingStarsCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE430A8E27B50BE1004AF8EE /* RatingStarsCell.swift */; };
 		FE430A9127B50BE1004AF8EE /* RatingStarsCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = FE430A8F27B50BE1004AF8EE /* RatingStarsCell.xib */; };
 		FE49A84027B8F35500C178A4 /* CommentListModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE49A83F27B8F35500C178A4 /* CommentListModel.swift */; };
-		FE49A84227B8FE0100C178A4 /* FBCommentModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE49A84127B8FE0100C178A4 /* FBCommentModel.swift */; };
 		FE49A84427B902AA00C178A4 /* FirebaseService.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE49A84327B902AA00C178A4 /* FirebaseService.swift */; };
-		FE49A84627B934E700C178A4 /* FBGradeModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE49A84527B934E700C178A4 /* FBGradeModel.swift */; };
 		FE49A84827B935EB00C178A4 /* GradeListModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE49A84727B935EB00C178A4 /* GradeListModel.swift */; };
-		FE49A84A27B945D200C178A4 /* FBWishToWatchModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE49A84927B945D200C178A4 /* FBWishToWatchModel.swift */; };
 		FE49A84C27B9470700C178A4 /* WishToWatchListModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE49A84B27B9470700C178A4 /* WishToWatchListModel.swift */; };
 		FE49A85427BB711600C178A4 /* CommentsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE49A85327BB711600C178A4 /* CommentsViewController.swift */; };
 		FE49A85627BB872300C178A4 /* UserCommentCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE49A85527BB872300C178A4 /* UserCommentCell.swift */; };
@@ -61,7 +58,6 @@
 		FEBF229427B26ACB00190D8F /* AccountViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FEBF229327B26ACB00190D8F /* AccountViewController.swift */; };
 		FEBF229627B26BA100190D8F /* LoginViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FEBF229527B26BA100190D8F /* LoginViewController.swift */; };
 		FEBF229827B26C2600190D8F /* RegisterViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FEBF229727B26C2600190D8F /* RegisterViewController.swift */; };
-		FED88FF927BF79D2009338A3 /* FBAccountCommentModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = FED88FF827BF79D2009338A3 /* FBAccountCommentModel.swift */; };
 		FED88FFB27BF7A5F009338A3 /* AccountCommentListModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = FED88FFA27BF7A5F009338A3 /* AccountCommentListModel.swift */; };
 		FEE30BB927B39B900045D6AC /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = FEE30BB827B39B8F0045D6AC /* GoogleService-Info.plist */; };
 		FEF75EBA27B008770022A1EE /* StaffsInfoTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FEF75EB927B008770022A1EE /* StaffsInfoTableViewController.swift */; };
@@ -83,11 +79,8 @@
 		FE430A8E27B50BE1004AF8EE /* RatingStarsCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RatingStarsCell.swift; sourceTree = "<group>"; };
 		FE430A8F27B50BE1004AF8EE /* RatingStarsCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = RatingStarsCell.xib; sourceTree = "<group>"; };
 		FE49A83F27B8F35500C178A4 /* CommentListModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommentListModel.swift; sourceTree = "<group>"; };
-		FE49A84127B8FE0100C178A4 /* FBCommentModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FBCommentModel.swift; sourceTree = "<group>"; };
 		FE49A84327B902AA00C178A4 /* FirebaseService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirebaseService.swift; sourceTree = "<group>"; };
-		FE49A84527B934E700C178A4 /* FBGradeModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FBGradeModel.swift; sourceTree = "<group>"; };
 		FE49A84727B935EB00C178A4 /* GradeListModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GradeListModel.swift; sourceTree = "<group>"; };
-		FE49A84927B945D200C178A4 /* FBWishToWatchModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FBWishToWatchModel.swift; sourceTree = "<group>"; };
 		FE49A84B27B9470700C178A4 /* WishToWatchListModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WishToWatchListModel.swift; sourceTree = "<group>"; };
 		FE49A85327BB711600C178A4 /* CommentsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommentsViewController.swift; sourceTree = "<group>"; };
 		FE49A85527BB872300C178A4 /* UserCommentCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserCommentCell.swift; sourceTree = "<group>"; };
@@ -134,7 +127,6 @@
 		FEBF229327B26ACB00190D8F /* AccountViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AccountViewController.swift; sourceTree = "<group>"; };
 		FEBF229527B26BA100190D8F /* LoginViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LoginViewController.swift; sourceTree = "<group>"; };
 		FEBF229727B26C2600190D8F /* RegisterViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RegisterViewController.swift; sourceTree = "<group>"; };
-		FED88FF827BF79D2009338A3 /* FBAccountCommentModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FBAccountCommentModel.swift; sourceTree = "<group>"; };
 		FED88FFA27BF7A5F009338A3 /* AccountCommentListModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AccountCommentListModel.swift; sourceTree = "<group>"; };
 		FEE30BB827B39B8F0045D6AC /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		FEF75EB927B008770022A1EE /* StaffsInfoTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StaffsInfoTableViewController.swift; sourceTree = "<group>"; };
@@ -242,10 +234,6 @@
 				FE7C446127AB623400AA33AC /* DailyBoxOfficeModel.swift */,
 				FE7C446327AB623900AA33AC /* WeeklyBoxOfficeModel.swift */,
 				FE7C446527AB623F00AA33AC /* MovieInformationModel.swift */,
-				FE49A84127B8FE0100C178A4 /* FBCommentModel.swift */,
-				FE49A84527B934E700C178A4 /* FBGradeModel.swift */,
-				FE49A84927B945D200C178A4 /* FBWishToWatchModel.swift */,
-				FED88FF827BF79D2009338A3 /* FBAccountCommentModel.swift */,
 			);
 			path = Entity;
 			sourceTree = "<group>";
@@ -509,13 +497,10 @@
 				FE7C446227AB623400AA33AC /* DailyBoxOfficeModel.swift in Sources */,
 				FE7C446627AB623F00AA33AC /* MovieInformationModel.swift in Sources */,
 				FEA886A527ADEA3400A0320B /* BoxOfficeViewModel.swift in Sources */,
-				FE49A84627B934E700C178A4 /* FBGradeModel.swift in Sources */,
-				FE49A84227B8FE0100C178A4 /* FBCommentModel.swift in Sources */,
 				FEA8868C27AB9D3600A0320B /* ApiService.swift in Sources */,
 				FE49A85427BB711600C178A4 /* CommentsViewController.swift in Sources */,
 				FE7C445E27AB5EBB00AA33AC /* AlertService.swift in Sources */,
 				FEF75ECC27B118A30022A1EE /* AddCommentViewController.swift in Sources */,
-				FE49A84A27B945D200C178A4 /* FBWishToWatchModel.swift in Sources */,
 				FE49A84427B902AA00C178A4 /* FirebaseService.swift in Sources */,
 				FEA886B127AE005400A0320B /* MovieInfoViewModel.swift in Sources */,
 				FE7C445227AB5ABB00AA33AC /* Private.swift in Sources */,
@@ -527,7 +512,6 @@
 				FEA4785727B88CFD00F04338 /* StorageCell.swift in Sources */,
 				FED88FFB27BF7A5F009338A3 /* AccountCommentListModel.swift in Sources */,
 				FEA886C527AFF9BE00A0320B /* DetailInfoCell.swift in Sources */,
-				FED88FF927BF79D2009338A3 /* FBAccountCommentModel.swift in Sources */,
 				FEA886B527AFBC5E00A0320B /* MovieInfoViewController.swift in Sources */,
 				FEF75EBA27B008770022A1EE /* StaffsInfoTableViewController.swift in Sources */,
 				FEBF229827B26C2600190D8F /* RegisterViewController.swift in Sources */,

@@ -10,10 +10,8 @@ import Foundation
 struct GradeListModel {
     let gradeList: [GradeModel]
     
-    init (_ gradeList: [FBGradeModel]) {
-        self.gradeList = gradeList.compactMap({ gradeList in
-            return GradeModel.init(gradeList)
-        })
+    init (_ gradeList: [GradeModel]) {
+        self.gradeList = gradeList
     }
 }
 
@@ -29,34 +27,22 @@ extension GradeListModel {
 }
 
 struct GradeModel {
+    let DOCID: String
+    let movieId: String
+    let movieSeq: String
+    let movieName: String
+    let thumbNailLink: String
+    let grade: Float
+}
+
+extension GradeModel {
     
-    let gradeModel: FBGradeModel
-    
-    init (_ gradeModel: FBGradeModel) {
-        self.gradeModel = gradeModel
-    }
-    
-    var DOCID: String {
-        return gradeModel.DOCID
-    }
-    
-    var movieId: String {
-        return gradeModel.movieId
-    }
-    
-    var movieSeq: String {
-        return gradeModel.movieSeq
-    }
-    
-    var movieName: String {
-        return gradeModel.movieName
-    }
-    
-    var thumbNailLink: String {
-        return gradeModel.thumbNailLink
-    }
-    
-    var grade: Float {
-        return gradeModel.grade
+    static var empty: GradeModel {
+        return GradeModel(DOCID: "",
+                          movieId: "",
+                          movieSeq: "",
+                          movieName: "",
+                          thumbNailLink: "",
+                          grade: 0.0)
     }
 }

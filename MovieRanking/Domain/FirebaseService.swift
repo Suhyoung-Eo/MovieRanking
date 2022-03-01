@@ -67,7 +67,7 @@ class FirebaseService {
                 
                 completion(gradeAverage, error)
                 
-                // 고객 서비스를 위해 따로 저장 
+                // 고객 서비스를 위해 따로 저장
                 self?.updateGradeAverage(id: DOCID, average: gradeAverage)
             }
         }
@@ -124,9 +124,9 @@ class FirebaseService {
         
         db.collection(DOCID).order(by: K.FStore.date, descending: true).getDocuments() { querySnapshot, error in
             
-            guard error == nil else { completion(CommentListModel([FBCommentModel.empty]), error); return }
+            guard error == nil else { completion(CommentListModel([CommentModel.empty]), error); return }
             
-            var FBCommentModelList: [FBCommentModel] = []
+            var commentModelList: [CommentModel] = []
             
             if let documents = querySnapshot?.documents {
                 
@@ -138,17 +138,17 @@ class FirebaseService {
                        let comment = data[K.FStore.comment] as? String,
                        let date = data[K.FStore.date] as? String {
                         
-                        let FBCommentModel = FBCommentModel(userId: userId,
-                                                            grade: grade,
-                                                            comment: comment,
-                                                            date: date)
+                        let newItem = CommentModel(userId: userId,
+                                                   grade: grade,
+                                                   comment: comment,
+                                                   date: date)
                         
                         if !comment.isEmpty {
-                            FBCommentModelList.append(FBCommentModel)
+                            commentModelList.append(newItem)
                         }
                     }
                 }
-                completion(CommentListModel(FBCommentModelList), nil)
+                completion(CommentListModel(commentModelList), nil)
             }
         }
     }
@@ -160,11 +160,11 @@ class FirebaseService {
         db.collection(userId).getDocuments() { documentSnapshot, error in
             
             guard error == nil else {
-                completion(WishToWatchListModel([FBWishToWatchModel.empty]), error)
+                completion(WishToWatchListModel([WishToWatchModel.empty]), error)
                 return
             }
             
-            var FBWishToWatchList: [FBWishToWatchModel] = []
+            var wishToWatchList: [WishToWatchModel] = []
             
             if let documents = documentSnapshot?.documents {
                 
@@ -178,16 +178,16 @@ class FirebaseService {
                        let isWishToWatch = data[K.FStore.wishToWatch] as? Bool,
                        isWishToWatch {
                         
-                        let newItem = FBWishToWatchModel(movieId: movieId,
-                                                         movieSeq: movieSeq,
-                                                         movieName: movieName,
-                                                         thumbNailLink: thumbNailLink,
-                                                         isWishToWatch: isWishToWatch)
+                        let newItem = WishToWatchModel(movieId: movieId,
+                                                       movieSeq: movieSeq,
+                                                       movieName: movieName,
+                                                       thumbNailLink: thumbNailLink,
+                                                       isWishToWatch: isWishToWatch)
                         
-                        FBWishToWatchList.append(newItem)
+                        wishToWatchList.append(newItem)
                     }
                 }
-                completion(WishToWatchListModel(FBWishToWatchList), nil)
+                completion(WishToWatchListModel(wishToWatchList), nil)
             }
         }
     }
@@ -199,11 +199,11 @@ class FirebaseService {
         db.collection(userId).getDocuments() { documentSnapshot, error in
             
             guard error == nil else {
-                completion(GradeListModel([FBGradeModel.empty]), error)
+                completion(GradeListModel([GradeModel.empty]), error)
                 return
             }
             
-            var FBGradeModelList: [FBGradeModel] = []
+            var gradeModelList: [GradeModel] = []
             
             if let documents = documentSnapshot?.documents {
                 
@@ -218,17 +218,17 @@ class FirebaseService {
                        let grade = data[K.FStore.grade] as? Float,
                        grade != 0 {
                         
-                        let newItem = FBGradeModel(DOCID: DOCID,
-                                                   movieId: movieId,
-                                                   movieSeq: movieSeq,
-                                                   movieName: movieName,
-                                                   thumbNailLink: thumbNailLink,
-                                                   grade: grade)
+                        let newItem = GradeModel(DOCID: DOCID,
+                                                 movieId: movieId,
+                                                 movieSeq: movieSeq,
+                                                 movieName: movieName,
+                                                 thumbNailLink: thumbNailLink,
+                                                 grade: grade)
                         
-                        FBGradeModelList.append(newItem)
+                        gradeModelList.append(newItem)
                     }
                 }
-                completion(GradeListModel(FBGradeModelList), nil)
+                completion(GradeListModel(gradeModelList), nil)
             }
         }
     }
@@ -240,11 +240,11 @@ class FirebaseService {
         db.collection(userId).order(by: K.FStore.date, descending: true).addSnapshotListener { querySnapshot, error in
             
             guard error == nil else {
-                completion(AccountCommentListModel([FBAccountCommentModel.empty]), error)
+                completion(AccountCommentListModel([AccountCommentModel.empty]), error)
                 return
             }
             
-            var FBUserCommentList: [FBAccountCommentModel] = []
+            var accountCommentList: [AccountCommentModel] = []
             
             if let documents = querySnapshot?.documents {
                 
@@ -261,19 +261,19 @@ class FirebaseService {
                        let date = data[K.FStore.date] as? String,
                        !comment.isEmpty {
                         
-                        let newItem = FBAccountCommentModel(DOCID: DOCID,
-                                                            movieId: movieId,
-                                                            movieSeq: movieSeq,
-                                                            movieName: movieName,
-                                                            thumbNailLink: thumbNailLink,
-                                                            grade: grade,
-                                                            comment: comment,
-                                                            date: date)
+                        let newItem = AccountCommentModel(DOCID: DOCID,
+                                                          movieId: movieId,
+                                                          movieSeq: movieSeq,
+                                                          movieName: movieName,
+                                                          thumbNailLink: thumbNailLink,
+                                                          grade: grade,
+                                                          comment: comment,
+                                                          date: date)
                         
-                        FBUserCommentList.append(newItem)
+                        accountCommentList.append(newItem)
                     }
                 }
-                completion(AccountCommentListModel(FBUserCommentList), nil)
+                completion(AccountCommentListModel(accountCommentList), nil)
             }
         }
     }
