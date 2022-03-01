@@ -10,10 +10,8 @@ import Foundation
 struct WishToWatchListModel {
     let wishToWatchList: [WishToWatchModel]
     
-    init (_ wishToWatchList: [FBWishToWatchModel]) {
-        self.wishToWatchList = wishToWatchList.compactMap({ wishToWatchList in
-            return WishToWatchModel.init(wishToWatchList)
-        })
+    init (_ wishToWatchList: [WishToWatchModel]) {
+        self.wishToWatchList = wishToWatchList
     }
 }
 
@@ -29,29 +27,24 @@ extension WishToWatchListModel {
 }
 
 struct WishToWatchModel {
-    let wishToWatchModel: FBWishToWatchModel
+    let movieId: String
+    let movieSeq: String
+    let movieName: String
+    let thumbNailLink: String
+    let isWishToWatch: Bool
     
-    init (_ wishToWatchModel: FBWishToWatchModel) {
-        self.wishToWatchModel = wishToWatchModel
+    enum CodingKeys: String, CodingKey {
+        case isWishToWatch = "wishToWatch"
     }
+}
+
+extension WishToWatchModel {
     
-    var movieId: String {
-        return wishToWatchModel.movieId
-    }
-    
-    var movieSeq: String {
-        return wishToWatchModel.movieSeq
-    }
-    
-    var movieName: String {
-        return wishToWatchModel.movieName
-    }
-    
-    var thumbNailLink: String {
-        return wishToWatchModel.thumbNailLink
-    }
-    
-    var wishToWatch: Bool {
-        return wishToWatchModel.isWishToWatch
+    static var empty: WishToWatchModel {
+        return WishToWatchModel(movieId: "",
+                                movieSeq: "",
+                                movieName: "",
+                                thumbNailLink: "",
+                                isWishToWatch: false)
     }
 }
