@@ -38,10 +38,10 @@ class MovieInfoViewController: UIViewController {
             }
         }
         
-        viewModel.onUpdatedGradeAverage = { self.reloadData() }
-        viewModel.onUpdateIsWishToWatch = { self.reloadData() }
-        viewModel.onUpdateCommentList = { self.reloadData() }
-        viewModel.onUpadteUserComment = { self.reloadData() }
+        viewModel.onUpdatedGradeAverage = { [weak self] in self?.reloadData() }
+        viewModel.onUpdateIsWishToWatch = { [weak self] in self?.reloadData() }
+        viewModel.onUpdateCommentList = { [weak self] in self?.reloadData() }
+        viewModel.onUpadteUserComment = { [weak self] in self?.reloadData() }
         
         // 소비자 계정을 위한 초기 데이터 설정
         viewModel.setDataForAccount(movieInfo: movieInfo)
