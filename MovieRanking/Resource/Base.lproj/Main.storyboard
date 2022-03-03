@@ -286,7 +286,7 @@
                                     <inset key="sectionInset" minX="0.0" minY="0.0" maxX="0.0" maxY="0.0"/>
                                 </collectionViewFlowLayout>
                                 <cells>
-                                    <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" reuseIdentifier="ImageCollectionViewCell" translatesAutoresizingMaskIntoConstraints="NO" id="yYo-en-gaf" customClass="ImageCollectionViewCell" customModule="MovieRanking" customModuleProvider="target">
+                                    <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" fixedFrame="YES" reuseIdentifier="ImageCollectionViewCell" translatesAutoresizingMaskIntoConstraints="NO" id="yYo-en-gaf" customClass="ImageCollectionViewCell" customModule="MovieRanking" customModuleProvider="target">
                                         <rect key="frame" x="0.0" y="0.0" width="128" height="128"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                         <collectionViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO" id="dhL-jU-yZY">
@@ -795,97 +795,108 @@
                                     <constraint firstAttribute="height" constant="50" id="sUz-cs-rEr"/>
                                 </constraints>
                             </view>
-                            <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" distribution="fillEqually" translatesAutoresizingMaskIntoConstraints="NO" id="yqq-oi-eyv">
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="WHE-ww-Xdy">
                                 <rect key="frame" x="0.0" y="190" width="414" height="623"/>
                                 <subviews>
-                                    <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" translatesAutoresizingMaskIntoConstraints="NO" id="X3R-uw-SSB">
-                                        <rect key="frame" x="0.0" y="0.0" width="414" height="207.5"/>
+                                    <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" distribution="fillEqually" translatesAutoresizingMaskIntoConstraints="NO" id="yqq-oi-eyv">
+                                        <rect key="frame" x="0.0" y="0.0" width="414" height="623"/>
                                         <subviews>
-                                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="vj8-pa-8ld">
+                                            <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" translatesAutoresizingMaskIntoConstraints="NO" id="X3R-uw-SSB">
                                                 <rect key="frame" x="0.0" y="0.0" width="414" height="207.5"/>
                                                 <subviews>
-                                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" adjustsImageWhenHighlighted="NO" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="MZW-ma-AjC">
-                                                        <rect key="frame" x="20" y="30" width="374" height="167.5"/>
-                                                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                                        <fontDescription key="fontDescription" type="boldSystem" pointSize="19"/>
-                                                        <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
-                                                        <state key="normal" title="보고싶어요">
-                                                            <color key="titleColor" red="0.98039215690000003" green="0.074509803920000006" blue="0.3411764706" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
-                                                            <color key="titleShadowColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                                        </state>
-                                                        <connections>
-                                                            <action selector="goToWishListButton:" destination="1hc-3D-obl" eventType="touchUpInside" id="oqJ-6L-tvM"/>
-                                                        </connections>
-                                                    </button>
+                                                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="vj8-pa-8ld">
+                                                        <rect key="frame" x="0.0" y="0.0" width="414" height="207.5"/>
+                                                        <subviews>
+                                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" adjustsImageWhenHighlighted="NO" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="MZW-ma-AjC">
+                                                                <rect key="frame" x="20" y="30" width="374" height="167.5"/>
+                                                                <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                                <fontDescription key="fontDescription" type="boldSystem" pointSize="19"/>
+                                                                <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
+                                                                <state key="normal" title="보고싶어요">
+                                                                    <color key="titleColor" red="0.98039215690000003" green="0.074509803920000006" blue="0.3411764706" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
+                                                                    <color key="titleShadowColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                                </state>
+                                                                <connections>
+                                                                    <action selector="goToWishListButton:" destination="1hc-3D-obl" eventType="touchUpInside" id="oqJ-6L-tvM"/>
+                                                                </connections>
+                                                            </button>
+                                                        </subviews>
+                                                        <constraints>
+                                                            <constraint firstItem="MZW-ma-AjC" firstAttribute="leading" secondItem="vj8-pa-8ld" secondAttribute="leading" constant="20" id="HSB-Av-AE6"/>
+                                                            <constraint firstAttribute="bottom" secondItem="MZW-ma-AjC" secondAttribute="bottom" constant="10" id="Ilu-tv-erH"/>
+                                                            <constraint firstItem="MZW-ma-AjC" firstAttribute="top" secondItem="vj8-pa-8ld" secondAttribute="top" constant="30" id="bXA-xa-KmR"/>
+                                                            <constraint firstAttribute="trailing" secondItem="MZW-ma-AjC" secondAttribute="trailing" constant="20" id="jgn-lT-kYm"/>
+                                                        </constraints>
+                                                    </view>
                                                 </subviews>
-                                                <constraints>
-                                                    <constraint firstItem="MZW-ma-AjC" firstAttribute="leading" secondItem="vj8-pa-8ld" secondAttribute="leading" constant="20" id="HSB-Av-AE6"/>
-                                                    <constraint firstAttribute="bottom" secondItem="MZW-ma-AjC" secondAttribute="bottom" constant="10" id="Ilu-tv-erH"/>
-                                                    <constraint firstItem="MZW-ma-AjC" firstAttribute="top" secondItem="vj8-pa-8ld" secondAttribute="top" constant="30" id="bXA-xa-KmR"/>
-                                                    <constraint firstAttribute="trailing" secondItem="MZW-ma-AjC" secondAttribute="trailing" constant="20" id="jgn-lT-kYm"/>
-                                                </constraints>
-                                            </view>
-                                        </subviews>
-                                    </stackView>
-                                    <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" translatesAutoresizingMaskIntoConstraints="NO" id="ZZz-VT-Vl6">
-                                        <rect key="frame" x="0.0" y="207.5" width="414" height="208"/>
-                                        <subviews>
-                                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="JK2-Mt-SVr">
-                                                <rect key="frame" x="0.0" y="0.0" width="414" height="208"/>
+                                            </stackView>
+                                            <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" translatesAutoresizingMaskIntoConstraints="NO" id="ZZz-VT-Vl6">
+                                                <rect key="frame" x="0.0" y="207.5" width="414" height="208"/>
                                                 <subviews>
-                                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" adjustsImageWhenHighlighted="NO" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="yTf-tX-ZVG">
-                                                        <rect key="frame" x="20" y="20" width="374" height="168"/>
-                                                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                                        <fontDescription key="fontDescription" type="boldSystem" pointSize="19"/>
-                                                        <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
-                                                        <state key="normal" title="평가한영화">
-                                                            <color key="titleColor" red="0.98039215690000003" green="0.074509803920000006" blue="0.3411764706" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
-                                                        </state>
-                                                        <connections>
-                                                            <action selector="goToGradeListButton:" destination="1hc-3D-obl" eventType="touchUpInside" id="qZJ-9h-7Ha"/>
-                                                        </connections>
-                                                    </button>
+                                                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="JK2-Mt-SVr">
+                                                        <rect key="frame" x="0.0" y="0.0" width="414" height="208"/>
+                                                        <subviews>
+                                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" adjustsImageWhenHighlighted="NO" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="yTf-tX-ZVG">
+                                                                <rect key="frame" x="20" y="20" width="374" height="168"/>
+                                                                <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                                <fontDescription key="fontDescription" type="boldSystem" pointSize="19"/>
+                                                                <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
+                                                                <state key="normal" title="평가한영화">
+                                                                    <color key="titleColor" red="0.98039215690000003" green="0.074509803920000006" blue="0.3411764706" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
+                                                                </state>
+                                                                <connections>
+                                                                    <action selector="goToGradeListButton:" destination="1hc-3D-obl" eventType="touchUpInside" id="qZJ-9h-7Ha"/>
+                                                                </connections>
+                                                            </button>
+                                                        </subviews>
+                                                        <constraints>
+                                                            <constraint firstAttribute="bottom" secondItem="yTf-tX-ZVG" secondAttribute="bottom" constant="20" id="4ih-27-66x"/>
+                                                            <constraint firstItem="yTf-tX-ZVG" firstAttribute="top" secondItem="JK2-Mt-SVr" secondAttribute="top" constant="20" id="bqK-9i-38o"/>
+                                                            <constraint firstAttribute="trailing" secondItem="yTf-tX-ZVG" secondAttribute="trailing" constant="20" id="nDg-IB-w08"/>
+                                                            <constraint firstItem="yTf-tX-ZVG" firstAttribute="leading" secondItem="JK2-Mt-SVr" secondAttribute="leading" constant="20" id="tqx-1M-kAD"/>
+                                                        </constraints>
+                                                    </view>
                                                 </subviews>
-                                                <constraints>
-                                                    <constraint firstAttribute="bottom" secondItem="yTf-tX-ZVG" secondAttribute="bottom" constant="20" id="4ih-27-66x"/>
-                                                    <constraint firstItem="yTf-tX-ZVG" firstAttribute="top" secondItem="JK2-Mt-SVr" secondAttribute="top" constant="20" id="bqK-9i-38o"/>
-                                                    <constraint firstAttribute="trailing" secondItem="yTf-tX-ZVG" secondAttribute="trailing" constant="20" id="nDg-IB-w08"/>
-                                                    <constraint firstItem="yTf-tX-ZVG" firstAttribute="leading" secondItem="JK2-Mt-SVr" secondAttribute="leading" constant="20" id="tqx-1M-kAD"/>
-                                                </constraints>
-                                            </view>
-                                        </subviews>
-                                    </stackView>
-                                    <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" translatesAutoresizingMaskIntoConstraints="NO" id="qOr-Ao-6sf">
-                                        <rect key="frame" x="0.0" y="415.5" width="414" height="207.5"/>
-                                        <subviews>
-                                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="KkX-8j-Wqt">
-                                                <rect key="frame" x="0.0" y="0.0" width="414" height="207.5"/>
+                                            </stackView>
+                                            <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" translatesAutoresizingMaskIntoConstraints="NO" id="qOr-Ao-6sf">
+                                                <rect key="frame" x="0.0" y="415.5" width="414" height="207.5"/>
                                                 <subviews>
-                                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" adjustsImageWhenHighlighted="NO" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="XfR-Df-wfl">
-                                                        <rect key="frame" x="20" y="10" width="374" height="167.5"/>
-                                                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                                        <fontDescription key="fontDescription" type="boldSystem" pointSize="19"/>
-                                                        <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
-                                                        <state key="normal" title="내코멘트">
-                                                            <color key="titleColor" red="0.98039215690000003" green="0.074509803920000006" blue="0.3411764706" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
-                                                        </state>
-                                                        <connections>
-                                                            <action selector="goToCommentListButton:" destination="1hc-3D-obl" eventType="touchUpInside" id="QgT-B9-H8U"/>
-                                                        </connections>
-                                                    </button>
+                                                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="KkX-8j-Wqt">
+                                                        <rect key="frame" x="0.0" y="0.0" width="414" height="207.5"/>
+                                                        <subviews>
+                                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" adjustsImageWhenHighlighted="NO" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="XfR-Df-wfl">
+                                                                <rect key="frame" x="20" y="10" width="374" height="167.5"/>
+                                                                <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                                <fontDescription key="fontDescription" type="boldSystem" pointSize="19"/>
+                                                                <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
+                                                                <state key="normal" title="내코멘트">
+                                                                    <color key="titleColor" red="0.98039215690000003" green="0.074509803920000006" blue="0.3411764706" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
+                                                                </state>
+                                                                <connections>
+                                                                    <action selector="goToCommentListButton:" destination="1hc-3D-obl" eventType="touchUpInside" id="QgT-B9-H8U"/>
+                                                                </connections>
+                                                            </button>
+                                                        </subviews>
+                                                        <constraints>
+                                                            <constraint firstAttribute="trailing" secondItem="XfR-Df-wfl" secondAttribute="trailing" constant="20" id="CzV-hW-x6c"/>
+                                                            <constraint firstItem="XfR-Df-wfl" firstAttribute="top" secondItem="KkX-8j-Wqt" secondAttribute="top" constant="10" id="Va6-X4-4Kx"/>
+                                                            <constraint firstAttribute="bottom" secondItem="XfR-Df-wfl" secondAttribute="bottom" constant="30" id="bsk-5P-hU2"/>
+                                                            <constraint firstItem="XfR-Df-wfl" firstAttribute="leading" secondItem="KkX-8j-Wqt" secondAttribute="leading" constant="20" id="gTe-hp-yb8"/>
+                                                        </constraints>
+                                                    </view>
                                                 </subviews>
-                                                <constraints>
-                                                    <constraint firstAttribute="trailing" secondItem="XfR-Df-wfl" secondAttribute="trailing" constant="20" id="CzV-hW-x6c"/>
-                                                    <constraint firstItem="XfR-Df-wfl" firstAttribute="top" secondItem="KkX-8j-Wqt" secondAttribute="top" constant="10" id="Va6-X4-4Kx"/>
-                                                    <constraint firstAttribute="bottom" secondItem="XfR-Df-wfl" secondAttribute="bottom" constant="30" id="bsk-5P-hU2"/>
-                                                    <constraint firstItem="XfR-Df-wfl" firstAttribute="leading" secondItem="KkX-8j-Wqt" secondAttribute="leading" constant="20" id="gTe-hp-yb8"/>
-                                                </constraints>
-                                            </view>
+                                            </stackView>
                                         </subviews>
                                     </stackView>
                                 </subviews>
-                                <color key="backgroundColor" red="0.94841569660000002" green="0.94939488169999997" blue="0.97051841019999996" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                            </stackView>
+                                <color key="backgroundColor" red="0.94901960784313721" green="0.94901960784313721" blue="0.96862745098039216" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                <constraints>
+                                    <constraint firstAttribute="trailing" secondItem="yqq-oi-eyv" secondAttribute="trailing" id="8rI-ip-btg"/>
+                                    <constraint firstItem="yqq-oi-eyv" firstAttribute="top" secondItem="WHE-ww-Xdy" secondAttribute="top" id="MoI-Wb-qvD"/>
+                                    <constraint firstItem="yqq-oi-eyv" firstAttribute="leading" secondItem="WHE-ww-Xdy" secondAttribute="leading" id="abJ-re-DNo"/>
+                                    <constraint firstAttribute="bottom" secondItem="yqq-oi-eyv" secondAttribute="bottom" id="mEs-IK-HwA"/>
+                                </constraints>
+                            </view>
                             <view hidden="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="qJz-UM-bBp">
                                 <rect key="frame" x="0.0" y="140" width="414" height="673"/>
                                 <subviews>
@@ -908,15 +919,15 @@
                         <constraints>
                             <constraint firstItem="qJz-UM-bBp" firstAttribute="leading" secondItem="hsg-lH-1Dh" secondAttribute="leading" id="5Ow-Ih-JLc"/>
                             <constraint firstItem="hsg-lH-1Dh" firstAttribute="trailing" secondItem="qJz-UM-bBp" secondAttribute="trailing" id="7Zr-df-nxs"/>
-                            <constraint firstItem="yqq-oi-eyv" firstAttribute="leading" secondItem="hsg-lH-1Dh" secondAttribute="leading" id="ICS-me-fjK"/>
+                            <constraint firstItem="hsg-lH-1Dh" firstAttribute="trailing" secondItem="WHE-ww-Xdy" secondAttribute="trailing" id="Ab1-vN-mxj"/>
                             <constraint firstItem="Vvf-kP-mV4" firstAttribute="leading" secondItem="hsg-lH-1Dh" secondAttribute="leading" id="QY7-XE-fyl"/>
                             <constraint firstItem="hsg-lH-1Dh" firstAttribute="bottom" secondItem="qJz-UM-bBp" secondAttribute="bottom" id="b0H-cu-0G8"/>
                             <constraint firstItem="qJz-UM-bBp" firstAttribute="top" secondItem="hsg-lH-1Dh" secondAttribute="top" id="i8x-1T-vcF"/>
                             <constraint firstItem="hsg-lH-1Dh" firstAttribute="trailing" secondItem="Vvf-kP-mV4" secondAttribute="trailing" id="jrc-0P-cgF"/>
-                            <constraint firstItem="yqq-oi-eyv" firstAttribute="top" secondItem="Vvf-kP-mV4" secondAttribute="bottom" id="vyv-eK-IHU"/>
-                            <constraint firstItem="hsg-lH-1Dh" firstAttribute="trailing" secondItem="yqq-oi-eyv" secondAttribute="trailing" id="w15-sB-sda"/>
+                            <constraint firstItem="WHE-ww-Xdy" firstAttribute="top" secondItem="Vvf-kP-mV4" secondAttribute="bottom" id="tXr-6J-bcI"/>
+                            <constraint firstItem="hsg-lH-1Dh" firstAttribute="bottom" secondItem="WHE-ww-Xdy" secondAttribute="bottom" id="tam-Pa-iJe"/>
+                            <constraint firstItem="WHE-ww-Xdy" firstAttribute="leading" secondItem="hsg-lH-1Dh" secondAttribute="leading" id="u23-KI-EKC"/>
                             <constraint firstItem="Vvf-kP-mV4" firstAttribute="top" secondItem="hsg-lH-1Dh" secondAttribute="top" id="wH6-lK-tVf"/>
-                            <constraint firstItem="hsg-lH-1Dh" firstAttribute="bottom" secondItem="yqq-oi-eyv" secondAttribute="bottom" id="xgq-2s-8Ft"/>
                         </constraints>
                     </view>
                     <navigationItem key="navigationItem" title="내계정" largeTitleDisplayMode="always" id="tiU-2h-OFi">
@@ -940,7 +951,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="g0M-TQ-mcm" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-1778" y="1191"/>
+            <point key="canvasLocation" x="-1778.2608695652175" y="1190.625"/>
         </scene>
         <!--Comments View Controller-->
         <scene sceneID="Mup-Qo-M4V">
