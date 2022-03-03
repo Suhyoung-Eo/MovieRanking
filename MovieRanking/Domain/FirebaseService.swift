@@ -137,8 +137,8 @@ class FirebaseService {
                        let grade = (data[K.FStore.grade] as? Float == nil ? 0 : data[K.FStore.grade] as? Float),
                        let comment = data[K.FStore.comment] as? String,
                        let date = data[K.FStore.date] as? String {
-                        
-                        let newItem = CommentModel(userId: userId,
+                        let id = userId.components(separatedBy: "@").first
+                        let newItem = CommentModel(userId: id ?? "",
                                                    grade: grade,
                                                    comment: comment,
                                                    date: date)
