@@ -15,17 +15,27 @@ class FirebaseService {
         return Auth.auth().currentUser?.email
     }
     
+    var displayName: String? {
+        return Auth.auth().currentUser?.displayName
+    }
+    
     func register(email: String, password: String, completion: @escaping (Error?) -> Void) {
         Auth.auth().createUser(withEmail: email, password: password) { _, error in
-            guard error == nil else { completion(error); return }
-            completion(nil)
+            completion(error)
+        }
+    }
+    
+    func createProfileChangeRequest(displayName: String, completion: @escaping (Error?) -> Void) {
+        let changeRequest = Auth.auth().currentUser?.createProfileChangeRequest()
+        changeRequest?.displayName = displayName
+        changeRequest?.commitChanges { error in
+            completion(error)
         }
     }
     
     func logIn(email: String, password: String, completion: @escaping (Error?) -> Void) {
         Auth.auth().signIn(withEmail: email, password: password) { _, error in
-            guard error == nil else { completion(error); return }
-            completion(nil)
+            completion(error)
         }
     }
     
@@ -137,8 +147,8 @@ class FirebaseService {
                        let grade = (data[K.FStore.grade] as? Float == nil ? 0 : data[K.FStore.grade] as? Float),
                        let comment = data[K.FStore.comment] as? String,
                        let date = data[K.FStore.date] as? String {
-                        let id = userId.components(separatedBy: "@").first
-                        let newItem = CommentModel(userId: id ?? "",
+                        
+                        let newItem = CommentModel(userId: userId,
                                                    grade: grade,
                                                    comment: comment,
                                                    date: date)
