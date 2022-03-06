@@ -25,6 +25,10 @@ class AccountViewModel {
         return FBService.userId
     }
     
+    var displayName: String? {
+        return FBService.displayName
+    }
+    
     var isMovieInfoModelEmpty: Bool {
         return movieInfoModel.DOCID.isEmpty
     }
@@ -39,6 +43,10 @@ class AccountViewModel {
     
     func logIn(email: String, password: String) {
         FBService.logIn(email: email, password: password) { [weak self] error in self?.error = error }
+    }
+    
+    func createProfileChangeRequest(displayName: String) {
+        FBService.createProfileChangeRequest(displayName: displayName) { [weak self] error in self?.error = error }
     }
     
     func logOut() {

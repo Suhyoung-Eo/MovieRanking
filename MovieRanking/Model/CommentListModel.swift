@@ -27,7 +27,7 @@ extension CommentListModel {
 }
 
 struct CommentModel {
-    let userId: String
+    let displayName: String
     let grade: Float
     let comment: String
     let date: String
@@ -36,7 +36,7 @@ struct CommentModel {
 extension CommentModel {
     
     static var empty: CommentModel {
-        return CommentModel(userId: "",
+        return CommentModel(displayName: "",
                             grade: 0.0,
                             comment: "",
                             date: "")

@@ -12,6 +12,7 @@ class BoxOfficeViewModel {
     var onUpdated: () -> Void = {}
     
     private let service = MovieInformationService()
+    private let FBService = FirebaseService()
     
     var boxOfficeList: BoxOfficeListModel!  // 박스 오피스 순위 정보를 가지고 있음
     var movieInfoList: MovieInfoListModel!  // 썸네일등 각 영화의 상세 정보를 가지고 있음
@@ -21,6 +22,18 @@ class BoxOfficeViewModel {
     private var isUpdate: Bool = false {
         didSet {
             onUpdated()
+        }
+    }
+    
+    var isEmptyDisplayName: Bool {
+        if FBService.userId == nil {
+            return false
+        } else {
+            if FBService.displayName == nil {
+                return true
+            } else {
+                return false
+            }
         }
     }
     

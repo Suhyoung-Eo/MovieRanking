@@ -41,6 +41,16 @@ class BoxOfficeViewController: UIViewController {
         super.viewWillAppear(animated)
         navigationController?.navigationBar.setBackgroundImage(UIImage(), for:.default)
         navigationController?.navigationBar.shadowImage = UIImage()
+        
+        if viewModel.isEmptyDisplayName {
+            guard let navigationVC = self.storyboard?.instantiateViewController(withIdentifier: K.SegueId.loginView) as? LoginViewController else {
+                fatalError("Could not found LoginViewController")
+            }
+            
+            navigationVC.modalTransitionStyle = .coverVertical
+            navigationVC.modalPresentationStyle = .fullScreen
+            self.present(navigationVC, animated: true, completion: nil)
+        }
     }
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {

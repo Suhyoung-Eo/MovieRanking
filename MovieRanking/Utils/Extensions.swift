@@ -76,3 +76,41 @@ extension URL {
         return URL(string: "\(K.Api.kmdbURL)\(Private.kmbdKey)&movieId=\(movieId)&movieSeq=\(movieSeq)")
     }
 }
+
+extension Bool {
+    
+    static func isDisplayNameValid(_ string: String?) -> Bool {
+        guard let string = string, !string.isEmpty else { return false }
+        let arr = Array(string)
+        let pattern = "^[가-힣ㄱ-ㅎㅏ-ㅣa-zA-Z0-9]$"
+        do {
+            let regex = try NSRegularExpression(pattern: pattern, options: .caseInsensitive)
+            var index = 0
+            while index < arr.count { // string 내 각 문자 하나하나 마다 정규식 체크 후 충족하지 못한것은 제거.
+                let results = regex.matches(in: String(arr[index]), options: [], range: NSRange(location: 0, length: 1))
+                if results.count == 0 {
+                    return false
+                } else {
+                    index += 1
+                }
+            }
+            
+        } catch {
+            return false
+        }
+        
+        return true
+    }
+}
+
+extension UIViewController {
+    func hideKeyboardWhenTappedAround() {
+        let tap: UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(UIViewController.dismissKeyboard))
+        view.addGestureRecognizer(tap)
+
+    }
+
+    @objc func dismissKeyboard() {
+        view.endEditing(true)
+    }
+}

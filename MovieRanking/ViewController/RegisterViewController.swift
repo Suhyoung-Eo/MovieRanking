@@ -11,7 +11,8 @@ class RegisterViewController: UIViewController {
 
     @IBOutlet weak var emailTextField: UITextField!
     @IBOutlet weak var passwordTextField: UITextField!
-    
+    @IBOutlet weak var agreeSwitch: UISwitch!
+
     private let viewModel = AccountViewModel()
     
     override func viewDidLoad() {
@@ -19,7 +20,9 @@ class RegisterViewController: UIViewController {
         
         viewModel.gotErrorStatus = { [weak self] in
             if let error = self?.viewModel.error {
-                AlertService.shared.alert(viewController: self, alertTitle: "회원 가입에 실패했습니다", message: error.localizedDescription)
+                AlertService.shared.alert(viewController: self,
+                                          alertTitle: "회원 가입에 실패했습니다",
+                                          message: error.localizedDescription)
             } else {
                 self?.alertService()
             }
@@ -27,8 +30,14 @@ class RegisterViewController: UIViewController {
     }
     
     @IBAction func registerButton(_ sender: Any) {
-        if let email = emailTextField.text, let password = passwordTextField.text {
-            viewModel.register(email: email, password: password)
+        if agreeSwitch.isOn {
+            if let email = emailTextField.text, let password = passwordTextField.text {
+                viewModel.register(email: email, password: password)
+            }
+        } else {
+            AlertService.shared.alert(viewController: self,
+                                      alertTitle: "이용 약관에 동의해주세요",
+                                      message: "버튼을 클릭하여 이용약관에 동의할 수 있습니다")
         }
     }
     
@@ -38,7 +47,7 @@ class RegisterViewController: UIViewController {
     
     private func alertService() {
         DispatchQueue.main.async { [weak self] in
-            let alert = UIAlertController(title: "회원 가입에 성공했습니다", message: "로그인해 주세요", preferredStyle: .alert)
+            let alert = UIAlertController(title: "회원 가입에 성공했습니다", message: "닉네임을 정해주세요", preferredStyle: .alert)
             alert.addAction(UIAlertAction(title: "확인", style: .default) { _ in self?.dismiss(animated: true, completion: nil) })
             self?.present(alert, animated: true, completion: nil)
         }
