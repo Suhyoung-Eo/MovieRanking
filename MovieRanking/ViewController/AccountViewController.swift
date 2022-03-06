@@ -45,13 +45,13 @@ class AccountViewController: UIViewController {
         navigationController?.navigationBar.setBackgroundImage(UIImage(), for:.default)
         navigationController?.navigationBar.shadowImage = UIImage()
         
-        if let userId = viewModel.userId {
-            emptyView.isHidden = true
-            accountButton.title = "로그아웃"
-            accountTextLabel.text = userId
-        } else {
+        if viewModel.userId == nil {
             emptyView.isHidden = false
             accountButton.title = "로그인"
+        } else {
+            emptyView.isHidden = true
+            accountButton.title = "로그아웃"
+            accountTextLabel.text = viewModel.displayName
         }
     }
     

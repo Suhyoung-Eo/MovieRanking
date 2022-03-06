@@ -242,7 +242,7 @@ extension MovieInfoViewController: UITableViewDataSource {
                 let commentModel = viewModel.commentListModel.commentModel(indexPath.row)
                 cell.stateEmptyLabel.isHidden = true
                 cell.grade = commentModel.grade
-                cell.userNameLabel.text = commentModel.userId
+                cell.userNameLabel.text = commentModel.displayName
                 cell.commentLabel.text = commentModel.comment
                 cell.dateLabel.text = commentModel.date
             } else {

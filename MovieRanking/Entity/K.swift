@@ -63,6 +63,7 @@ struct K {
     
     struct FStore {
         static let userId = "userId"
+        static let displayName = "displayName"
         static let DOCID = "DOCID"
         static let movieId = "movieId"
         static let movieSeq = "movieSeq"

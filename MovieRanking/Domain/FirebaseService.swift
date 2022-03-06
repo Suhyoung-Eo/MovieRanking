@@ -12,20 +12,30 @@ class FirebaseService {
     private let db = Firestore.firestore()
     
     var userId: String? {
-        return Auth.auth().currentUser?.email
+        return Auth.auth().currentUser?.uid
+    }
+    
+    var displayName: String? {
+        return Auth.auth().currentUser?.displayName
     }
     
     func register(email: String, password: String, completion: @escaping (Error?) -> Void) {
         Auth.auth().createUser(withEmail: email, password: password) { _, error in
-            guard error == nil else { completion(error); return }
-            completion(nil)
+            completion(error)
+        }
+    }
+    
+    func createProfileChangeRequest(displayName: String, completion: @escaping (Error?) -> Void) {
+        let changeRequest = Auth.auth().currentUser?.createProfileChangeRequest()
+        changeRequest?.displayName = displayName
+        changeRequest?.commitChanges { error in
+            completion(error)
         }
     }
     
     func logIn(email: String, password: String, completion: @escaping (Error?) -> Void) {
         Auth.auth().signIn(withEmail: email, password: password) { _, error in
-            guard error == nil else { completion(error); return }
-            completion(nil)
+            completion(error)
         }
     }
     
@@ -74,7 +84,7 @@ class FirebaseService {
     }
     
     func loadGradeAverageforAccount(DOCID: String, completion: @escaping (Float) -> Void) {
-        db.collection(DOCID).document("\(DOCID)\(K.FStore.gradeAverage)").getDocument() { documentSnapshot, error in
+        db.collection(DOCID).document(K.FStore.gradeAverage).getDocument() { documentSnapshot, error in
             guard error == nil, let document = documentSnapshot else { completion(0); return }
             
             if let data = document.data(), let gradeAverage = data[K.FStore.gradeAverage] as? Float {
@@ -133,12 +143,12 @@ class FirebaseService {
                 for document in documents {
                     let data = document.data()
                     
-                    if let userId = data[K.FStore.userId] as? String,
+                    if let displayName = data[K.FStore.displayName] as? String,
                        let grade = (data[K.FStore.grade] as? Float == nil ? 0 : data[K.FStore.grade] as? Float),
                        let comment = data[K.FStore.comment] as? String,
                        let date = data[K.FStore.date] as? String {
                         
-                        let newItem = CommentModel(userId: userId,
+                        let newItem = CommentModel(displayName: displayName,
                                                    grade: grade,
                                                    comment: comment,
                                                    date: date)
@@ -282,10 +292,10 @@ class FirebaseService {
     
     func addComment(DOCID: String, comment: String, completion: @escaping (Error?) -> Void) {
         
-        guard let userId = self.userId else { completion(nil); return }
+        guard let userId = self.userId, let displayName = self.displayName else { completion(nil); return }
         let date = getFormattedDate()
         
-        db.collection(DOCID).document(userId).setData([K.FStore.userId : userId,
+        db.collection(DOCID).document(userId).setData([K.FStore.displayName : displayName,
                                                        K.FStore.comment: comment,
                                                        K.FStore.date: date]
                                                       , merge: true) { [weak self] error in
@@ -301,9 +311,9 @@ class FirebaseService {
     }
     
     func updateGrade(DOCID: String, grade: Float, completion: @escaping (Error?) -> Void) {
-        guard let userId = self.userId else { completion(nil); return }
+        guard let userId = self.userId, let displayName = self.displayName else { completion(nil); return }
         
-        db.collection(DOCID).document(userId).setData([K.FStore.userId : userId,
+        db.collection(DOCID).document(userId).setData([K.FStore.displayName : displayName,
                                                        K.FStore.grade : grade]
                                                       , merge: true) { [weak self] error in
             
@@ -329,7 +339,7 @@ class FirebaseService {
     }
     
     private func updateGradeAverage(id DOCID: String, average gradeAverage: Float) {
-        db.collection(DOCID).document("\(DOCID)\(K.FStore.gradeAverage)").setData([K.FStore.gradeAverage: gradeAverage], merge: true)
+        db.collection(DOCID).document(K.FStore.gradeAverage).setData([K.FStore.gradeAverage: gradeAverage], merge: true)
     }
     
     func setIsWishToWatch(DOCID: String, isWishToWatch: Bool, completion: @escaping (Error?) -> Void) {
