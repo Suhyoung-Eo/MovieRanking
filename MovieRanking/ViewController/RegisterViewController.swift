@@ -27,6 +27,8 @@ class RegisterViewController: UIViewController {
                 self?.alertService()
             }
         }
+        
+        self.hideKeyboardWhenTappedAround()
     }
     
     @IBAction func registerButton(_ sender: Any) {
