@@ -117,7 +117,17 @@ extension CommentsViewController {
             self?.showDeleteAlert(index: index)
         })
         alert.addAction(UIAlertAction(title: "취소", style: .cancel))
-        present(alert, animated: true)
+        
+        if UIDevice.current.userInterfaceIdiom == .pad {
+            if let popoverController = alert.popoverPresentationController {
+                popoverController.sourceView = self.view
+                popoverController.sourceRect = CGRect(x: self.view.bounds.midX, y: self.view.bounds.midY, width: 0, height: 0)
+                popoverController.permittedArrowDirections = []
+                present(alert, animated: true, completion: nil) }
+            
+        } else {
+            present(alert, animated: true, completion: nil)
+        }
     }
     
     private func showDeleteAlert(index: Int) {
