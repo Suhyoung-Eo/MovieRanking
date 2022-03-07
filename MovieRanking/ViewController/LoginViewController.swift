@@ -23,10 +23,12 @@ class LoginViewController: UIViewController {
         super.viewDidLoad()
         
         viewModel.gotErrorStatus = { [weak self] in
-            if let error = self?.viewModel.error {
-                AlertService.shared.alert(viewController: self, alertTitle: "로그인에 실패했습니다", message: error.localizedDescription)
-            } else {
+            if self?.viewModel.error == nil {
                 self?.setView()
+            } else {
+                AlertService.shared.alert(viewController: self,
+                                          alertTitle: "로그인에 실패했습니다",
+                                          message: "아이디 또는 비밀번호가 틀렸거나 가입되지 않은 회원일 수 있습니다")
             }
         }
         
