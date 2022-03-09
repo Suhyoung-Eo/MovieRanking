@@ -30,6 +30,8 @@
 
 - 캐시메모리 활용: 한번 다운로드 된 이미지는 iOS에서 관리하는 캐시메모리에 저장하도록 개발, 캐시 키로 이미지 url이 사용됨.
 
+### 앱스토어 - [링크](https://apps.apple.com/kr/app/movie-ranking/id1612590047)
+
 ### 구동화면
 
 https://user-images.githubusercontent.com/91250216/155888498-08a51120-87ec-437a-a1dc-bdb8c91132c0.mp4
