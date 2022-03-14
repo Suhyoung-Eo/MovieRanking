@@ -7,24 +7,23 @@
 
 import Foundation
 
+protocol BoxOfficeViewModelDelegate: AnyObject {
+    func didUpdateBoxOffice()
+    func didFailWithError(error: Error)
+}
+
 class BoxOfficeViewModel {
-    
-    var onUpdated: () -> Void = {}
     
     private let service = MovieInformationService()
     private let FBService = FirebaseService()
     
+    weak var delegate: BoxOfficeViewModelDelegate?
+    
     var boxOfficeList: BoxOfficeListModel!  // 박스 오피스 순위 정보를 가지고 있음
     var movieInfoList: MovieInfoListModel!  // 썸네일등 각 영화의 상세 정보를 가지고 있음
     var buttonTitle: String = ""
-    var error: Error?
     
-    private var isUpdate: Bool = false {
-        didSet {
-            onUpdated()
-        }
-    }
-    
+    // 앱 실행 시 회원가입을 했지만 닉네임을 저장하지 않은 경우 판별
     var isEmptyDisplayName: Bool {
         if FBService.userId == nil {
             return false
@@ -45,13 +44,11 @@ class BoxOfficeViewModel {
         return boxOfficeList == nil ? 0 : boxOfficeList.count
     }
     
-    func boxOfficeInfo(index: Int) -> (String, BoxOfficeModel) {
-        return (movieInfoList.movieInfoModel(index).thumbNailLinks[0], boxOfficeList.boxOfficeModel(index))
+    func boxOfficeInfo(index: Int) -> (thumbNailLink: String, boxOfficeModel: BoxOfficeModel) {
+        return (thumbNailLink: movieInfoList.movieInfoModel(index).thumbNailLinks[0], boxOfficeModel: boxOfficeList.boxOfficeModel(index))
     }
     
     func fetchBoxOffice(by boxOfficeType: Int) {
-        error = nil
-        
         switch boxOfficeType {
         case 0: // 주간 (월~일)
             buttonTitle = "     ▼  주간 박스오피스"
@@ -69,38 +66,37 @@ class BoxOfficeViewModel {
     }
     
     private func fetchWeeklyBoxOffice(by boxOfficeType: Int) {
-        error = nil
+
         boxOfficeList = nil
         movieInfoList = nil
-        isUpdate = !isUpdate    // tableView Refresh
+        delegate?.didUpdateBoxOffice()  // tableView Refresh
         
         service.fetchWeeklyBoxOffice(by: boxOfficeType) { [weak self] boxOfficeList, movieInfoList, error in
             guard let self = self else { return }
             if let error = error {
-                self.error = error
+                self.delegate?.didFailWithError(error: error)
             } else {
                 self.boxOfficeList = boxOfficeList
                 self.movieInfoList = movieInfoList
+                self.delegate?.didUpdateBoxOffice()
             }
-            self.isUpdate = !self.isUpdate
         }
     }
     
     private func fetchDailyBoxOffice() {
-        error = nil
         boxOfficeList = nil
         movieInfoList = nil
-        isUpdate = !isUpdate    // tableView Refresh
+        delegate?.didUpdateBoxOffice()  // tableView Refresh
         
         service.fetchDailyBoxOffice { [weak self] boxOfficeList, movieInfoList, error in
             guard let self = self else { return }
             if let error = error {
-                self.error = error
+                self.delegate?.didFailWithError(error: error)
             } else {
                 self.boxOfficeList = boxOfficeList
                 self.movieInfoList = movieInfoList
+                self.delegate?.didUpdateBoxOffice()
             }
-            self.isUpdate = !self.isUpdate
         }
     }
     

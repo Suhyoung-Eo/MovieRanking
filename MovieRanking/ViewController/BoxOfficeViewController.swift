@@ -33,7 +33,7 @@ class BoxOfficeViewController: UIViewController {
         navigationItem.title = "박스오피스 순위"
         button.contentHorizontalAlignment = .left
         
-        onUpdated()
+        viewModel.delegate = self
         fetchBoxOffice()
     }
     
@@ -42,6 +42,7 @@ class BoxOfficeViewController: UIViewController {
         navigationController?.navigationBar.setBackgroundImage(UIImage(), for:.default)
         navigationController?.navigationBar.shadowImage = UIImage()
         
+        // 회원가입만 하고 닉네임을 정하지 않은 경우 닉네임 저장 뷰를 띄운다.
         if viewModel.isEmptyDisplayName {
             guard let navigationVC = self.storyboard?.instantiateViewController(withIdentifier: K.SegueId.loginView) as? LoginViewController else {
                 fatalError("Could not found LoginViewController")
@@ -90,27 +91,6 @@ class BoxOfficeViewController: UIViewController {
 
 extension BoxOfficeViewController {
     
-    private func onUpdated() {
-        viewModel.onUpdated = { [weak self] in
-            if let error = self?.viewModel.error {
-                self?.retry(error: error)
-            } else {
-                DispatchQueue.main.async {
-                    self?.button.setTitle(self?.viewModel.buttonTitle, for: .normal)
-                    
-                    if self?.viewModel.numberOfRowsInSection == 0 {
-                        self?.tableView.separatorStyle = .none  // fetchBoxOffice 동작 하는 동안 화면 클리어
-                    } else {
-                        self?.tableView.separatorStyle = .singleLine
-                        self?.activityIndicator.stopAnimating()
-                        self?.button.isEnabled = true
-                    }
-                    self?.tableView.reloadData()
-                }
-            }
-        }
-    }
-    
     private func fetchBoxOffice() {
         button.isEnabled = false    // 박스오피스 정보 다운로드 완료전까지 선택 버튼 비활성화
         activityIndicator.isHidden = false
@@ -148,12 +128,12 @@ extension BoxOfficeViewController: UITableViewDataSource {
         let boxOfficeInfo = viewModel.boxOfficeInfo(index: indexPath.row)   // return (String, BoxOfficeModel)
         
         cell.selectionStyle = .none
-        cell.thumbnailImageView.setImage(from: boxOfficeInfo.0)
-        cell.titleLabel.text = boxOfficeInfo.1.movieName
-        cell.rankLabel.text = boxOfficeInfo.1.movieRank
-        cell.openDateLabel.text = "개봉일: \(boxOfficeInfo.1.openDate)"
-        cell.audiAccLabel.text = "누적: \(boxOfficeInfo.1.audiAcc)"
-        if boxOfficeInfo.1.rankOldAndNew == "NEW" {
+        cell.thumbnailImageView.setImage(from: boxOfficeInfo.thumbNailLink)
+        cell.titleLabel.text = boxOfficeInfo.boxOfficeModel.movieName
+        cell.rankLabel.text = boxOfficeInfo.boxOfficeModel.movieRank
+        cell.openDateLabel.text = "개봉일: \(boxOfficeInfo.boxOfficeModel.openDate)"
+        cell.audiAccLabel.text = "누적: \(boxOfficeInfo.boxOfficeModel.audiAcc)"
+        if boxOfficeInfo.boxOfficeModel.rankOldAndNew == "NEW" {
             cell.newImageView.image = UIImage(named: "new")
         }
         
@@ -168,7 +148,7 @@ extension BoxOfficeViewController: UITableViewDelegate {
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         if viewModel.movieInfoList.movieInfoModel(indexPath.row).DOCID.isEmpty {
-            AlertService.shared.alert(viewController: self, alertTitle: "해당 영화의 상세 정보가 없습니다")
+            AlertService.shared.alert(viewController: self, alertTitle: "해당 영화의 상세 정보를 검색할 수 없습니다")
             return
         }
         performSegue(withIdentifier: K.SegueId.movieInfoView, sender: K.Prepare.movieInfoView)
@@ -184,13 +164,31 @@ extension BoxOfficeViewController: UIViewControllerTransitioningDelegate {
     }
 }
 
-//MARK: - OptionTableViewController delegate method
+//MARK: - delegate method
 
-extension BoxOfficeViewController: OptionTableViewControllerDelegate {
+extension BoxOfficeViewController:  BoxOfficeViewModelDelegate, OptionTableViewControllerDelegate {
     
     func didSelectType(selectedType: Int) {
         if boxOfficeType != selectedType {
             boxOfficeType = selectedType
         }
+    }
+    
+    func didUpdateBoxOffice() {
+        
+        button.setTitle(viewModel.buttonTitle, for: .normal)
+        
+        if viewModel.numberOfRowsInSection == 0 {
+            tableView.separatorStyle = .none  // fetchBoxOffice 동작 하는 동안 화면 클리어
+        } else {
+            tableView.separatorStyle = .singleLine
+            activityIndicator.stopAnimating()
+            button.isEnabled = true
+        }
+        tableView.reloadData()
+    }
+    
+    func didFailWithError(error: Error) {
+        retry(error: error)
     }
 }
