@@ -18,16 +18,7 @@ class RegisterViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        viewModel.gotErrorStatus = { [weak self] in
-            if let error = self?.viewModel.error {
-                AlertService.shared.alert(viewController: self,
-                                          alertTitle: "회원 가입에 실패했습니다",
-                                          message: error.localizedDescription)
-            } else {
-                self?.alertService()
-            }
-        }
-        
+        viewModel.delegate = self
         self.hideKeyboardWhenTappedAround()
     }
     
@@ -47,7 +38,15 @@ class RegisterViewController: UIViewController {
         dismiss(animated: true, completion: nil)
     }
     
-    private func alertService() {
+    deinit {
+        print("deinit RegisterViewController")
+    }
+}
+
+//MARK: - ViewModel delegate methods
+
+extension RegisterViewController: AccountViewModelDelegate {
+    func didUpdate() {
         DispatchQueue.main.async { [weak self] in
             let alert = UIAlertController(title: "회원 가입에 성공했습니다", message: "닉네임을 정해주세요", preferredStyle: .alert)
             alert.addAction(UIAlertAction(title: "확인", style: .default) { _ in self?.dismiss(animated: true, completion: nil) })
@@ -55,7 +54,9 @@ class RegisterViewController: UIViewController {
         }
     }
     
-    deinit {
-        print("deinit RegisterViewController")
+    func didFailWithError(error: Error) {
+        DispatchQueue.main.async {
+            AlertService.shared.alert(viewController: self, alertTitle: "회원 가입에 실패했습니다", message: error.localizedDescription)
+        }
     }
 }

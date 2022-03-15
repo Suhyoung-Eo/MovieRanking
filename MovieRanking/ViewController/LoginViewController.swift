@@ -22,16 +22,7 @@ class LoginViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        viewModel.gotErrorStatus = { [weak self] in
-            if self?.viewModel.error == nil {
-                self?.setView()
-            } else {
-                AlertService.shared.alert(viewController: self,
-                                          alertTitle: "로그인에 실패했습니다",
-                                          message: "아이디 또는 비밀번호가 틀렸거나 가입되지 않은 회원일 수 있습니다")
-            }
-        }
-        
+        viewModel.delegate = self
         self.hideKeyboardWhenTappedAround()
     }
     
@@ -84,5 +75,22 @@ class LoginViewController: UIViewController {
     
     deinit {
         print("deinit LoginViewController")
+    }
+}
+
+//MARK: - ViewModel delegate methods
+
+extension LoginViewController: AccountViewModelDelegate {
+    
+    func didUpdate() {
+        setView()
+    }
+    
+    func didFailWithError(error: Error) {
+        DispatchQueue.main.async {
+            AlertService.shared.alert(viewController: self,
+                                      alertTitle: "로그인에 실패했습니다",
+                                      message: "아이디 또는 비밀번호가 틀렸거나 가입되지 않은 회원일 수 있습니다")
+        }
     }
 }

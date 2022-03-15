@@ -20,18 +20,7 @@ class AddCommentViewController: UIViewController {
         super.viewDidLoad()
         
         commentTextView.delegate = self
-        
-        viewModel.gotErrorStatus = { [weak self] in
-            if let error = self?.viewModel.error {
-                DispatchQueue.main.async {
-                    AlertService.shared.alert(viewController: self, alertTitle: "코멘트 등록에 실패했습니다", message: error.localizedDescription)
-                }
-            }
-        }
-        
-        viewModel.onUpdatedComment = { [weak self] in
-            self?.dismiss(animated: true, completion: nil)
-        }
+        viewModel.addCommentVMDelegate = self
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -67,12 +56,22 @@ class AddCommentViewController: UIViewController {
     }
 }
 
-//MARK: - UITextView delegate methods
+//MARK: - delegate methods
 
-extension AddCommentViewController: UITextViewDelegate {
+extension AddCommentViewController: UITextViewDelegate, AddCommentViewModelDelegate {
     
     func textViewShouldBeginEditing(_ textView: UITextView) -> Bool {
         if viewModel.userId == nil { showAlert(); return false }
         return true
+    }
+    
+    func didUpdate() {
+        dismiss(animated: true, completion: nil)
+    }
+    
+    func didFailWithError(error: Error) {
+        DispatchQueue.main.async { [weak self] in
+            AlertService.shared.alert(viewController: self, alertTitle: "코멘트 등록에 실패했습니다", message: error.localizedDescription)
+        }
     }
 }

@@ -7,27 +7,31 @@
 
 import Foundation
 
+protocol SearchMovieViewModelDelegate: AnyObject {
+    func didUpdate()
+    func didFailWithError(error: Error)
+}
+
+protocol MovieInfoViewModelDelegate: AnyObject {
+    func didUpdate()
+    func didFailWithError(error: Error)
+}
+
+protocol AddCommentViewModelDelegate: AnyObject {
+    func didUpdate()
+    func didFailWithError(error: Error)
+}
+
 class MovieInfoViewModel {
-    
-    var gotErrorStatus: () -> Void = {}
-    var onUpdatedMovieInfoList: () -> Void = {}
     
     private let service = MovieInformationService()
     private let FBService = FirebaseService()
     
-    var error: Error? {
-        didSet {
-            gotErrorStatus()
-        }
-    }
+    weak var searchVMDelegate: SearchMovieViewModelDelegate?
+    
+    var movieInfoList: MovieInfoListModel!
     
     //MARK: - MovieInformationService
-    
-    var movieInfoList: MovieInfoListModel! {
-        didSet {
-            onUpdatedMovieInfoList()
-        }
-    }
     
     var isMovieInfoModelEmpty: Bool {
         return movieInfoList.movieInfoModel(0).DOCID.isEmpty
@@ -55,54 +59,34 @@ class MovieInfoViewModel {
     }
     
     func clearMovieInfoList() {
-        error = nil
         movieInfoList = nil
+        searchVMDelegate?.didUpdate()
     }
     
     // 영화별 정보 상세 - 한국영화데이터베이스
     func fetchMovieInfo(title movieName: String) {
         movieInfoList = nil
+        searchVMDelegate?.didUpdate()  // tableView Refresh
         service.fetchMovieInfo(title: movieName) { [weak self] movieInfoList, error in
             if let error = error {
-                self?.error = error
+                self?.searchVMDelegate?.didFailWithError(error: error)
             } else {
                 self?.movieInfoList = movieInfoList
+                self?.searchVMDelegate?.didUpdate()
             }
         }
     }
     
     //MARK: - FirebaseService
     
-    var onUpdatedGradeAverage: () -> Void = {}
-    var onUpdateIsWishToWatch: () -> Void = {}
-    var onUpdateCommentList: () -> Void = {}
-    var onUpadteUserComment: () -> Void = {}
-    
     /* For MovieInfoViewController */
     
-    var gradeAverage: Float = 0.0 {
-        didSet {
-            onUpdatedGradeAverage()
-        }
-    }
+    weak var movieInfoVMDelegate: MovieInfoViewModelDelegate?
     
-    var isWishToWatch: Bool = false {
-        didSet {
-            onUpdateIsWishToWatch()
-        }
-    }
-    
-    var commentListModel: CommentListModel! {
-        didSet {
-            onUpdateCommentList()
-        }
-    }
-    
-    var gradeAndComment: (Float, String) = (0.0, "") {
-        didSet {
-            onUpadteUserComment()
-        }
-    }
+    var gradeAverage: Float = 0.0
+    var isWishToWatch: Bool = false
+    var commentListModel: CommentListModel!
+    var gradeAndComment = (grade: Float(0.0), comment: "")
     
     var userId: String? {
         return FBService.userId
@@ -128,9 +112,10 @@ class MovieInfoViewModel {
     func loadGradeAverage(DOCID: String) {
         FBService.loadGradeAverage(DOCID: DOCID) { [weak self] gradeAverage, error in
             if let error = error {
-                self?.error = error
+                self?.movieInfoVMDelegate?.didFailWithError(error: error)
             } else {
                 self?.gradeAverage = gradeAverage
+                self?.movieInfoVMDelegate?.didUpdate()
             }
         }
     }
@@ -138,9 +123,10 @@ class MovieInfoViewModel {
     func loadIsWishToWatch(DOCID: String) {
         FBService.loadIsWishToWatch(DOCID: DOCID) { [weak self] isWishToWatch, error in
             if let error = error {
-                self?.error = error
+                self?.movieInfoVMDelegate?.didFailWithError(error: error)
             } else {
                 self?.isWishToWatch = isWishToWatch
+                self?.movieInfoVMDelegate?.didUpdate()
             }
         }
     }
@@ -148,9 +134,10 @@ class MovieInfoViewModel {
     func loadCommentList(DOCID: String) {
         FBService.loadCommentList(DOCID: DOCID) { [weak self] commentListModel, error in
             if let error = error {
-                self?.error = error
+                self?.movieInfoVMDelegate?.didFailWithError(error: error)
             } else {
                 self?.commentListModel = commentListModel
+                self?.movieInfoVMDelegate?.didUpdate()
             }
         }
     }
@@ -158,9 +145,10 @@ class MovieInfoViewModel {
     func loadUserComment(DOCID: String) {
         FBService.loadUserComment(DOCID: DOCID) { [weak self] grade, comment, error in
             if let error = error {
-                self?.error = error
+                self?.movieInfoVMDelegate?.didFailWithError(error: error)
             } else {
                 self?.gradeAndComment = (grade, comment)
+                self?.movieInfoVMDelegate?.didUpdate()
             }
         }
     }
@@ -168,8 +156,8 @@ class MovieInfoViewModel {
     // 소비자 계정을 위한 초기 데이터 설정
     func setDataForAccount(movieInfo: MovieInfoModel) {
         FBService.setDataForAccount(movieInfo: movieInfo) { [weak self] error in
-            if let error = error{
-                self?.error = error
+            if let error = error {
+                self?.movieInfoVMDelegate?.didFailWithError(error: error)
             }
         }
     }
@@ -177,9 +165,10 @@ class MovieInfoViewModel {
     func setIsWishToWatch(DOCID: String, isWishToWatch: Bool) {
         FBService.setIsWishToWatch(DOCID: DOCID, isWishToWatch: isWishToWatch) { [weak self] error in
             if let error = error {
-                self?.error = error
+                self?.movieInfoVMDelegate?.didFailWithError(error: error)
             } else {
                 self?.isWishToWatch = isWishToWatch
+                self?.movieInfoVMDelegate?.didUpdate()
             }
         }
     }
@@ -187,10 +176,11 @@ class MovieInfoViewModel {
     func updateGrade(DOCID: String, grade: Float) {
         FBService.updateGrade(DOCID: DOCID, grade: grade) { [weak self] error in
             if let error = error {
-                self?.error = error
+                self?.movieInfoVMDelegate?.didFailWithError(error: error)
             } else {
                 self?.gradeAndComment = (grade, self?.gradeAndComment.1 ?? "")
                 self?.loadGradeAverage(DOCID: DOCID)    // 평점 바낄때마다 평균 평점 갱신
+                self?.movieInfoVMDelegate?.didUpdate()
             }
         }
     }
@@ -198,30 +188,28 @@ class MovieInfoViewModel {
     func deleteGrade(DOCID: String) {
         FBService.deleteGrade(collection: DOCID, document: userId) { [weak self] error in
             if let error = error {
-                self?.error = error
+                self?.movieInfoVMDelegate?.didFailWithError(error: error)
             } else {
                 self?.gradeAndComment = (0.0, self?.gradeAndComment.1 ?? "")
                 self?.loadGradeAverage(DOCID: DOCID)    // 평점 바낄때마다 평균 평점 갱신
+                self?.movieInfoVMDelegate?.didUpdate()
             }
         }
     }
     
     /* For AddCommentViewController */
     
-    var onUpdatedComment: () -> Void = {}
+    weak var addCommentVMDelegate: AddCommentViewModelDelegate?
     
-    var comment: String = "" {
-        didSet {
-            onUpdatedComment()
-        }
-    }
+    var comment: String = ""
     
     func addComment(DOCID: String, comment: String) {
         FBService.addComment(DOCID: DOCID, comment: comment) { [weak self] error in
             if let error = error {
-                self?.error = error
+                self?.addCommentVMDelegate?.didFailWithError(error: error)
             } else {
                 self?.comment = comment
+                self?.addCommentVMDelegate?.didUpdate()
             }
         }
     }

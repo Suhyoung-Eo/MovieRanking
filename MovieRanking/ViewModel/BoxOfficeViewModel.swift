@@ -8,7 +8,7 @@
 import Foundation
 
 protocol BoxOfficeViewModelDelegate: AnyObject {
-    func didUpdateBoxOffice()
+    func didUpdate()
     func didFailWithError(error: Error)
 }
 
@@ -45,7 +45,7 @@ class BoxOfficeViewModel {
     }
     
     func boxOfficeInfo(index: Int) -> (thumbNailLink: String, boxOfficeModel: BoxOfficeModel) {
-        return (thumbNailLink: movieInfoList.movieInfoModel(index).thumbNailLinks[0], boxOfficeModel: boxOfficeList.boxOfficeModel(index))
+        return (movieInfoList.movieInfoModel(index).thumbNailLinks[0], boxOfficeList.boxOfficeModel(index))
     }
     
     func fetchBoxOffice(by boxOfficeType: Int) {
@@ -69,7 +69,7 @@ class BoxOfficeViewModel {
 
         boxOfficeList = nil
         movieInfoList = nil
-        delegate?.didUpdateBoxOffice()  // tableView Refresh
+        delegate?.didUpdate()  // tableView Refresh
         
         service.fetchWeeklyBoxOffice(by: boxOfficeType) { [weak self] boxOfficeList, movieInfoList, error in
             guard let self = self else { return }
@@ -78,7 +78,7 @@ class BoxOfficeViewModel {
             } else {
                 self.boxOfficeList = boxOfficeList
                 self.movieInfoList = movieInfoList
-                self.delegate?.didUpdateBoxOffice()
+                self.delegate?.didUpdate()
             }
         }
     }
@@ -86,7 +86,7 @@ class BoxOfficeViewModel {
     private func fetchDailyBoxOffice() {
         boxOfficeList = nil
         movieInfoList = nil
-        delegate?.didUpdateBoxOffice()  // tableView Refresh
+        delegate?.didUpdate()  // tableView Refresh
         
         service.fetchDailyBoxOffice { [weak self] boxOfficeList, movieInfoList, error in
             guard let self = self else { return }
@@ -95,7 +95,7 @@ class BoxOfficeViewModel {
             } else {
                 self.boxOfficeList = boxOfficeList
                 self.movieInfoList = movieInfoList
-                self.delegate?.didUpdateBoxOffice()
+                self.delegate?.didUpdate()
             }
         }
     }

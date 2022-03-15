@@ -97,15 +97,6 @@ extension BoxOfficeViewController {
         activityIndicator.startAnimating()
         viewModel.fetchBoxOffice(by: boxOfficeType)
     }
-    
-    private func retry(error: Error?) {
-        DispatchQueue.main.async { [weak self] in
-            let alert = UIAlertController(title: "네트워크 장애", message: error?.localizedDescription, preferredStyle: .alert)
-            alert.addAction(UIAlertAction(title: "재시도", style: .default) { [weak self] _ in self?.fetchBoxOffice() })
-            self?.present(alert, animated: true, completion: nil)
-            self?.activityIndicator.stopAnimating()
-        }
-    }
 }
 
 //MARK: - TableView Datasource Methods
@@ -155,7 +146,7 @@ extension BoxOfficeViewController: UITableViewDelegate {
     }
 }
 
-//MARK: - UIViewControllerTransitioning delegate method
+//MARK: - UIViewControllerTransitioning delegate methods
 
 extension BoxOfficeViewController: UIViewControllerTransitioningDelegate {
     
@@ -164,7 +155,7 @@ extension BoxOfficeViewController: UIViewControllerTransitioningDelegate {
     }
 }
 
-//MARK: - delegate method
+//MARK: - delegate methods
 
 extension BoxOfficeViewController:  BoxOfficeViewModelDelegate, OptionTableViewControllerDelegate {
     
@@ -174,21 +165,28 @@ extension BoxOfficeViewController:  BoxOfficeViewModelDelegate, OptionTableViewC
         }
     }
     
-    func didUpdateBoxOffice() {
-        
-        button.setTitle(viewModel.buttonTitle, for: .normal)
-        
-        if viewModel.numberOfRowsInSection == 0 {
-            tableView.separatorStyle = .none  // fetchBoxOffice 동작 하는 동안 화면 클리어
-        } else {
-            tableView.separatorStyle = .singleLine
-            activityIndicator.stopAnimating()
-            button.isEnabled = true
+    func didUpdate() {
+        DispatchQueue.main.async { [weak self] in
+            guard let self = self else { return }
+            self.button.setTitle(self.viewModel.buttonTitle, for: .normal)
+            
+            if self.viewModel.numberOfRowsInSection == 0 {
+                self.tableView.separatorStyle = .none  // fetchBoxOffice 동작 하는 동안 화면 클리어
+            } else {
+                self.tableView.separatorStyle = .singleLine
+                self.activityIndicator.stopAnimating()
+                self.button.isEnabled = true
+            }
+            self.tableView.reloadData()
         }
-        tableView.reloadData()
     }
     
     func didFailWithError(error: Error) {
-        retry(error: error)
+        DispatchQueue.main.async { [weak self] in
+            let alert = UIAlertController(title: "네트워크 장애", message: error.localizedDescription, preferredStyle: .alert)
+            alert.addAction(UIAlertAction(title: "재시도", style: .default) { [weak self] _ in self?.fetchBoxOffice() })
+            self?.present(alert, animated: true, completion: nil)
+            self?.activityIndicator.stopAnimating()
+        }
     }
 }
