@@ -30,7 +30,7 @@ class MovieInfoViewController: UIViewController {
         tableView.dataSource = self
         tableView.delegate = self
         
-        viewModel.movieInfoVMDelegate = self
+        viewModel.delegate = self
         
         // 소비자 계정을 위한 초기 데이터 설정 
         viewModel.setDataForAccount(movieInfo: movieInfo)

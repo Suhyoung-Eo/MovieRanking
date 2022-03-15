@@ -32,7 +32,7 @@ class SearchMovieViewController: UIViewController {
         searchController.searchBar.placeholder = "영화 콘텐츠를 검색해 보세요"
         searchController.searchBar.setValue("취소", forKey: "cancelButtonText")
         
-        viewModel.searchVMDelegate = self
+        viewModel.delegate = self
         
     }
     
@@ -119,7 +119,7 @@ extension SearchMovieViewController: UISearchBarDelegate {
 
 //MARK: - viewModel delegate methods
 
-extension SearchMovieViewController: SearchMovieViewModelDelegate {
+extension SearchMovieViewController: MovieInfoViewModelDelegate {
     
     func didUpdate() {
         DispatchQueue.main.async { [weak self] in

@@ -20,7 +20,7 @@ class AddCommentViewController: UIViewController {
         super.viewDidLoad()
         
         commentTextView.delegate = self
-        viewModel.addCommentVMDelegate = self
+        viewModel.delegate = self
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -58,7 +58,7 @@ class AddCommentViewController: UIViewController {
 
 //MARK: - delegate methods
 
-extension AddCommentViewController: UITextViewDelegate, AddCommentViewModelDelegate {
+extension AddCommentViewController: UITextViewDelegate, MovieInfoViewModelDelegate {
     
     func textViewShouldBeginEditing(_ textView: UITextView) -> Bool {
         if viewModel.userId == nil { showAlert(); return false }
