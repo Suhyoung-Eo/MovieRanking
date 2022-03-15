@@ -247,7 +247,7 @@ class FirebaseService {
         
         guard let userId = userId else { completion(nil, nil); return }
         
-        db.collection(userId).order(by: K.FStore.date, descending: true).addSnapshotListener { querySnapshot, error in
+        db.collection(userId).addSnapshotListener { querySnapshot, error in
             
             guard error == nil else {
                 completion(AccountCommentListModel([AccountCommentModel.empty]), error)
@@ -283,6 +283,8 @@ class FirebaseService {
                         accountCommentList.append(newItem)
                     }
                 }
+                
+                accountCommentList.sort { $0.date > $1.date }
                 completion(AccountCommentListModel(accountCommentList), nil)
             }
         }
