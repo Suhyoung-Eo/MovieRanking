@@ -26,7 +26,11 @@ class UserCommentCell: UITableViewCell {
     var thumbNailLink: String = "" {
         didSet {
             DownloadImage.shared.download(from: thumbNailLink) { [weak self] image in
-                self?.thumbNailImageButton.setImage(image, for: .normal)
+                if let image = image {
+                    self?.thumbNailImageButton.setImage(image, for: .normal)
+                } else {
+                    self?.thumbNailImageButton.setImage(UIImage(named: K.Image.noImage), for: .normal)
+                }
             }
         }
     }
