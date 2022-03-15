@@ -7,19 +7,23 @@
 
 import Foundation
 
+protocol AccountViewModelDelegate: AnyObject {
+    func didUpdate()
+    func didFailWithError(error: Error)
+}
+
+protocol StorageViewModelDelegate: AnyObject {
+    func didUpdate()
+    func didUpdateMovieInfo()
+    func didFailWithError(error: Error)
+}
+
 class AccountViewModel {
     
-    var gotErrorStatus: () -> Void = {}
-    var onUpdatedMovieInfo: () -> Void = {}
+    weak var delegate: AccountViewModelDelegate?
     
     private let FBService = FirebaseService()
     private let movieInfoService = MovieInformationService()
-    
-    var error: Error? {
-        didSet {
-            gotErrorStatus()
-        }
-    }
     
     var userId: String? {
         return FBService.userId
@@ -38,50 +42,60 @@ class AccountViewModel {
     }
     
     func register(email: String, password: String) {
-        FBService.register(email: email, password: password) { [weak self] error in self?.error = error }
+        FBService.register(email: email, password: password) { [weak self] error in
+            if let error = error {
+                self?.delegate?.didFailWithError(error: error)
+            } else {
+                self?.delegate?.didUpdate()
+            }
+        }
     }
     
     func logIn(email: String, password: String) {
-        FBService.logIn(email: email, password: password) { [weak self] error in self?.error = error }
+        FBService.logIn(email: email, password: password) { [weak self] error in
+            if let error = error {
+                self?.delegate?.didFailWithError(error: error)
+            } else {
+                self?.delegate?.didUpdate()
+            }
+        }
     }
     
     func createProfileChangeRequest(displayName: String) {
-        FBService.createProfileChangeRequest(displayName: displayName) { [weak self] error in self?.error = error }
+        FBService.createProfileChangeRequest(displayName: displayName) { [weak self] error in
+            if let error = error {
+                self?.delegate?.didFailWithError(error: error)
+            } else {
+                self?.delegate?.didUpdate()
+            }
+        }
     }
     
     func logOut() {
-        FBService.logOut { [weak self] error in self?.error = error }
+        FBService.logOut { [weak self] error in
+            if let error = error {
+                self?.delegate?.didFailWithError(error: error)
+            } else {
+                self?.delegate?.didUpdate()
+            }
+        }
     }
     
     //MARK: - For StorageViewController
     
-    var onUpdatedwishToWatchList: () -> Void = {}
-    var onUpdatedgradeList: () -> Void = {}
+    weak var storageVMDelegate: StorageViewModelDelegate?
+    
+    var gradeListModel: GradeListModel!
+    var movieInfoModel: MovieInfoModel!
+    var gradeAverageList: [String] = []
     
     var wishToWatchListModel: WishToWatchListModel! {
         didSet {
             DispatchQueue.global(qos: .userInitiated).async { [weak self] in
                 guard let self = self else { return }
                 self.gradeAverageList = self.loadGradeAverage(by: self.wishToWatchListModel)
+                self.storageVMDelegate?.didUpdate()
             }
-        }
-    }
-    
-    var gradeAverageList: [String] = [] {
-        didSet {
-            onUpdatedwishToWatchList()
-        }
-    }
-    
-    var gradeListModel: GradeListModel! {
-        didSet {
-            onUpdatedgradeList()
-        }
-    }
-    
-    var movieInfoModel: MovieInfoModel! {
-        didSet {
-            onUpdatedMovieInfo()
         }
     }
     
@@ -118,14 +132,14 @@ class AccountViewModel {
     func loadWishToWatchList() {
         FBService.loadWishToWatchList { [weak self] wishToWatchListModel, error in
             if let error = error {
-                self?.error = error
+                self?.storageVMDelegate?.didFailWithError(error: error)
             } else {
                 self?.wishToWatchListModel = wishToWatchListModel
             }
         }
     }
     
-    func loadGradeAverage(by wishToWatchListModel: WishToWatchListModel) -> [String] {
+    private func loadGradeAverage(by wishToWatchListModel: WishToWatchListModel) -> [String] {
         var averageList = [String]()
         let models = wishToWatchListModel.wishToWatchList
         let group = DispatchGroup()
@@ -144,32 +158,27 @@ class AccountViewModel {
     func loadGradeList() {
         FBService.loadGradeList { [weak self] gradeListModel, error in
             if let error = error {
-                self?.error = error
+                self?.storageVMDelegate?.didFailWithError(error: error)
             } else {
                 self?.gradeListModel = gradeListModel
+                self?.storageVMDelegate?.didUpdate()
             }
         }
     }
     
     //MARK: - For CommentsViewController
     
-    var onUpdatedAccountCommentList: () -> Void = {}
-    
     var prepareId: String = ""
     var comment: String = ""
-    
-    var accountCommentListModel: AccountCommentListModel! {
-        didSet {
-            onUpdatedAccountCommentList()
-        }
-    }
+    var accountCommentListModel: AccountCommentListModel!
     
     func loadAccountCommentList() {
         FBService.loadAccountCommentList { [weak self] accountCommentListModel, error in
             if let error = error {
-                self?.error = error
+                self?.storageVMDelegate?.didFailWithError(error: error)
             } else {
                 self?.accountCommentListModel = accountCommentListModel
+                self?.storageVMDelegate?.didUpdate()
             }
         }
     }
@@ -177,7 +186,9 @@ class AccountViewModel {
     func deleteComment(userId: String?, index: Int) {
         let movieInfo = accountCommentListModel.accountCommentModel(index)
         FBService.deleteComment(collection: userId, document: movieInfo.DOCID) { [weak self] error in
-            self?.error = error
+            if let error = error {
+                self?.storageVMDelegate?.didFailWithError(error: error)
+            }
         }
     }
     
@@ -213,9 +224,10 @@ class AccountViewModel {
         
         movieInfoService.fetchMovieInfo(id: movieId, seq: movieSeq) { [weak self] movieInfoList, error in
             if let error = error {
-                self?.error = error
+                self?.delegate?.didFailWithError(error: error)
             } else {
                 self?.movieInfoModel = movieInfoList.movieInfoModel(0)
+                self?.storageVMDelegate?.didUpdateMovieInfo()
             }
         }
     }

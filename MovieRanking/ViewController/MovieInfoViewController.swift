@@ -30,20 +30,9 @@ class MovieInfoViewController: UIViewController {
         tableView.dataSource = self
         tableView.delegate = self
         
-        viewModel.gotErrorStatus = { [weak self] in
-            if let error = self?.viewModel.error {
-                DispatchQueue.main.async {
-                    AlertService.shared.alert(viewController: self, alertTitle: "Error", message: error.localizedDescription)
-                }
-            }
-        }
+        viewModel.delegate = self
         
-        viewModel.onUpdatedGradeAverage = { [weak self] in self?.reloadData() }
-        viewModel.onUpdateIsWishToWatch = { [weak self] in self?.reloadData() }
-        viewModel.onUpdateCommentList = { [weak self] in self?.reloadData() }
-        viewModel.onUpadteUserComment = { [weak self] in self?.reloadData() }
-        
-        // 소비자 계정을 위한 초기 데이터 설정
+        // 소비자 계정을 위한 초기 데이터 설정 
         viewModel.setDataForAccount(movieInfo: movieInfo)
         
         // ios15에서 setionHeader에 여백이 생기는 이슈
@@ -92,7 +81,7 @@ class MovieInfoViewController: UIViewController {
             guard let destinationVC = segue.destination as? AddCommentViewController else {
                 fatalError("Could not found AddCommentViewController")
             }
-            destinationVC.comment = viewModel.gradeAndComment.1
+            destinationVC.comment = viewModel.gradeAndComment.comment
             destinationVC.movieInfo = movieInfo
         default:
             return
@@ -117,12 +106,6 @@ extension MovieInfoViewController {
     @objc private func tappedstllImage(gesture: UITapGestureRecognizer) {
         if !movieInfo.stllsLinks[0].isEmpty {
             performSegue(withIdentifier: K.SegueId.imageView, sender: K.Prepare.stllImageView)
-        }
-    }
-    
-    private func reloadData() {
-        DispatchQueue.main.async { [weak self] in
-            self?.tableView.reloadData()
         }
     }
 }
@@ -181,7 +164,7 @@ extension MovieInfoViewController: UITableViewDataSource {
             cell.parent = self
             cell.viewModel = viewModel
             cell.movieInfo = movieInfo
-            cell.grade = viewModel.gradeAndComment.0
+            cell.grade = viewModel.gradeAndComment.grade
             
             return cell
         case 2:
@@ -287,5 +270,22 @@ extension MovieInfoViewController: StaffsInfoCellDelegate, UserInteractionCellDe
     func pushedWishToWatchButton() {
         isWishToWatch = viewModel.userId == nil ? false : !viewModel.isWishToWatch
         viewModel.setIsWishToWatch(DOCID: movieInfo.DOCID, isWishToWatch: isWishToWatch)
+    }
+}
+
+//MARK: - ViewModel delegate methods
+
+extension MovieInfoViewController: MovieInfoViewModelDelegate {
+    
+    func didUpdate() {
+        DispatchQueue.main.async { [weak self] in
+            self?.tableView.reloadData()
+        }
+    }
+    
+    func didFailWithError(error: Error) {
+        DispatchQueue.main.async { [weak self] in
+            AlertService.shared.alert(viewController: self, alertTitle: "Error", message: error.localizedDescription)
+        }
     }
 }

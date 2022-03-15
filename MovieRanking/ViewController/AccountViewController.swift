@@ -24,19 +24,9 @@ class AccountViewController: UIViewController {
         goToWishListButton.layer.cornerRadius = goToWishListButton.frame.width / 40
         goToGradeListButton.layer.cornerRadius = goToGradeListButton.frame.width / 40
         goToCommentListButton.layer.cornerRadius = goToCommentListButton.frame.width / 40
-
-        navigationItem.title = "내계정"
         
-        viewModel.gotErrorStatus = { [weak self] in
-            if let error = self?.viewModel.error {
-                AlertService.shared.alert(viewController: self, alertTitle: "로그아웃에 실패했습니다", message: error.localizedDescription)
-            } else {
-                DispatchQueue.main.async {
-                    self?.emptyView.isHidden = false
-                    self?.accountButton.title = "로그인"
-                }
-            }
-        }
+        viewModel.delegate = self
+        navigationItem.title = "내계정"
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -117,5 +107,21 @@ class AccountViewController: UIViewController {
         alert.addAction(UIAlertAction(title: "확인", style: .default) { [weak self] _ in self?.viewModel.logOut() })
         alert.addAction(UIAlertAction(title: "취소", style: .cancel))
         present(alert, animated: true)
+    }
+}
+
+//MARK: - ViewModel delegate methods
+
+extension AccountViewController: AccountViewModelDelegate {
+    
+    func didUpdate() {
+        DispatchQueue.main.async { [weak self] in
+            self?.emptyView.isHidden = false
+            self?.accountButton.title = "로그인"
+        }
+    }
+    
+    func didFailWithError(error: Error) {
+        AlertService.shared.alert(viewController: self, alertTitle: "로그아웃에 실패했습니다", message: error.localizedDescription)
     }
 }
