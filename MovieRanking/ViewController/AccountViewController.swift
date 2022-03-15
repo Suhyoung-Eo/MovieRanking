@@ -35,14 +35,7 @@ class AccountViewController: UIViewController {
         navigationController?.navigationBar.setBackgroundImage(UIImage(), for:.default)
         navigationController?.navigationBar.shadowImage = UIImage()
         
-        if viewModel.userId == nil {
-            emptyView.isHidden = false
-            accountButton.title = "로그인"
-        } else {
-            emptyView.isHidden = true
-            accountButton.title = "로그아웃"
-            accountTextLabel.text = viewModel.displayName
-        }
+        setView()
     }
     
     @IBAction func accountButton(_ sender: Any) {
@@ -102,12 +95,26 @@ class AccountViewController: UIViewController {
         navigationItem.backBarButtonItem = backItem
     }
     
+    private func setView() {
+        DispatchQueue.main.async { [weak self] in
+            if self?.viewModel.userId == nil {
+                self?.emptyView.isHidden = false
+                self?.accountButton.title = "로그인"
+            } else {
+                self?.emptyView.isHidden = true
+                self?.accountButton.title = "로그아웃"
+                self?.accountTextLabel.text = self?.viewModel.displayName
+            }
+        }
+    }
+    
     private func logOutAlert() {
         let alert = UIAlertController(title: "로그아웃하시겠습니까?", message: nil, preferredStyle: .alert)
         alert.addAction(UIAlertAction(title: "확인", style: .default) { [weak self] _ in self?.viewModel.logOut() })
         alert.addAction(UIAlertAction(title: "취소", style: .cancel))
         present(alert, animated: true)
     }
+    
 }
 
 //MARK: - ViewModel delegate methods
@@ -115,10 +122,7 @@ class AccountViewController: UIViewController {
 extension AccountViewController: AccountViewModelDelegate {
     
     func didUpdate() {
-        DispatchQueue.main.async { [weak self] in
-            self?.emptyView.isHidden = false
-            self?.accountButton.title = "로그인"
-        }
+        setView()
     }
     
     func didFailWithError(error: Error) {
