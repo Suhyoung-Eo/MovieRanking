@@ -9,6 +9,8 @@ import Firebase
 
 class FirebaseService {
     
+    static let shared = FirebaseService()
+    
     private let db = Firestore.firestore()
     
     var userId: String? {
@@ -380,4 +382,6 @@ class FirebaseService {
         dateformat.dateFormat = "yyyy.MM.dd HH:mm:ss"
         return dateformat.string(from: date)
     }
+    
+    private init() {}
 }

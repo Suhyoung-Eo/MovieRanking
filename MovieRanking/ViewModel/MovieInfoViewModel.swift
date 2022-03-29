@@ -15,7 +15,6 @@ protocol MovieInfoViewModelDelegate: AnyObject {
 class MovieInfoViewModel {
     
     private let service = MovieInformationService()
-    private let FBService = FirebaseService()
     
     weak var delegate: MovieInfoViewModelDelegate?
     
@@ -77,7 +76,7 @@ class MovieInfoViewModel {
     var gradeAndComment = (grade: Float(0.0), comment: "")
     
     var userId: String? {
-        return FBService.userId
+        return FirebaseService.shared.userId
     }
     
     var IsCommentExist: Bool {
@@ -98,7 +97,7 @@ class MovieInfoViewModel {
     }
     
     func loadGradeAverage(DOCID: String) {
-        FBService.loadGradeAverage(DOCID: DOCID) { [weak self] gradeAverage, error in
+        FirebaseService.shared.loadGradeAverage(DOCID: DOCID) { [weak self] gradeAverage, error in
             if let error = error {
                 self?.delegate?.didFailWithError(error: error)
             } else {
@@ -109,7 +108,7 @@ class MovieInfoViewModel {
     }
     
     func loadIsWishToWatch(DOCID: String) {
-        FBService.loadIsWishToWatch(DOCID: DOCID) { [weak self] isWishToWatch, error in
+        FirebaseService.shared.loadIsWishToWatch(DOCID: DOCID) { [weak self] isWishToWatch, error in
             if let error = error {
                 self?.delegate?.didFailWithError(error: error)
             } else {
@@ -120,7 +119,7 @@ class MovieInfoViewModel {
     }
     
     func loadCommentList(DOCID: String) {
-        FBService.loadCommentList(DOCID: DOCID) { [weak self] commentListModel, error in
+        FirebaseService.shared.loadCommentList(DOCID: DOCID) { [weak self] commentListModel, error in
             if let error = error {
                 self?.delegate?.didFailWithError(error: error)
             } else {
@@ -131,7 +130,7 @@ class MovieInfoViewModel {
     }
     
     func loadUserComment(DOCID: String) {
-        FBService.loadUserComment(DOCID: DOCID) { [weak self] grade, comment, error in
+        FirebaseService.shared.loadUserComment(DOCID: DOCID) { [weak self] grade, comment, error in
             if let error = error {
                 self?.delegate?.didFailWithError(error: error)
             } else {
@@ -143,7 +142,7 @@ class MovieInfoViewModel {
     
     // 소비자 계정을 위한 초기 데이터 설정
     func setDataForAccount(movieInfo: MovieInfoModel) {
-        FBService.setDataForAccount(movieInfo: movieInfo) { [weak self] error in
+        FirebaseService.shared.setDataForAccount(movieInfo: movieInfo) { [weak self] error in
             if let error = error {
                 self?.delegate?.didFailWithError(error: error)
             }
@@ -151,7 +150,7 @@ class MovieInfoViewModel {
     }
     
     func setIsWishToWatch(DOCID: String, isWishToWatch: Bool) {
-        FBService.setIsWishToWatch(DOCID: DOCID, isWishToWatch: isWishToWatch) { [weak self] error in
+        FirebaseService.shared.setIsWishToWatch(DOCID: DOCID, isWishToWatch: isWishToWatch) { [weak self] error in
             if let error = error {
                 self?.delegate?.didFailWithError(error: error)
             } else {
@@ -162,7 +161,7 @@ class MovieInfoViewModel {
     }
     
     func updateGrade(DOCID: String, grade: Float) {
-        FBService.updateGrade(DOCID: DOCID, grade: grade) { [weak self] error in
+        FirebaseService.shared.updateGrade(DOCID: DOCID, grade: grade) { [weak self] error in
             if let error = error {
                 self?.delegate?.didFailWithError(error: error)
             } else {
@@ -174,7 +173,7 @@ class MovieInfoViewModel {
     }
     
     func deleteGrade(DOCID: String) {
-        FBService.deleteGrade(collection: DOCID, document: userId) { [weak self] error in
+        FirebaseService.shared.deleteGrade(collection: DOCID, document: userId) { [weak self] error in
             if let error = error {
                 self?.delegate?.didFailWithError(error: error)
             } else {
@@ -190,7 +189,7 @@ class MovieInfoViewModel {
     var comment: String = ""
     
     func addComment(DOCID: String, comment: String) {
-        FBService.addComment(DOCID: DOCID, comment: comment) { [weak self] error in
+        FirebaseService.shared.addComment(DOCID: DOCID, comment: comment) { [weak self] error in
             if let error = error {
                 self?.delegate?.didFailWithError(error: error)
             } else {

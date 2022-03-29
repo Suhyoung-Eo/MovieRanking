@@ -15,7 +15,6 @@ protocol BoxOfficeViewModelDelegate: AnyObject {
 class BoxOfficeViewModel {
     
     private let service = MovieInformationService()
-    private let FBService = FirebaseService()
     
     weak var delegate: BoxOfficeViewModelDelegate?
     
@@ -25,10 +24,10 @@ class BoxOfficeViewModel {
     
     // 앱 실행 시 회원가입을 했지만 닉네임을 저장하지 않은 경우 판별
     var isEmptyDisplayName: Bool {
-        if FBService.userId == nil {
+        if FirebaseService.shared.userId == nil {
             return false
         } else {
-            if FBService.displayName == nil {
+            if FirebaseService.shared.displayName == nil {
                 return true
             } else {
                 return false
