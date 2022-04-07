@@ -21,11 +21,16 @@ class MovieInformationService {
         guard let boxOfficeDay = getBoxofficeDate(day: -1),
               let url = URL.urlForBoxOfficeApi(targetDt: boxOfficeDay) else { return }
         
-        apiService.fetchDailyBoxOffice(with: url) { [weak self] boxOfficeList, error in
-            guard error == nil else { completion(BoxOfficeListModel([BoxOffice.empty]), MovieInfoListModel([MovieInfo.empty]), error); return }
-            
-            self?.loadMovieInfo(BoxOfficeListModel(boxOfficeList)) { results in
-                completion(BoxOfficeListModel(boxOfficeList), results, nil)
+        let resource = Resource<DailyBoxOfficeModel>(url: url)
+        
+        apiService.fetchData(resource: resource) { [weak self] result in
+            switch result {
+            case .success(let dailyBoxOffice):
+                self?.loadMovieInfo(BoxOfficeListModel(dailyBoxOffice.boxOfficeResult.dailyBoxOfficeList)) { movieInfoList in
+                    completion(BoxOfficeListModel(dailyBoxOffice.boxOfficeResult.dailyBoxOfficeList), movieInfoList, nil)
+                }
+            case .failure(let error):
+                completion(BoxOfficeListModel([BoxOffice.empty]), MovieInfoListModel([MovieInfo.empty]), error)
             }
         }
     }
@@ -35,11 +40,16 @@ class MovieInformationService {
         guard let boxOfficeDay = getBoxofficeDate(day: -7),
               let url = URL.urlForBoxOfficeApi(weekGb: boxOfficeType, targetDt: boxOfficeDay) else { return }
         
-        apiService.fetchWeeklyBoxOffice(with: url) { [weak self] boxOfficeList, error in
-            guard error == nil else { completion(BoxOfficeListModel([BoxOffice.empty]), MovieInfoListModel([MovieInfo.empty]), error); return }
-            
-            self?.loadMovieInfo(BoxOfficeListModel(boxOfficeList)) { results in
-                completion(BoxOfficeListModel(boxOfficeList), results, nil)
+        let resource = Resource<WeeklyBoxOfficeModel>(url: url)
+        
+        apiService.fetchData(resource: resource) { [weak self] result in
+            switch result {
+            case .success(let weeklyBoxOffice):
+                self?.loadMovieInfo(BoxOfficeListModel(weeklyBoxOffice.boxOfficeResult.weeklyBoxOfficeList)) { movieInfoList in
+                    completion(BoxOfficeListModel(weeklyBoxOffice.boxOfficeResult.weeklyBoxOfficeList), movieInfoList, nil)
+                }
+            case .failure(let error):
+                completion(BoxOfficeListModel([BoxOffice.empty]), MovieInfoListModel([MovieInfo.empty]), error)
             }
         }
     }
@@ -78,9 +88,15 @@ class MovieInformationService {
         guard let movieName = movieName.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed),
               let url = URL.urlForMovieInfoApi(movieName: movieName, releaseDts: releaseDts) else { completion(MovieInfoListModel([MovieInfo.empty])); return }
         
-        apiService.fetchMovieInfo(with: url) { movieInfo, error in
-            guard error == nil else { completion(MovieInfoListModel([MovieInfo.empty])); return }
-            completion(MovieInfoListModel(movieInfo))
+        let resource = Resource<MovieInformationModel>(url: url)
+        
+        apiService.fetchData(resource: resource) { result in
+            switch result {
+            case .success(let movieInfoModel):
+                completion(MovieInfoListModel(movieInfoModel.Data[0].Result ?? [MovieInfo.empty]))
+            case .failure(_):
+                completion(MovieInfoListModel([MovieInfo.empty]))
+            }
         }
     }
     
@@ -90,9 +106,15 @@ class MovieInformationService {
         guard let movieName = movieName.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed),
               let url = URL.urlForMovieInfoApi(movieName: movieName) else { completion(MovieInfoListModel([MovieInfo.empty]), nil); return }
         
-        apiService.fetchMovieInfo(with: url) { movieInfo, error in
-            guard error == nil else { completion(MovieInfoListModel([MovieInfo.empty]), error); return }
-            completion(MovieInfoListModel(movieInfo), nil)
+        let resource = Resource<MovieInformationModel>(url: url)
+        
+        apiService.fetchData(resource: resource) { result in
+            switch result {
+            case .success(let movieInfoModel):
+                completion(MovieInfoListModel(movieInfoModel.Data[0].Result ?? [MovieInfo.empty]), nil)
+            case .failure(let error):
+                completion(MovieInfoListModel([MovieInfo.empty]), error)
+            }
         }
     }
     
@@ -100,9 +122,16 @@ class MovieInformationService {
     
     func fetchMovieInfo(id movieId: String, seq movieSeq: String, completion: @escaping(MovieInfoListModel, Error?) -> Void) {
         guard let url = URL.urlForMovieInfoApi(movieId: movieId, movieSeq: movieSeq) else { completion(MovieInfoListModel([MovieInfo.empty]), nil); return }
-        apiService.fetchMovieInfo(with: url) { movieInfo, error in
-            guard error == nil else { completion(MovieInfoListModel([MovieInfo.empty]), error); return }
-            completion(MovieInfoListModel(movieInfo), nil)
+        
+        let resource = Resource<MovieInformationModel>(url: url)
+        
+        apiService.fetchData(resource: resource) { result in
+            switch result {
+            case .success(let movieInfoModel):
+                completion(MovieInfoListModel(movieInfoModel.Data[0].Result ?? [MovieInfo.empty]), nil)
+            case .failure(let error):
+                completion(MovieInfoListModel([MovieInfo.empty]), error)
+            }
         }
     }
     
