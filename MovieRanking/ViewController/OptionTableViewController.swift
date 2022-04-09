@@ -8,7 +8,7 @@
 import UIKit
 
 protocol OptionTableViewControllerDelegate: AnyObject {
-    func didSelectType(selectedType: Int)
+    func didSelectType(selectedType: Int, controller: UIViewController)
 }
 
 class OptionTableViewController: UITableViewController {
@@ -51,8 +51,7 @@ class OptionTableViewController: UITableViewController {
     //MARK: - Table view delegate methods
     
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        delegate?.didSelectType(selectedType: indexPath.row)
-        dismiss(animated: true, completion: nil)
+        delegate?.didSelectType(selectedType: indexPath.row, controller: self)
     }
     
     deinit {

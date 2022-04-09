@@ -33,15 +33,21 @@ extension Resource {
 class ApiService {
     
     func fetchData<T>(resource: Resource<T>, completion: @escaping (Result<T, NetworkError>) -> Void) {
-        if let data = try? Data(contentsOf: resource.url) {
-            let result = try? JSONDecoder().decode(T.self, from: data)
-            if let result = result {
-                completion(.success(result))
+        DispatchQueue.global(qos: .default).async {
+            if let data = try? Data(contentsOf: resource.url) {
+                DispatchQueue.main.async {
+                    let result = try? JSONDecoder().decode(T.self, from: data)
+                    if let result = result {
+                        completion(.success(result))
+                    } else {
+                        completion(.failure(.decodingError))
+                    }
+                }
             } else {
-                completion(.failure(.decodingError))
+                DispatchQueue.main.async {
+                    completion(.failure(.domainError))
+                }
             }
-        } else {
-            completion(.failure(.domainError))
         }
     }
 }

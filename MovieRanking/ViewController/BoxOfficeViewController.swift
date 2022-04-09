@@ -16,11 +16,7 @@ class BoxOfficeViewController: UIViewController {
     private let viewModel = BoxOfficeViewModel()
     
     // 0: 주간/ 1: 주말/ 2: 일별 박스오피스
-    private var boxOfficeType = 0 {
-        didSet {
-            fetchBoxOffice()
-        }
-    }
+    private var boxOfficeType = 0
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -159,9 +155,11 @@ extension BoxOfficeViewController: UIViewControllerTransitioningDelegate {
 
 extension BoxOfficeViewController:  BoxOfficeViewModelDelegate, OptionTableViewControllerDelegate {
     
-    func didSelectType(selectedType: Int) {
+    func didSelectType(selectedType: Int, controller: UIViewController) {
+        controller.dismiss(animated: true)
         if boxOfficeType != selectedType {
             boxOfficeType = selectedType
+            fetchBoxOffice()
         }
     }
     
